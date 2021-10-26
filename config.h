@@ -372,13 +372,9 @@ static const Rule clientrules[] = {
 	{ .instance = "spcalc (c)", .scratchkey = 'c', .flags = Floating },
 	{ .instance = "spfm (r)", .scratchkey = 'r', .flags = Floating },
 	{ .class = "Gimp", .workspace = "5", .flags = Floating|SwitchWorkspace },
-	{ .class = "firefox", .workspace = "8", .flags = AttachMaster|SwitchWorkspace },
 	{ .class = "Steam", .flags = IgnoreCfgReqPos|Floating|Centered },
 	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },
-	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
 	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
-	{ .role = "browser", .workspace = "8", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
-	{ .class = "Gnome-terminal", .role = "gnome-terminal-preferences", .flags = Centered },
 	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
 	{ .class = "Alacritty", .flags = Terminal },
@@ -590,7 +586,7 @@ static const char *dmenucmd[] = {
 	NULL
 };
 static const char *spcmd1[] = {"w", "st", "-n", "spterm (w)", "-g", "120x34", NULL };
-static const char *spcmd2[] = {"e", "st", "-n", "spcalc(e)", "-g", "50x20", "-e", "bc", "-lq", NULL };
+static const char *spcmd2[] = {"c", "st", "-n", "spcalc(c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
 static const char *spcmd3[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", "lf", NULL };
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
 
@@ -598,40 +594,40 @@ static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/s
 
 static Key keys[] = {
 	/* type       modifier                      key              function                argument */
-	{ KeyPress, MODKEY,			XK_BackSpace,  		killclient,	{0} },
-	{ KeyPress, MODKEY|ShiftMask,		XK_BackSpace,  		quit,		{0} },
+	{ KeyPress, MODKEY,													XK_BackSpace,  		killclient,	{0} },
+	{ KeyPress, MODKEY|ShiftMask,								XK_BackSpace,  		quit,		{0} },
 	{ KeyPress, MODKEY|ShiftMask|ControlMask,		XK_BackSpace,  		restart,		{0} },
-	{ KeyPress, MODKEY|Mod1Mask,		XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && sudo -A shutdown -h now") },
+	{ KeyPress, MODKEY|Mod1Mask,								XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && sudo -A shutdown -h now") },
 	{ KeyPress, MODKEY|ControlMask,		XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot computer?\")\" = Yes ] && sudo -A reboot") },
 	/***********           q use with stack actions 	        ***************/	
-	{KeyPress, MODKEY,			XK_w,			spawn,		SHCMD("$BROWSER") },
-	{KeyPress, MODKEY|ShiftMask,		XK_w,			spawn,		SHCMD("$BROWSER_2") },
-	{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_w,			spawn,		SHCMD("$BROWSER_3") },
-	{KeyPress, MODKEY,			XK_e,			spawn,		SHCMD("$EDI") },
-	{KeyPress, MODKEY|ShiftMask,		XK_e,			spawn,		SHCMD("code") },
+	{	KeyPress,	MODKEY,													XK_w,			spawn,		SHCMD("$BROWSER") },
+	{	KeyPress, MODKEY|ShiftMask,								XK_w,			spawn,		SHCMD("$BROWSER_2") },
+	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_w,			spawn,		SHCMD("$BROWSER_3") },
+	{	KeyPress, MODKEY,													XK_e,			spawn,		SHCMD("$EDI") },
+	{	KeyPress, MODKEY|ShiftMask,								XK_e,			spawn,		SHCMD("code") },
 	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
-	{KeyPress, MODKEY,			XK_r,			spawn,		SHCMD("st -e lf") },
-	{KeyPress, MODKEY|ShiftMask,		XK_r,			spawn,		SHCMD("st -e lf /hdd") },
-	{KeyPress, MODKEY|ControlMask,			XK_r,			spawn,		SHCMD("st -e lf /development") },
-	{KeyPress, MODKEY|ControlMask|ShiftMask,		XK_r,			spawn,		SHCMD("st -e sudo lf /") },
-	{KeyPress, MODKEY,                       XK_t,      		setlayout,     	{.v = &layouts[0]} },
-	{KeyPress, MODKEY|ShiftMask,		XK_t,      		setlayout,     	{.v = &layouts[1]} },
-	{KeyPress, MODKEY|ControlMask,		XK_t,      		setlayout,     	{.v = &layouts[2]} },
-	{KeyPress, MODKEY|Mod1Mask,		XK_t,      		setlayout,     	{.v = &layouts[3]} },
-	{KeyPress, MODKEY|Mod1Mask|ShiftMask,	XK_t,      		setlayout,     	{.v = &layouts[4]} },
-	{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_t,      		setlayout,     	{.v = &layouts[5]} },
-	{KeyPress, MODKEY,                       XK_y,      		setlayout,     	{.v = &layouts[6]}},
-	{KeyPress, MODKEY|ShiftMask,             XK_y,      		setlayout,     	{.v = &layouts[7]}},
-	{KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[8]}},
-	{KeyPress, MODKEY|Mod1Mask,             XK_y,      		setlayout,     	{.v = &layouts[9]}},
-	{KeyPress, MODKEY|ControlMask|Mod1Mask, XK_y,      		setlayout,     	{.v = &layouts[10]}},
-	{KeyPress, MODKEY|ControlMask|ShiftMask, XK_y,      		setlayout,     	{.v = &layouts[11]}},
-	{KeyPress, MODKEY,                       XK_u,      		setlayout,     	{.v = &layouts[12]} },
-	{KeyPress, MODKEY|ShiftMask,		XK_u,      		setlayout,     	{.v = &layouts[13]} },
-	{KeyPress, MODKEY|ControlMask,		XK_u,      		setlayout,     	{.v = &layouts[14]} },
-	{KeyPress, MODKEY|Mod1Mask,		XK_u,      		setlayout,     	{.v = &layouts[15]} },
-	{KeyPress, MODKEY|ControlMask|Mod1Mask,	XK_u,      		setlayout,     	{.v = &layouts[16]} },
-	{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_u,      		setlayout,     	{.v = &layouts[17]} },
+//	{KeyPress, MODKEY,													XK_r,			spawn,		SHCMD("st -e lf") },
+//	{KeyPress, MODKEY|ShiftMask,								XK_r,			spawn,		SHCMD("st -e lf /hdd") },
+//	{KeyPress, MODKEY|ControlMask,							XK_r,			spawn,		SHCMD("st -e lf /development") },
+//	{KeyPress, MODKEY|ControlMask|ShiftMask,		XK_r,			spawn,		SHCMD("st -e sudo lf /") },
+	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{.v = &layouts[0]} },
+	{	KeyPress, MODKEY|ShiftMask,								XK_t,      		setlayout,     	{.v = &layouts[1]} },
+	{	KeyPress, MODKEY|ControlMask,							XK_t,      		setlayout,     	{.v = &layouts[2]} },
+	{	KeyPress, MODKEY|Mod1Mask,								XK_t,      		setlayout,     	{.v = &layouts[3]} },
+	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,			XK_t,      		setlayout,     	{.v = &layouts[4]} },
+	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_t,      		setlayout,     	{.v = &layouts[5]} },
+	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{.v = &layouts[6]}},
+	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{.v = &layouts[7]}},
+	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[8]}},
+	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{.v = &layouts[9]}},
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{.v = &layouts[10]}},
+	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{.v = &layouts[11]}},
+	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{.v = &layouts[12]} },
+	{	KeyPress, MODKEY|ShiftMask,								XK_u,      		setlayout,     	{.v = &layouts[13]} },
+	{	KeyPress, MODKEY|ControlMask,							XK_u,      		setlayout,     	{.v = &layouts[14]} },
+	{	KeyPress, MODKEY|Mod1Mask,								XK_u,      		setlayout,     	{.v = &layouts[15]} },
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_u,      		setlayout,     	{.v = &layouts[16]} },
+	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_u,      		setlayout,     	{.v = &layouts[17]} },
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
 	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
@@ -664,16 +660,10 @@ static Key keys[] = {
 
 	{ KeyPress,   MODKEY,                       XK_backslash,    togglepinnedws,         {0} }, // toggle pinning of currently selected workspace on the current monitor
 	{ KeyPress,   MODKEY,                       XK_z,            showhideclient,         {0} }, // hide the currently selected client (or show if hidden)
-	{ KeyPress,   MODKEY,                       XK_q,            killclient,             {0} }, // close the currently focused window
-	{ KeyPress,   MODKEY|Shift,                 XK_q,            restart,                {0} }, // restart dusk
-	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_q,            quit,                   {0} }, // exit dusk
-
 	{ KeyPress,   MODKEY,                       XK_a,            markall,                {0} }, // marks all clients on the selected workspace
 	{ KeyPress,   MODKEY|Ctrl,                  XK_a,            markall,                {1} }, // marks all floating clients on the selected workspace
 	{ KeyPress,   MODKEY|Alt,                   XK_a,            markall,                {2} }, // marks all hidden clients on the selected workspace
 	{ KeyPress,   MODKEY|Shift,                 XK_a,            unmarkall,              {0} }, // unmarks all clients
-	{ KeyPress,   MODKEY,                       XK_m,            togglemark,             {0} }, // marks or unmarks the selected client for group action
-	{ KeyPress,   MODKEY|Alt,                   XK_m,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 
 	{ KeyPress,   MODKEY,                       XK_bracketleft,  rotatelayoutaxis,       {.i = -1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
 	{ KeyPress,   MODKEY,                       XK_bracketright, rotatelayoutaxis,       {.i = +1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
@@ -683,9 +673,21 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_bracketright, rotatelayoutaxis,       {.i = +3 } }, // cycle through the available tiling arrangements for the primary (first) stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketleft,  rotatelayoutaxis,       {.i = -4 } }, // cycle through the available tiling arrangements for the secondary stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
-	{ KeyPress,   MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
-	{ KeyPress,   MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
+	{KeyPress,		MODKEY,												XK_n,      		spawn	,    	SHCMD("discord") },
+	{KeyPress,		MODKEY|ShiftMask,             XK_n,      		spawn,    	SHCMD("slack") },
+	{KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
+	{KeyPress,	 	MODKEY|ShiftMask|ControlMask, XK_n,      		spawn,    	SHCMD("skype") },
+	{KeyPress,	 	MODKEY|ALTKEY,								XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
+	{KeyPress,	 	MODKEY|ALTKEY|ShiftMask,      XK_n,      		spawn,    	SHCMD("pkill -9 slack") },
+	{KeyPress,	 	MODKEY|ALTKEY|ControlMask,		XK_n,      		spawn	,    	SHCMD("pkill -9 teams") },
+	{KeyPress,	 	MODKEY|ALTKEY|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
+	{KeyPress,	  MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
+	{KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
+	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("vlc") }, // marks or unmarks the selected client for group action
+	{ KeyPress,   MODKEY|Alt,                   XK_m,            spawn,                   SHCMD("spotify") }, // moves the currently focused window to/from the master area (for tiled layouts)
 	{ KeyPress,   MODKEY,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
+	{ KeyPress,   MODKEY,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
+	{ KeyPress,   MODKEY|Alt,                   XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 
 	{ KeyPress,   MODKEY|Ctrl,                  XK_g,            floatpos,               {.v = "50% 50% 80% 80%" } }, // center client and take up 80% of the screen
 	{ KeyPress,   MODKEY,                       XK_g,            togglefloating,         {0} }, // toggles between tiled and floating arrangement for the currently focused client
@@ -730,7 +732,7 @@ static Key keys[] = {
 //	STACKKEYS(AltGr|Ctrl|Shift,                      stackpush)                            // move the currently focused client to the nth place in the stack
 
 	SCRATCHKEYS(                    XK_w,                                    spcmd1)
-	SCRATCHKEYS(                    XK_e,                                    spcmd2)
+	SCRATCHKEYS(                    XK_c,                                    spcmd2)
 	SCRATCHKEYS(                    XK_r,                                    spcmd3)
 
 	WSKEYS(                         XK_1,                                    "1")
@@ -815,7 +817,14 @@ static Button buttons[] = {
 	{ ClkClientWin,              MODKEY|Shift,            Button3,        resizemouse,      {0} }, // change the size of a floating client window
 	//{ ClkClientWin,              0,                       Button8,        movemouse,        {0} }, // move a client window using extra mouse buttons (previous)
 	//{ ClkClientWin,              0,                       Button9,        resizemouse,      {0} }, // resize a client window using extra mouse buttons (next)
-	{ ClkClientWin,              MODKEY,                  Button2,        zoom,             {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
+	{ ClkClientWin,              MODKEY,                  Button2,        zoom, { MODKEY,			XK_c,      		spawn	,    	SHCMD("discord") },
+	{ MODKEY|ShiftMask,             XK_c,      		spawn,    	SHCMD("slack") },
+	{ MODKEY|ControlMask,			XK_c,      		spawn	,    	SHCMD("teams") },
+	{ MODKEY|ShiftMask|ControlMask,             XK_c,      		spawn,    	SHCMD("skype") },
+	{ MODKEY|ALTKEY,			XK_c,      		spawn	,    	SHCMD("pkill -9 Discord") },
+	{ MODKEY|ALTKEY|ShiftMask,             XK_c,      		spawn,    	SHCMD("pkill -9 slack") },
+	{ MODKEY|ALTKEY|ControlMask,			XK_c,      		spawn	,    	SHCMD("pkill -9 teams") },
+	{ MODKEY|ALTKEY|ShiftMask|ControlMask,             XK_c,      		spawn,    	SHCMD("pkill -9 skype") },            {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 	{ ClkClientWin,              MODKEY|Ctrl,             Button1,        dragmfact,        {0} }, // dynamically change the size of the master area compared to the stack area(s)
 	{ ClkRootWin,                MODKEY|Ctrl,             Button1,        dragmfact,        {0} }, // dynamically change the size of the master area compared to the stack area(s)
 	{ ClkClientWin,              MODKEY,                  Button4,        inplacerotate,    {.i = +1 } }, // rotate clients within the respective area (master, primary stack, secondary stack) clockwise
