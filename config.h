@@ -369,7 +369,7 @@ static const Rule clientrules[] = {
 	{ .wintype = WTYPE "TOOLBAR", .flags = AlwaysOnTop|Centered|Floating },
 	{ .wintype = WTYPE "SPLASH", .flags = AlwaysOnTop|Centered|Floating },
 	{ .instance = "spterm (w)", .scratchkey = 'w', .flags = Floating },
-	{ .instance = "spalc (e)", .scratchkey = 'e', .flags = Floating },
+	{ .instance = "spcalc (c)", .scratchkey = 'c', .flags = Floating },
 	{ .instance = "spfm (r)", .scratchkey = 'r', .flags = Floating },
 	{ .class = "Gimp", .workspace = "5", .flags = Floating|SwitchWorkspace },
 	{ .class = "firefox", .workspace = "8", .flags = AttachMaster|SwitchWorkspace },
