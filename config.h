@@ -677,10 +677,10 @@ static Key keys[] = {
 	{KeyPress,		MODKEY|ShiftMask,             XK_n,      		spawn,    	SHCMD("slack") },
 	{KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
 	{KeyPress,	 	MODKEY|ShiftMask|ControlMask, XK_n,      		spawn,    	SHCMD("skype") },
-	{KeyPress,	 	MODKEY|ALTKEY,								XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
-	{KeyPress,	 	MODKEY|ALTKEY|ShiftMask,      XK_n,      		spawn,    	SHCMD("pkill -9 slack") },
-	{KeyPress,	 	MODKEY|ALTKEY|ControlMask,		XK_n,      		spawn	,    	SHCMD("pkill -9 teams") },
-	{KeyPress,	 	MODKEY|ALTKEY|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
+	{KeyPress,	 	MODKEY|Alt,								XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
+	{KeyPress,	 	MODKEY|Alt|ShiftMask,      XK_n,      		spawn,    	SHCMD("pkill -9 slack") },
+	{KeyPress,	 	MODKEY|Alt|ControlMask,		XK_n,      		spawn	,    	SHCMD("pkill -9 teams") },
+	{KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
 	{KeyPress,	  MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
 	{KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
 	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("vlc") }, // marks or unmarks the selected client for group action
@@ -817,14 +817,7 @@ static Button buttons[] = {
 	{ ClkClientWin,              MODKEY|Shift,            Button3,        resizemouse,      {0} }, // change the size of a floating client window
 	//{ ClkClientWin,              0,                       Button8,        movemouse,        {0} }, // move a client window using extra mouse buttons (previous)
 	//{ ClkClientWin,              0,                       Button9,        resizemouse,      {0} }, // resize a client window using extra mouse buttons (next)
-	{ ClkClientWin,              MODKEY,                  Button2,        zoom, { MODKEY,			XK_c,      		spawn	,    	SHCMD("discord") },
-	{ MODKEY|ShiftMask,             XK_c,      		spawn,    	SHCMD("slack") },
-	{ MODKEY|ControlMask,			XK_c,      		spawn	,    	SHCMD("teams") },
-	{ MODKEY|ShiftMask|ControlMask,             XK_c,      		spawn,    	SHCMD("skype") },
-	{ MODKEY|ALTKEY,			XK_c,      		spawn	,    	SHCMD("pkill -9 Discord") },
-	{ MODKEY|ALTKEY|ShiftMask,             XK_c,      		spawn,    	SHCMD("pkill -9 slack") },
-	{ MODKEY|ALTKEY|ControlMask,			XK_c,      		spawn	,    	SHCMD("pkill -9 teams") },
-	{ MODKEY|ALTKEY|ShiftMask|ControlMask,             XK_c,      		spawn,    	SHCMD("pkill -9 skype") },            {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
+	{ ClkClientWin,              MODKEY,                  Button2,        zoom,       {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 	{ ClkClientWin,              MODKEY|Ctrl,             Button1,        dragmfact,        {0} }, // dynamically change the size of the master area compared to the stack area(s)
 	{ ClkRootWin,                MODKEY|Ctrl,             Button1,        dragmfact,        {0} }, // dynamically change the size of the master area compared to the stack area(s)
 	{ ClkClientWin,              MODKEY,                  Button4,        inplacerotate,    {.i = +1 } }, // rotate clients within the respective area (master, primary stack, secondary stack) clockwise
