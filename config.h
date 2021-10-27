@@ -585,7 +585,7 @@ static const char *dmenucmd[] = {
 	"-sf", selfgcolor,
 	NULL
 };
-static const char *spcmd1[] = {"w", "st", "-n", "spterm (w)", "-g", "120x34", NULL };
+static const char *spcmd1[] = {"q", "st", "-n", "spterm (q)", "-g", "120x34", NULL };
 static const char *spcmd2[] = {"c", "st", "-n", "spcalc(c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
 static const char *spcmd3[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", "lf", NULL };
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
@@ -685,9 +685,8 @@ static Key keys[] = {
 	{KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
 	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("vlc") }, // marks or unmarks the selected client for group action
 	{ KeyPress,   MODKEY|Alt,                   XK_m,            spawn,                   SHCMD("spotify") }, // moves the currently focused window to/from the master area (for tiled layouts)
-	{ KeyPress,   MODKEY,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
-	{ KeyPress,   MODKEY,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
-	{ KeyPress,   MODKEY|Alt,                   XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
+	{ KeyPress,   MODKEY|Alt,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
+	{ KeyPress,   MODKEY,                   XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 
 	{ KeyPress,   MODKEY|Ctrl,                  XK_g,            floatpos,               {.v = "50% 50% 80% 80%" } }, // center client and take up 80% of the screen
 	{ KeyPress,   MODKEY,                       XK_g,            togglefloating,         {0} }, // toggles between tiled and floating arrangement for the currently focused client
@@ -731,7 +730,7 @@ static Key keys[] = {
 //	STACKKEYS(AltGr|Ctrl,                            stackfocus)                           // focus on the nth client in the stack, see the STACKKEYS macro for keybindings
 //	STACKKEYS(AltGr|Ctrl|Shift,                      stackpush)                            // move the currently focused client to the nth place in the stack
 
-	SCRATCHKEYS(                    XK_w,                                    spcmd1)
+	SCRATCHKEYS(                    XK_q,                                    spcmd1)
 	SCRATCHKEYS(                    XK_c,                                    spcmd2)
 	SCRATCHKEYS(                    XK_r,                                    spcmd3)
 
