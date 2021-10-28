@@ -586,7 +586,7 @@ static const char *dmenucmd[] = {
 	NULL
 };
 static const char *spcmd1[] = {"q", "st", "-n", "spterm (q)", "-g", "120x34", NULL };
-static const char *spcmd2[] = {"c", "st", "-n", "spcalc(c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
+static const char *spcmd2[] = {"c", "st", "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
 static const char *spcmd3[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", "lf", NULL };
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
 
@@ -673,13 +673,13 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_bracketright, rotatelayoutaxis,       {.i = +3 } }, // cycle through the available tiling arrangements for the primary (first) stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketleft,  rotatelayoutaxis,       {.i = -4 } }, // cycle through the available tiling arrangements for the secondary stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
-	{KeyPress,		MODKEY,												XK_n,      		spawn	,    	SHCMD("discord") },
+	{KeyPress,		MODKEY,												XK_n,	  				spawn	,    	SHCMD("discord") },
 	{KeyPress,		MODKEY|ShiftMask,             XK_n,      		spawn,    	SHCMD("slack") },
 	{KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
 	{KeyPress,	 	MODKEY|ShiftMask|ControlMask, XK_n,      		spawn,    	SHCMD("skype") },
-	{KeyPress,	 	MODKEY|Alt,								XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
-	{KeyPress,	 	MODKEY|Alt|ShiftMask,      XK_n,      		spawn,    	SHCMD("pkill -9 slack") },
-	{KeyPress,	 	MODKEY|Alt|ControlMask,		XK_n,      		spawn	,    	SHCMD("pkill -9 teams") },
+	{KeyPress,	 	MODKEY|Alt,										XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
+	{KeyPress,	 	MODKEY|Alt|ShiftMask,      		XK_n,      				spawn,    	SHCMD("pkill -9 slack") },
+	{KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
 	{KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
 	{KeyPress,	  MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
 	{KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
