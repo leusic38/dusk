@@ -112,7 +112,7 @@ static int flexwintitle_masterweight     = 15; // master weight compared to hidd
 static int flexwintitle_stackweight      = 4;  // stack weight compared to hidden and floating window titles
 static int flexwintitle_hiddenweight     = 0;  // hidden window title weight
 static int flexwintitle_floatweight      = 0;  // floating window title weight, set to 0 to not show floating windows
-static int flexwintitle_separator        = 0;  // width of client separator
+static int flexwintitle_separator        = borderpx; // width of client separator
 
 static const char *fonts[]               = { "monospace:size=10", "JoyPixels:pixelsize=12:antialias=true:autohint=true", "Inconsolata:size=10", "Symbola:size=10", "Twitter Color Emoji:size=10"  };
 static const char dmenufont[]            = "monospace:size=10";
@@ -348,7 +348,7 @@ static char *colors[SchemeLast][4] = {
 /* List of programs to start automatically during startup only. Note that these will not be
  * executed again when doing a restart. */
 static const char *const autostart[] = {
-	TERMINAL,"-c","ranger",
+	TERMINAL,"-c","statusbar_launch", NULL,
 	NULL /* terminate */
 };
 
