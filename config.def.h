@@ -642,7 +642,7 @@ static Key keys[] = {
 	{ KeyPress, MODKEY|ShiftMask|ControlMask,		XK_BackSpace,  		restart,		{0} },
 	{ KeyPress, MODKEY|Mod1Mask,								XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && sudo -A shutdown -h now") },
 	{ KeyPress, MODKEY|ControlMask,		XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot computer?\")\" = Yes ] && sudo -A reboot") },
-	/***********           q used by scrtchpad st 	        ***************/	
+	/***********           q used by scratchpad st 	        ***************/	
 	{	KeyPress,	MODKEY,													XK_w,			spawn,		SHCMD("$BROWSER") },
 	{	KeyPress, MODKEY|ShiftMask,								XK_w,			spawn,		SHCMD("$BROWSER_2") },
 	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_w,			spawn,		SHCMD("$BROWSER_3") },
@@ -759,7 +759,6 @@ static Key keys[] = {
 	{ KeyPress, 0,				XK_Print,		spawn,		SHCMD("maim /hdd/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
 	{ KeyPress, ShiftMask,			XK_Print,		spawn,		SHCMD("printscript") },
 	{ KeyPress, 0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
-
 
 	{ KeyPress,  0,				XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t") },
 	{ KeyPress,  0,				XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 5") },
