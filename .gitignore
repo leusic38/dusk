@@ -1,3 +1,4 @@
 *.o
 dusk
 duskc
+config.h
