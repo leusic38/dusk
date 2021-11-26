@@ -347,7 +347,7 @@ static char *colors[SchemeLast][4] = {
 /* List of programs to start automatically during startup only. Note that these will not be
  * executed again when doing a restart. */
 static const char *const autostart[] = {
-	TERMINAL,"-c","statusbar_launch", NULL,
+	"sh","-c","statusbar_launch", NULL,
 	NULL /* terminate */
 };
 
