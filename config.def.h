@@ -347,7 +347,7 @@ static char *colors[SchemeLast][4] = {
  * executed again when doing a restart. */
 static const char *const autostart[] = {
 	"sh","-c","statusbar_launch",
-  NULL,
+	NULL /* terminate */
 };
 
 /* There are two options when it comes to per-client rules:
