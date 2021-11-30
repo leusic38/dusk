@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
-
+#define TERMINAL "st"
 /* appearance */
-static const unsigned int borderpx       = 5;   /* border pixel of windows */
+static const unsigned int borderpx       = 3;   /* border pixel of windows */
 static const unsigned int snap           = 32;  /* snap pixel */
 static const unsigned int gappih         = 5;   /* horiz inner gap between windows */
 static const unsigned int gappiv         = 5;   /* vert inner gap between windows */
@@ -10,7 +10,7 @@ static const unsigned int gappov         = 5;   /* vert outer gap between window
 static const unsigned int gappfl         = 5;   /* gap between floating windows (when relevant) */
 static const unsigned int smartgaps_fact = 0;   /* smartgaps factor when there is only one client; 0 = no gaps, 3 = 3x outer gaps */
 
-static unsigned int attachdefault        = AttachAside; // AttachMaster, AttachAbove, AttachAside, AttachBelow, AttachBottom
+static unsigned int attachdefault        = AttachAside; // AttachMaster, AttachAbove, AttachSide, AttachBelow, AttachBottom
 
 static const int initshowbar             = 1;   /* 0 means no bar */
 
@@ -94,7 +94,7 @@ static uint64_t functionality = 0
 	|SnapToWindows // snap to windows when moving floating clients
 //	|SortScreens // monitors are numbered from left to right
 //	|ViewOnWs // follow a window to the workspace it is being moved to
-	|Xresources // add support for changing colours via Xresources
+//	|Xresources // add support for changing colours via Xresources
 //	|Debug // enables additional debug output
 //	|AltWorkspaceIcons // show the workspace name instead of the icons
 //	|GreedyMonitor // disables swap of workspaces between monitors
@@ -114,13 +114,160 @@ static int flexwintitle_hiddenweight     = 0;  // hidden window title weight
 static int flexwintitle_floatweight      = 0;  // floating window title weight, set to 0 to not show floating windows
 static int flexwintitle_separator        = 0;  // width of client separator
 
-static const char *fonts[]               = { "monospace:size=10" };
-static       char dmenufont[]            = "monospace:size=10";
-
-static char dmenunormfgcolor[] = "#BE89AE";
+static const char *fonts[]               = { "monospace:size=10", "JoyPixels:pixelsize=12:antialias=true:autohint=true", "Inconsolata:size=10", "Symbola:size=10", "Twitter Color Emoji:size=10"  };
+static const char dmenufont[]            = "monospace:size=10";
 static char dmenunormbgcolor[] = "#180A13";
 static char dmenuselfgcolor[] = "#FFF7D4";
 static char dmenuselbgcolor[] = "#440000";
+static char normfgcolor[]                = "#C6BDBD";
+static char normbgcolor[]                = "#180A13";
+static char normbordercolor[]            = "#444444";
+
+static char selfgcolor[]                 = "#FFF7D4";
+static char selbgcolor[]                 = "#440000";
+static char selbordercolor[]             = "#440000";
+
+static char titlenormfgcolor[]           = "#C6BDBD";
+static char titlenormbgcolor[]           = "#180A13";
+static char titlenormbordercolor[]       = "#440000";
+
+static char titleselfgcolor[]            = "#FFF7D4";
+static char titleselbgcolor[]            = "#440000";
+static char titleselbordercolor[]        = "#440000";
+
+static char wsnormfgcolor[]              = "#C6BDBD";
+static char wsnormbgcolor[]              = "#180A13";
+static char wsvisfgcolor[]               = "#FFF7D4";
+static char wsvisbgcolor[]               = "#5E294B";
+static char wsselfgcolor[]               = "#FFF7D4";
+static char wsselbgcolor[]               = "#6F3A5C";
+static char wsoccfgcolor[]               = "#C6BDBD";
+static char wsoccbgcolor[]               = "#180A13";
+
+static char hidnormfgcolor[]             = "#c278b6";
+static char hidnormbgcolor[]             = "#222222";
+static char hidnormbordercolor[]         = "#440000";
+
+static char hidselfgcolor[]              = "#D288C6";
+static char hidselbgcolor[]              = "#111111";
+static char hidselbordercolor[]          = "#440000";
+
+static char urgfgcolor[]                 = "#bbbbbb";
+static char urgbgcolor[]                 = "#222222";
+static char urgbordercolor[]             = "#d10f3f";
+
+static char markedfgcolor[]              = "#615656";
+static char markedbgcolor[]              = "#ECB820";
+static char markedbordercolor[]          = "#ECB820";
+
+static char scratchnormcolor[]           = "#FFF7D4";
+static char scratchnormbgcolor[]         = "#664C67";
+static char scratchnormbordercolor[]     = "#77547E";
+
+static char scratchselcolor[]            = "#FFF7D4";
+static char scratchselbgcolor[]          = "#77547E";
+static char scratchselbordercolor[]      = "#894B9F";
+
+/* flexwintitle background colours */
+static char normTTBbgcolor[]             = "#330000";
+static char normLTRbgcolor[]             = "#330033";
+static char normMONObgcolor[]            = "#000033";
+static char normGRIDbgcolor[]            = "#003300";
+static char normGRIDCbgcolor[]           = "#003300";
+static char normGRD1bgcolor[]            = "#003300";
+static char normGRD2bgcolor[]            = "#003300";
+static char normGRDMbgcolor[]            = "#506600";
+static char normHGRDbgcolor[]            = "#b96600";
+static char normDWDLbgcolor[]            = "#003333";
+static char normDWDLCbgcolor[]           = "#003333";
+static char normSPRLbgcolor[]            = "#333300";
+static char normSPRLCbgcolor[]           = "#333300";
+static char normTTMIbgcolor[]            = "#B32727";
+static char normTTMICbgcolor[]           = "#B32727";
+static char normfloatbgcolor[]           = "#4C314C";
+static char actTTBbgcolor[]              = "#440000";
+static char actLTRbgcolor[]              = "#440044";
+static char actMONObgcolor[]             = "#000044";
+static char actGRIDbgcolor[]             = "#004400";
+static char actGRIDCbgcolor[]            = "#004400";
+static char actGRD1bgcolor[]             = "#004400";
+static char actGRD2bgcolor[]             = "#004400";
+static char actGRDMbgcolor[]             = "#507711";
+static char actHGRDbgcolor[]             = "#b97711";
+static char actDWDLbgcolor[]             = "#004444";
+static char actDWDLCbgcolor[]            = "#004444";
+static char actSPRLbgcolor[]             = "#444400";
+static char actSPRLCbgcolor[]            = "#444400";
+static char actTTMIbgcolor[]             = "#C81C1C";
+static char actTTMICbgcolor[]            = "#C81C1C";
+static char actfloatbgcolor[]            = "#4C314C";
+static char selTTBbgcolor[]              = "#550000";
+static char selLTRbgcolor[]              = "#550055";
+static char selMONObgcolor[]             = "#212171";
+static char selGRIDbgcolor[]             = "#005500";
+static char selGRIDCbgcolor[]            = "#005500";
+static char selGRD1bgcolor[]             = "#005500";
+static char selGRD2bgcolor[]             = "#005500";
+static char selGRDMbgcolor[]             = "#508822";
+static char selHGRDbgcolor[]             = "#b98822";
+static char selDWDLbgcolor[]             = "#005555";
+static char selDWDLCbgcolor[]            = "#005555";
+static char selSPRLbgcolor[]             = "#555500";
+static char selSPRLCbgcolor[]            = "#555500";
+static char selTTMIbgcolor[]             = "#C91717";
+static char selTTMICbgcolor[]            = "#C91717";
+static char selfloatbgcolor[]            = "#5C415C";
+
+/* flexwintitle foreground colours */
+static char normTTBfgcolor[]             = "#C6BDBD";
+static char normLTRfgcolor[]             = "#C6BDBD";
+static char normMONOfgcolor[]            = "#C6BDBD";
+static char normGRIDfgcolor[]            = "#C6BDBD";
+static char normGRIDCfgcolor[]           = "#C6BDBD";
+static char normGRD1fgcolor[]            = "#C6BDBD";
+static char normGRD2fgcolor[]            = "#C6BDBD";
+static char normGRDMfgcolor[]            = "#C6BDBD";
+static char normHGRDfgcolor[]            = "#C6BDBD";
+static char normDWDLfgcolor[]            = "#C6BDBD";
+static char normDWDLCfgcolor[]           = "#C6BDBD";
+static char normSPRLfgcolor[]            = "#C6BDBD";
+static char normSPRLCfgcolor[]           = "#C6BDBD";
+static char normTTMIfgcolor[]            = "#C6BDBD";
+static char normTTMICfgcolor[]           = "#C6BDBD";
+static char normfloatfgcolor[]           = "#C6BDBD";
+static char actTTBfgcolor[]              = "#FFF7D4";
+static char actLTRfgcolor[]              = "#FFF7D4";
+static char actMONOfgcolor[]             = "#FFF7D4";
+static char actGRIDfgcolor[]             = "#FFF7D4";
+static char actGRIDCfgcolor[]            = "#FFF7D4";
+static char actGRD1fgcolor[]             = "#FFF7D4";
+static char actGRD2fgcolor[]             = "#FFF7D4";
+static char actGRDMfgcolor[]             = "#FFF7D4";
+static char actHGRDfgcolor[]             = "#FFF7D4";
+static char actDWDLfgcolor[]             = "#FFF7D4";
+static char actDWDLCfgcolor[]            = "#FFF7D4";
+static char actSPRLfgcolor[]             = "#FFF7D4";
+static char actSPRLCfgcolor[]            = "#FFF7D4";
+static char actTTMIfgcolor[]             = "#FFF7D4";
+static char actTTMICfgcolor[]            = "#FFF7D4";
+static char actfloatfgcolor[]            = "#FFF7D4";
+static char selTTBfgcolor[]              = "#FFF7D4";
+static char selLTRfgcolor[]              = "#FFF7D4";
+static char selMONOfgcolor[]             = "#FFF7D4";
+static char selGRIDfgcolor[]             = "#FFF7D4";
+static char selGRIDCfgcolor[]            = "#FFF7D4";
+static char selGRD1fgcolor[]             = "#FFF7D4";
+static char selGRD2fgcolor[]             = "#FFF7D4";
+static char selGRDMfgcolor[]             = "#FFF7D4";
+static char selHGRDfgcolor[]             = "#FFF7D4";
+static char selDWDLfgcolor[]             = "#FFF7D4";
+static char selDWDLCfgcolor[]            = "#FFF7D4";
+static char selSPRLfgcolor[]             = "#FFF7D4";
+static char selSPRLCfgcolor[]            = "#FFF7D4";
+static char selTTMIfgcolor[]             = "#FFF7D4";
+static char selTTMICfgcolor[]            = "#FFF7D4";
+static char selfloatfgcolor[]            = "#FFF7D4";
+>>>>>>> d0a1078 (resolv conflict upstream pull)
 
 /* Xresources preferences to load at startup. */
 static const ResourcePref resources[] = {
@@ -202,7 +349,7 @@ static char *colors[SchemeLast][4] = {
 /* List of programs to start automatically during startup only. Note that these will not be
  * executed again when doing a restart. */
 static const char *const autostart[] = {
-	"st", NULL,
+	TERMINAL,"-e","ranger", NULL,
 	NULL /* terminate */
 };
 
@@ -245,19 +392,18 @@ static const Rule clientrules[] = {
 	{ .wintype = WTYPE "TOOLBAR", .flags = AlwaysOnTop|Centered|Floating },
 	{ .wintype = WTYPE "SPLASH", .flags = AlwaysOnTop|Centered|Floating },
 	{ .instance = "spterm (w)", .scratchkey = 'w', .flags = Floating },
-	{ .instance = "spterm (e)", .scratchkey = 'e', .flags = Floating },
+	{ .instance = "spcalc (c)", .scratchkey = 'c', .flags = Floating },
 	{ .instance = "spfm (r)", .scratchkey = 'r', .flags = Floating },
 	{ .class = "Gimp", .workspace = "5", .flags = Floating|SwitchWorkspace },
-	{ .class = "firefox", .workspace = "8", .flags = AttachMaster|SwitchWorkspace },
-	{ .class = "Steam", .flags = Floating|Centered },
-	{ .class = "steam_app_", .flags = SteamGame|Floating|Centered },
+	{ .class = "firefox", .workspace = "2", .flags = AttachMaster|SwitchWorkspace },
+	{ .class = "Steam", .flags = IgnoreCfgReqPos|Floating|Centered },
+	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },
 	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
 	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
-	{ .role = "browser", .workspace = "8", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
-	{ .class = "Gnome-terminal", .role = "gnome-terminal-preferences", .flags = Centered },
 	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
 	{ .class = "Alacritty", .flags = Terminal },
+	{ .class = TERMINAL, .flags = Terminal },
 	{ .class = "st-256color", .flags = Terminal|AttachBottom },
 	{ .class = "XTerm", .flags = Terminal },
 	{ .class = "Xephyr", .flags = NoSwallow|Floating|Centered },
@@ -316,8 +462,8 @@ static const BarDef bars[] = {
 	{  0,      1,   0,    "0%    100%   100% -1h ", "Primary bottom" },
 	{  1,      0,   0,    "0%    0%     100% -1h ", "Secondary top" },
 	{  1,      1,   0,    "0%    100%   100% -1h ", "Secondary bottom" },
-	{  2,      0,   0,    "0%    0%     100% -1h ", "Tertiary top" },
-	{  2,      1,   0,    "0%    100%   100% -1h ", "Tertiary bottom" },
+/*	{  2,      0,   0,    "0%    0%     100% -1h ", "Tertiary top" },
+	{  2,      1,   0,    "0%    100%   100% -1h ", "Tertiary bottom" },*/
 };
 
 /* Bar rules allow you to configure what is shown where on the bar, as well as
@@ -339,39 +485,39 @@ static const BarDef bars[] = {
 #define PWRL PwrlForwardSlash
 static const BarRule barrules[] = {
 	/* monitor  bar    scheme   lpad rpad value  alignment               sizefunc                  drawfunc                 clickfunc                 hoverfunc                 name */
-	{ -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   7,     BAR_ALIGN_LEFT,         size_status,              draw_status,             click_status,             NULL,                     "status7" },
+	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{  -1,       0,     4,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_workspaces,          draw_workspaces,         click_workspaces,         hover_workspaces,         "workspaces" },
+	{ 'A',       0,     6,       5,   5,   0,     BAR_ALIGN_RIGHT,        size_systray,             draw_systray,            click_systray,            NULL,                     "systray" },
+	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{  -1,       0,     5,       0,   0,   0,     BAR_ALIGN_LEFT,         size_ltsymbol,            draw_ltsymbol,           click_ltsymbol,           NULL,                     "layout" },
+	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{  -1,       0,     0,       5,   5,   0,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status0" },
 	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{ -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_workspaces,          draw_workspaces,         click_workspaces,         hover_workspaces,         "workspaces" },
-	{  0,       0,     6,       5,   5,   0,     BAR_ALIGN_RIGHT,        size_systray,             draw_systray,            click_systray,            NULL,                     "systray" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{ -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{ -1,       0,     5,       0,   0,   0,     BAR_ALIGN_LEFT,         size_ltsymbol,            draw_ltsymbol,           click_ltsymbol,           NULL,                     "layout" },
-	{ -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   0,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status0" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   1,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status1" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   2,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status2" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   3,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status3" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   4,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status4" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   5,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status5" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   6,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status6" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   8,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status8" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  0,       0,     0,       5,   5,   9,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status9" },
-	{ -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{ -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_NONE,         size_wintitle_sticky,     draw_wintitle_sticky,    click_wintitle_sticky,    NULL,                     "wintitle_sticky" },
-	{ -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_NONE,         size_flexwintitle,        draw_flexwintitle,       click_flexwintitle,       NULL,                     "flexwintitle" },
+	{   0,       0,     0,       5,   5,   7,     BAR_ALIGN_RIGHT,         size_status,              draw_status,             click_status,             NULL,                     "status7" },
+	{ 'A',       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   1,       0,     0,       5,   5,   1,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status1" },
+	{   1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   0,       0,     0,       5,   5,   2,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status2" },
+	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   0,       0,     0,       5,   5,   3,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status3" },
+	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   0,       0,     0,       5,   5,   4,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status4" },
+	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   1,       0,     0,       5,   5,   5,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status5" },
+	{   1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   0,       0,     0,       5,   5,   6,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status6" },
+	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   0,       0,     0,       5,   5,   8,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status8" },
+	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   0,       0,     0,       5,   5,   9,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status9" },
+	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_NONE,         size_wintitle_sticky,     draw_wintitle_sticky,    click_wintitle_sticky,    NULL,                     "wintitle_sticky" },
+	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_NONE,         size_flexwintitle,        draw_flexwintitle,       click_flexwintitle,       NULL,                     "flexwintitle" },
 
-	{ -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_CENTER,       size_pwrl_ifhidfloat,     draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{ -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT_RIGHT,  size_wintitle_hidden,     draw_wintitle_hidden,    click_wintitle_hidden,    NULL,                     "wintitle_hidden" },
-	{ -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT_LEFT,    size_wintitle_floating,   draw_wintitle_floating,  click_wintitle_floating,  NULL,                     "wintitle_floating" },
+	{  -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_CENTER,       size_pwrl_ifhidfloat,     draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{  -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT_RIGHT,  size_wintitle_hidden,     draw_wintitle_hidden,    click_wintitle_hidden,    NULL,                     "wintitle_hidden" },
+	{  -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT_LEFT,    size_wintitle_floating,   draw_wintitle_floating,  click_wintitle_floating,  NULL,                     "wintitle_floating" },
 };
 
 /* Workspace rules define what workspaces are available and their properties.
@@ -414,24 +560,25 @@ static const int enablegaps  = 1;    /* whether gaps are enabled by default or n
 
 /* layout(s) */
 static const Layout layouts[] = {
-	/* symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis, symbol func }, name */
-	{ "[]=",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL }, "tile" },
-	{ "|||",      flextile,         { -1, -1, NO_SPLIT, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL }, "columns" },
-	{ "===",      flextile,         { -1, -1, NO_SPLIT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL }, "rows" },
-	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, MONOCLE, 0, NULL }, "monocle" },
-	{ "||=",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL }, "col" },
-	{ ">M>",      flextile,         { -1, -1, FLOATING_MASTER, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL }, "floating master" },
-	{ "[D]",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, MONOCLE, 0, NULL }, "deck" },
-	{ "TTT",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL }, "bstack" },
-	{ "===",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL }, "bstackhoriz" },
-	{ "==#",      flextile,         { -1, -1, SPLIT_HORIZONTAL, TOP_TO_BOTTOM, GAPPLESSGRID_CFACTS, 0, NULL }, "bstackgrid" },
-	{ "|M|",      flextile,         { -1, -1, SPLIT_CENTERED_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, NULL }, "centeredmaster" },
-	{ "-M-",      flextile,         { -1, -1, SPLIT_CENTERED_HORIZONTAL, TOP_TO_BOTTOM, LEFT_TO_RIGHT, LEFT_TO_RIGHT, NULL }, "centeredmaster horiz" },
-	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID_CFACTS, GAPPLESSGRID_CFACTS, 0, NULL }, "gappless grid" },
-	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE_CFACTS, DWINDLE_CFACTS, 0, NULL }, "fibonacci dwindle" },
-	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL_CFACTS, SPIRAL_CFACTS, 0, NULL }, "fibonacci spiral" },
-	{ "[T]",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TATAMI_CFACTS, 0, NULL }, "tatami mats" },
- 	{ "><>",      NULL,             { -1, -1 }, "floating" }, /* no layout function means floating behavior */
+	/* symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis, symbol func } */
+	{ "[]=",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, //) default tile layout
+	{ "|||",      flextile,         { -1, -1, NO_SPLIT, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //1 columns
+	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, MONOCLE, 0, NULL } }, //2 monocle
+	{ "||=",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, //3 columns (col) layout
+	{ ">M>",      flextile,         { -1, -1, FLOATING_MASTER, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //4 floating master
+	{ "TTT",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //5 bstack
+	{ "===",      flextile,         { -1, -1, NO_SPLIT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, //6 rows
+	{ "===",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, //7 bstackhoriz
+	{ "==#",      flextile,         { -1, -1, SPLIT_HORIZONTAL, TOP_TO_BOTTOM, GAPPLESSGRID_CFACTS, 0, NULL } }, //8 bstackgrid
+	{ "-M-",      flextile,         { -1, -1, SPLIT_CENTERED_HORIZONTAL, TOP_TO_BOTTOM, LEFT_TO_RIGHT, LEFT_TO_RIGHT, NULL } }, //9 centeredmaster horiz
+	{ "[D]",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, MONOCLE, 0, NULL } }, //10 deck
+	{ "|M|",      flextile,         { -1, -1, SPLIT_CENTERED_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, NULL } }, //11 centeredmaster
+	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID_CFACTS, GAPPLESSGRID_CFACTS, 0, NULL } }, //12 gappless grid
+	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE_CFACTS, DWINDLE_CFACTS, 0, NULL } }, //13 fibonacci dwindle
+	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL_CFACTS, SPIRAL_CFACTS, 0, NULL } }, //14 fibonacci spiral
+	{ "[T]",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TATAMI_CFACTS, 0, NULL } }, //15 tatami mats
+ 	{ "><>",      NULL,             {0} },    /* 16 no layout function means floating behavior */
+	{ NULL,       NULL,             {0} },    /*17 end of layouts marker for cyclelayouts */
 };
 
 #define Shift ShiftMask
@@ -445,9 +592,9 @@ static const Layout layouts[] = {
 #define MODKEY Super
 
 #define SCRATCHKEYS(MOD,KEY,CMD) \
-	{ KeyPress,   MOD,                      KEY,      togglescratch,       {.v = CMD } }, \
-	{ KeyPress,   MOD|Ctrl,                 KEY,      setscratch,          {.v = CMD } }, \
-	{ KeyPress,   MOD|Ctrl|Shift,           KEY,      removescratch,       {.v = CMD } }, \
+	{ KeyPress,   MODKEY,                      KEY,      togglescratch,     {.v = CMD } }, \
+	{ KeyPress,   MODKEY|Ctrl,                 KEY,      setscratch,        {.v = CMD } }, \
+	{ KeyPress,   MODKEY|Ctrl|Shift,           KEY,      removescratch,     {.v = CMD } }, \
 
 #define WSKEYS(MOD,KEY,NAME) \
 	{ KeyPress,   MOD,                      KEY,      comboviewwsbyname,   {.v = NAME} }, \
@@ -472,7 +619,7 @@ static const Layout layouts[] = {
 #define CMD(...)   { .v = (const char*[]){ NULL, __VA_ARGS__, NULL } }
 
 /* Scratch/Spawn commands:        NULL (scratchkey), command, argument, argument, ..., NULL */
-static const char *termcmd[]  = { NULL, "st", NULL };
+static const char *termcmd[]  = { NULL, TERMINAL, NULL };
 static const char *dmenucmd[] = {
 	NULL,
 	"dmenu_run",
@@ -483,13 +630,46 @@ static const char *dmenucmd[] = {
 	"-sf", dmenuselfgcolor,
 	NULL
 };
-static const char *spcmd_w[] = {"w", "st", "-n", "spterm (w)", "-g", "120x34", NULL };
-static const char *spcmd_e[] = {"e", "st", "-n", "spterm (e)", "-g", "120x34", NULL };
-static const char *spcmd_r[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", "ranger", NULL };
-static const char *statusclickcmd[] = { NULL, "bin/statusbar/statusclick.sh", NULL };
+static const char *spcmd1[] = {"q", TERMINAL, "-n", "spterm (q)", "-g", "120x34", NULL };
+static const char *spcmd2[] = {"c", TERMINAL, "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
+static const char *spcmd3[] = {"r", TERMINAL, "-n", "spfm (r)", "-g", "144x41", "-e", "ranger", NULL };
+static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
+
+#include <X11/XF86keysym.h>
 
 static Key keys[] = {
 	/* type       modifier                      key              function                argument */
+	{ KeyPress, MODKEY,													XK_BackSpace,  		killclient,	{0} },
+	{ KeyPress, MODKEY|ShiftMask,								XK_BackSpace,  		quit,		{0} },
+	{ KeyPress, MODKEY|ShiftMask|ControlMask,		XK_BackSpace,  		restart,		{0} },
+	{ KeyPress, MODKEY|Mod1Mask,								XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && sudo -A shutdown -h now") },
+	{ KeyPress, MODKEY|ControlMask,		XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot computer?\")\" = Yes ] && sudo -A reboot") },
+	/***********           q used by scrtchpad st 	        ***************/	
+	{	KeyPress,	MODKEY,													XK_w,			spawn,		SHCMD("$BROWSER") },
+	{	KeyPress, MODKEY|ShiftMask,								XK_w,			spawn,		SHCMD("$BROWSER_2") },
+	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_w,			spawn,		SHCMD("$BROWSER_3") },
+	{	KeyPress, MODKEY,													XK_e,			spawn,		SHCMD("$EDI") },
+	{	KeyPress, MODKEY|ShiftMask,								XK_e,			spawn,		SHCMD("code") },
+	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
+// XK_r used by skratchpads ranger
+	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{.v = &layouts[0]} },
+	{	KeyPress, MODKEY|ShiftMask,								XK_t,      		setlayout,     	{.v = &layouts[1]} },
+	{	KeyPress, MODKEY|ControlMask,							XK_t,      		setlayout,     	{.v = &layouts[2]} },
+	{	KeyPress, MODKEY|Mod1Mask,								XK_t,      		setlayout,     	{.v = &layouts[3]} },
+	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,			XK_t,      		setlayout,     	{.v = &layouts[4]} },
+	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_t,      		setlayout,     	{.v = &layouts[5]} },
+	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{.v = &layouts[6]}},
+	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{.v = &layouts[7]}},
+	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[8]}},
+	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{.v = &layouts[9]}},
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{.v = &layouts[10]}},
+	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{.v = &layouts[11]}},
+	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{.v = &layouts[12]} },
+	{	KeyPress, MODKEY|ShiftMask,								XK_u,      		setlayout,     	{.v = &layouts[13]} },
+	{	KeyPress, MODKEY|ControlMask,							XK_u,      		setlayout,     	{.v = &layouts[14]} },
+	{	KeyPress, MODKEY|Mod1Mask,								XK_u,      		setlayout,     	{.v = &layouts[15]} },
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_u,      		setlayout,     	{.v = &layouts[16]} },
+//	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_u,      		setlayout,     	{.v = &layouts[17]} },
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
 	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
@@ -510,10 +690,10 @@ static Key keys[] = {
 
 	{ KeyPress,   MODKEY|Ctrl,                  XK_j,            pushdown,               {0} }, // move the selected client down the stack
 	{ KeyPress,   MODKEY|Ctrl,                  XK_k,            pushup,                 {0} }, // move the selected client up the stack
-	{ KeyPress,   MODKEY,                       XK_i,            incnmaster,             {.i = +1 } }, // increase the number of clients in the master area
-	{ KeyPress,   MODKEY,                       XK_u,            incnmaster,             {.i = -1 } }, // decrease the number of clients in the master area
-	{ KeyPress,   MODKEY|Ctrl,                  XK_i,            incnstack,              {.i = +1 } }, // increase the number of clients in the primary (first) stack area
-	{ KeyPress,   MODKEY|Ctrl,                  XK_u,            incnstack,              {.i = -1 } }, // increase the number of clients in the primary (first) stack area
+	{ KeyPress,   MODKEY,                       XK_o,            incnmaster,             {.i = +1 } }, // increase the number of clients in the master area
+	{ KeyPress,   MODKEY,                       XK_i,            incnmaster,             {.i = -1 } }, // decrease the number of clients in the master area
+	{ KeyPress,   MODKEY|Ctrl,                  XK_o,            incnstack,              {.i = +1 } }, // increase the number of clients in the primary (first) stack area
+	{ KeyPress,   MODKEY|Ctrl,                  XK_i,            incnstack,              {.i = -1 } }, // increase the number of clients in the primary (first) stack area
 	{ KeyPress,   MODKEY,                       XK_h,            setmfact,               {.f = -0.05} }, // decrease the size of the master area compared to the stack area(s)
 	{ KeyPress,   MODKEY,                       XK_l,            setmfact,               {.f = +0.05} }, // increase the size of the master area compared to the stack area(s)
 	{ KeyPress,   MODKEY|Shift,                 XK_h,            setcfact,               {.f = +0.25} }, // increase size respective to other windows within the same area
@@ -522,19 +702,10 @@ static Key keys[] = {
 
 	{ KeyPress,   MODKEY,                       XK_backslash,    togglepinnedws,         {0} }, // toggle pinning of currently selected workspace on the current monitor
 	{ KeyPress,   MODKEY,                       XK_z,            showhideclient,         {0} }, // hide the currently selected client (or show if hidden)
-	{ KeyPress,   MODKEY,                       XK_q,            killclient,             {0} }, // close the currently focused window
-	{ KeyPress,   MODKEY|Shift,                 XK_q,            restart,                {0} }, // restart dusk
-	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_q,            quit,                   {0} }, // exit dusk
-
-	{ KeyPress,   MODKEY,                       XK_v,            group,                  {0} }, // groups floating clients together
-	{ KeyPress,   MODKEY|Shift,                 XK_v,            ungroup,                {0} }, // ungroups floating clients
-
 	{ KeyPress,   MODKEY,                       XK_a,            markall,                {0} }, // marks all clients on the selected workspace
 	{ KeyPress,   MODKEY|Ctrl,                  XK_a,            markall,                {1} }, // marks all floating clients on the selected workspace
 	{ KeyPress,   MODKEY|Alt,                   XK_a,            markall,                {2} }, // marks all hidden clients on the selected workspace
 	{ KeyPress,   MODKEY|Shift,                 XK_a,            unmarkall,              {0} }, // unmarks all clients
-	{ KeyPress,   MODKEY,                       XK_m,            togglemark,             {0} }, // marks or unmarks the selected client for group action
-	{ KeyPress,   MODKEY,                       XK_n,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 
 	{ KeyPress,   MODKEY,                       XK_bracketleft,  rotatelayoutaxis,       {.i = -1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
 	{ KeyPress,   MODKEY,                       XK_bracketright, rotatelayoutaxis,       {.i = +1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
@@ -544,9 +715,20 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_bracketright, rotatelayoutaxis,       {.i = +3 } }, // cycle through the available tiling arrangements for the primary (first) stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketleft,  rotatelayoutaxis,       {.i = -4 } }, // cycle through the available tiling arrangements for the secondary stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
-	{ KeyPress,   MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
-	{ KeyPress,   MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
-	{ KeyPress,   MODKEY,                       XK_space,        setlayout,              {-1} }, // toggles between current and previous layout
+	{KeyPress,		MODKEY,												XK_n,	  				spawn	,    	SHCMD("discord") },
+	{KeyPress,		MODKEY|ShiftMask,             XK_n,      		spawn,    	SHCMD("slack") },
+	{KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
+	{KeyPress,	 	MODKEY|ShiftMask|ControlMask, XK_n,      		spawn,    	SHCMD("skype") },
+	{KeyPress,	 	MODKEY|Alt,										XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
+	{KeyPress,	 	MODKEY|Alt|ShiftMask,      		XK_n,      				spawn,    	SHCMD("pkill -9 slack") },
+	{KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
+	{KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
+	{KeyPress,	  MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
+	{KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
+	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("vlc") }, // marks or unmarks the selected client for group action
+	{ KeyPress,   MODKEY|Alt,                   XK_m,            spawn,                   SHCMD("spotify") }, // moves the currently focused window to/from the master area (for tiled layouts)
+	{ KeyPress,   MODKEY|Alt,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
+	{ KeyPress,   MODKEY,                   XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 
 	{ KeyPress,   MODKEY|Ctrl,                  XK_g,            floatpos,               {.v = "50% 50% 80% 80%" } }, // center client and take up 80% of the screen
 	{ KeyPress,   MODKEY,                       XK_g,            togglefloating,         {0} }, // toggles between tiled and floating arrangement for the currently focused client
@@ -573,24 +755,39 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY,                       XK_Tab,          viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_comma,        movewsdir,              {.i = -1 } }, // move client to workspace on the immediate left of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_period,       movewsdir,              {.i = +1 } }, // move client to workspace on the immediate right of current workspace (on the current monitor)
+	{ KeyPress, MODKEY,			XK_slash,			spawn,		SHCMD("st -e sudo openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
+	{ KeyPress, MODKEY|ControlMask,			XK_slash,			spawn,		SHCMD("st -e sudo pkill openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
+	{ KeyPress, MODKEY|ShiftMask,		XK_slash,			spawn,		SHCMD("st -e /usr/NX/bin/nxplayer") },
+	{ KeyPress, 0,				XK_Print,		spawn,		SHCMD("maim /hdd/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+	{ KeyPress, ShiftMask,			XK_Print,		spawn,		SHCMD("printscript") },
+	{ KeyPress, 0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
 
-//	STACKKEYS(AltGr|Ctrl,                                        stackfocus)                           // focus on the nth client in the stack, see the STACKKEYS macro for keybindings
-//	STACKKEYS(AltGr|Ctrl|Shift,                                  stackpush)                            // move the currently focused client to the nth place in the stack
-//	STACKKEYS(AltGr|Shift,                                       stackswap)                            // swap the currently focused client with the nth client in the stack
 
-	SCRATCHKEYS(MODKEY,                         XK_w,            spcmd_w)
-	SCRATCHKEYS(MODKEY,                         XK_e,            spcmd_e)
-	SCRATCHKEYS(MODKEY,                         XK_r,            spcmd_r)
+	{ KeyPress,  0,				XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t") },
+	{ KeyPress,  0,				XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 5") },
+	{ KeyPress,  0,				XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 5") },
+	{ KeyPress,  0,				XF86XK_AudioPrev,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous") },
+	{ KeyPress,  0,				XF86XK_AudioNext,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next") },
+	/* { KeyPress 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc pause") }, */
+	{ KeyPress,  0, XF86XK_AudioPlay,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
 
-	WSKEYS(MODKEY,                              XK_1,            "1")
-	WSKEYS(MODKEY,                              XK_2,            "2")
-	WSKEYS(MODKEY,                              XK_3,            "3")
-	WSKEYS(MODKEY,                              XK_4,            "4")
-	WSKEYS(MODKEY,                              XK_5,            "5")
-	WSKEYS(MODKEY,                              XK_6,            "6")
-	WSKEYS(MODKEY,                              XK_7,            "7")
-	WSKEYS(MODKEY,                              XK_8,            "8")
-	WSKEYS(MODKEY,                              XK_9,            "9")
+
+//	STACKKEYS(AltGr|Ctrl,                            stackfocus)                           // focus on the nth client in the stack, see the STACKKEYS macro for keybindings
+//	STACKKEYS(AltGr|Ctrl|Shift,                      stackpush)                            // move the currently focused client to the nth place in the stack
+
+	SCRATCHKEYS(MODKEY,                    XK_q,                                    spcmd1)
+	SCRATCHKEYS(MODKEY,                    XK_c,                                    spcmd2)
+	SCRATCHKEYS(MODKEY,                    XK_r,                                    spcmd3)
+
+	WSKEYS(MODKEY,                         XK_1,                                    "1")
+	WSKEYS(MODKEY,                         XK_2,                                    "2")
+	WSKEYS(MODKEY,                         XK_3,                                    "3")
+	WSKEYS(MODKEY,                         XK_4,                                    "4")
+	WSKEYS(MODKEY,                         XK_5,                                    "5")
+	WSKEYS(MODKEY,                         XK_6,                                    "6")
+	WSKEYS(MODKEY,                         XK_7,                                    "7")
+	WSKEYS(MODKEY,                         XK_8,                                    "8")
+	WSKEYS(MODKEY,                         XK_9,                                    "9")
 
 	/* Unassigned key bindings (available externally via the duskc command) */
 //	{ KeyPress,   MODKEY,                       XK_Control_R,    showbar,                {0} },
@@ -664,9 +861,9 @@ static Button buttons[] = {
 	{ ClkClientWin,              MODKEY|Alt,              Button2,        togglefloating,   {0} }, // toggles between tiled and floating arrangement for given client
 	{ ClkClientWin,              MODKEY,                  Button3,        resizeorfacts,    {0} }, // change the size of a floating client window or adjust cfacts and mfacts when tiled
 	{ ClkClientWin,              MODKEY|Shift,            Button3,        resizemouse,      {0} }, // change the size of a floating client window
-	{ ClkClientWin,              0,                       Button8,        movemouse,        {0} }, // move a client window using extra mouse buttons (previous)
-	{ ClkClientWin,              0,                       Button9,        resizemouse,      {0} }, // resize a client window using extra mouse buttons (next)
-	{ ClkClientWin,              MODKEY,                  Button2,        zoom,             {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
+	//{ ClkClientWin,              0,                       Button8,        movemouse,        {0} }, // move a client window using extra mouse buttons (previous)
+	//{ ClkClientWin,              0,                       Button9,        resizemouse,      {0} }, // resize a client window using extra mouse buttons (next)
+	{ ClkClientWin,              MODKEY,                  Button2,        zoom,       {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 	{ ClkClientWin,              MODKEY|Ctrl,             Button1,        dragmfact,        {0} }, // dynamically change the size of the master area compared to the stack area(s)
 	{ ClkRootWin,                MODKEY|Ctrl,             Button1,        dragmfact,        {0} }, // dynamically change the size of the master area compared to the stack area(s)
 	{ ClkClientWin,              MODKEY|Ctrl,             Button3,        dragwfact,        {0} }, // dynamically change the size of a workspace relative to other workspaces
