@@ -40,7 +40,7 @@ static const double placeopacity         = 0;   /* client opacity when being pla
 
 /* Indicators: see lib/bar_indicators.h for options */
 static int wsindicatortype               = INDICATOR_BOTTOM_BAR_SLIM;
-static int wspinnedindicatortype         = INDICATOR_NONE;
+static int wspinnedindicatortype         = INDICATOR_TOP_RIGHT_PIN;
 static int fakefsindicatortype           = INDICATOR_PLUS;
 static int floatfakefsindicatortype      = INDICATOR_PLUS_AND_LARGER_SQUARE;
 static int floatindicatortype            = INDICATOR_TOP_LEFT_LARGER_SQUARE;
@@ -267,7 +267,6 @@ static char selSPRLCfgcolor[]            = "#FFF7D4";
 static char selTTMIfgcolor[]             = "#FFF7D4";
 static char selTTMICfgcolor[]            = "#FFF7D4";
 static char selfloatfgcolor[]            = "#FFF7D4";
->>>>>>> d0a1078 (resolv conflict upstream pull)
 
 /* Xresources preferences to load at startup. */
 static const ResourcePref resources[] = {
@@ -349,7 +348,7 @@ static char *colors[SchemeLast][4] = {
 /* List of programs to start automatically during startup only. Note that these will not be
  * executed again when doing a restart. */
 static const char *const autostart[] = {
-	TERMINAL,"-e","ranger", NULL,
+	TERMINAL,"-c","ranger",
 	NULL /* terminate */
 };
 
@@ -493,8 +492,8 @@ static const BarRule barrules[] = {
 	{  -1,       0,     5,       0,   0,   0,     BAR_ALIGN_LEFT,         size_ltsymbol,            draw_ltsymbol,           click_ltsymbol,           NULL,                     "layout" },
 	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{  -1,       0,     0,       5,   5,   0,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status0" },
-	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{   0,       0,     0,       5,   5,   7,     BAR_ALIGN_RIGHT,         size_status,              draw_status,             click_status,             NULL,                     "status7" },
+	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   0,       0,     0,       5,   5,   7,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status7" },
 	{ 'A',       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{   1,       0,     0,       5,   5,   1,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status1" },
 	{   1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
@@ -514,7 +513,6 @@ static const BarRule barrules[] = {
 	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_NONE,         size_wintitle_sticky,     draw_wintitle_sticky,    click_wintitle_sticky,    NULL,                     "wintitle_sticky" },
 	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_NONE,         size_flexwintitle,        draw_flexwintitle,       click_flexwintitle,       NULL,                     "flexwintitle" },
-
 	{  -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_CENTER,       size_pwrl_ifhidfloat,     draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{  -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT_RIGHT,  size_wintitle_hidden,     draw_wintitle_hidden,    click_wintitle_hidden,    NULL,                     "wintitle_hidden" },
 	{  -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT_LEFT,    size_wintitle_floating,   draw_wintitle_floating,  click_wintitle_floating,  NULL,                     "wintitle_floating" },
