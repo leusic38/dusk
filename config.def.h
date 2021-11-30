@@ -267,7 +267,6 @@ static char selTTMIfgcolor[]             = "#FFF7D4";
 static char selTTMICfgcolor[]            = "#FFF7D4";
 static char selfloatfgcolor[]            = "#FFF7D4";
 
-
 /* Xresources preferences to load at startup. */
 static const ResourcePref resources[] = {
 	{ "dmenu.norm.fg.color", STRING, &dmenunormfgcolor },
