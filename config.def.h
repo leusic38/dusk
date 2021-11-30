@@ -118,7 +118,7 @@ static int flexwintitle_floatweight      = 0;  // floating window title weight, 
 static int flexwintitle_separator        = borderpx; // width of client separator
 
 static const char *fonts[]               = { "monospace:size=10", "JoyPixels:pixelsize=12:antialias=true:autohint=true", "Inconsolata:size=10", "Symbola:size=10", "Twitter Color Emoji:size=10"  };
-static char dmenufont[]            = "monospace:size=10";
+static const char dmenufont[]            = "monospace:size=10";
 
 static char dmenunormfgcolor[] = "#BE89AE";
 static char dmenunormbgcolor[] = "#180A13";
