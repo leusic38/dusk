@@ -2,6 +2,7 @@
 #define TERMINAL "st"
 #define HOME (getenv("HOME"))
 #define FILEMANAGER "ranger"
+
 /* appearance */
 static const unsigned int borderpx       = 3;   /* border pixel of windows */
 static const unsigned int snap           = 32;  /* snap pixel */
@@ -117,12 +118,165 @@ static int flexwintitle_floatweight      = 0;  // floating window title weight, 
 static int flexwintitle_separator        = borderpx; // width of client separator
 
 static const char *fonts[]               = { "monospace:size=10", "JoyPixels:pixelsize=12:antialias=true:autohint=true", "Inconsolata:size=10", "Symbola:size=10", "Twitter Color Emoji:size=10"  };
+<<<<<<< HEAD
 static char dmenufont[]            = "monospace:size=10";
 
 static char dmenunormfgcolor[] = "#BE89AE";
+=======
+static const char dmenufont[]            = "monospace:size=10";
+>>>>>>> a01a17d (resolv conflict upstream pull)
 static char dmenunormbgcolor[] = "#180A13";
 static char dmenuselfgcolor[] = "#FFF7D4";
 static char dmenuselbgcolor[] = "#440000";
+static char normfgcolor[]                = "#C6BDBD";
+static char normbgcolor[]                = "#180A13";
+static char normbordercolor[]            = "#444444";
+
+static char selfgcolor[]                 = "#FFF7D4";
+static char selbgcolor[]                 = "#440000";
+static char selbordercolor[]             = "#440000";
+
+static char titlenormfgcolor[]           = "#C6BDBD";
+static char titlenormbgcolor[]           = "#180A13";
+static char titlenormbordercolor[]       = "#440000";
+
+static char titleselfgcolor[]            = "#FFF7D4";
+static char titleselbgcolor[]            = "#440000";
+static char titleselbordercolor[]        = "#440000";
+
+static char wsnormfgcolor[]              = "#C6BDBD";
+static char wsnormbgcolor[]              = "#180A13";
+static char wsvisfgcolor[]               = "#FFF7D4";
+static char wsvisbgcolor[]               = "#5E294B";
+static char wsselfgcolor[]               = "#FFF7D4";
+static char wsselbgcolor[]               = "#6F3A5C";
+static char wsoccfgcolor[]               = "#C6BDBD";
+static char wsoccbgcolor[]               = "#180A13";
+
+static char hidnormfgcolor[]             = "#c278b6";
+static char hidnormbgcolor[]             = "#222222";
+static char hidnormbordercolor[]         = "#440000";
+
+static char hidselfgcolor[]              = "#D288C6";
+static char hidselbgcolor[]              = "#111111";
+static char hidselbordercolor[]          = "#440000";
+
+static char urgfgcolor[]                 = "#bbbbbb";
+static char urgbgcolor[]                 = "#222222";
+static char urgbordercolor[]             = "#d10f3f";
+
+static char markedfgcolor[]              = "#615656";
+static char markedbgcolor[]              = "#ECB820";
+static char markedbordercolor[]          = "#ECB820";
+
+static char scratchnormcolor[]           = "#FFF7D4";
+static char scratchnormbgcolor[]         = "#664C67";
+static char scratchnormbordercolor[]     = "#77547E";
+
+static char scratchselcolor[]            = "#FFF7D4";
+static char scratchselbgcolor[]          = "#77547E";
+static char scratchselbordercolor[]      = "#894B9F";
+
+/* flexwintitle background colours */
+static char normTTBbgcolor[]             = "#330000";
+static char normLTRbgcolor[]             = "#330033";
+static char normMONObgcolor[]            = "#000033";
+static char normGRIDbgcolor[]            = "#003300";
+static char normGRIDCbgcolor[]           = "#003300";
+static char normGRD1bgcolor[]            = "#003300";
+static char normGRD2bgcolor[]            = "#003300";
+static char normGRDMbgcolor[]            = "#506600";
+static char normHGRDbgcolor[]            = "#b96600";
+static char normDWDLbgcolor[]            = "#003333";
+static char normDWDLCbgcolor[]           = "#003333";
+static char normSPRLbgcolor[]            = "#333300";
+static char normSPRLCbgcolor[]           = "#333300";
+static char normTTMIbgcolor[]            = "#B32727";
+static char normTTMICbgcolor[]           = "#B32727";
+static char normfloatbgcolor[]           = "#4C314C";
+static char actTTBbgcolor[]              = "#440000";
+static char actLTRbgcolor[]              = "#440044";
+static char actMONObgcolor[]             = "#000044";
+static char actGRIDbgcolor[]             = "#004400";
+static char actGRIDCbgcolor[]            = "#004400";
+static char actGRD1bgcolor[]             = "#004400";
+static char actGRD2bgcolor[]             = "#004400";
+static char actGRDMbgcolor[]             = "#507711";
+static char actHGRDbgcolor[]             = "#b97711";
+static char actDWDLbgcolor[]             = "#004444";
+static char actDWDLCbgcolor[]            = "#004444";
+static char actSPRLbgcolor[]             = "#444400";
+static char actSPRLCbgcolor[]            = "#444400";
+static char actTTMIbgcolor[]             = "#C81C1C";
+static char actTTMICbgcolor[]            = "#C81C1C";
+static char actfloatbgcolor[]            = "#4C314C";
+static char selTTBbgcolor[]              = "#550000";
+static char selLTRbgcolor[]              = "#550055";
+static char selMONObgcolor[]             = "#212171";
+static char selGRIDbgcolor[]             = "#005500";
+static char selGRIDCbgcolor[]            = "#005500";
+static char selGRD1bgcolor[]             = "#005500";
+static char selGRD2bgcolor[]             = "#005500";
+static char selGRDMbgcolor[]             = "#508822";
+static char selHGRDbgcolor[]             = "#b98822";
+static char selDWDLbgcolor[]             = "#005555";
+static char selDWDLCbgcolor[]            = "#005555";
+static char selSPRLbgcolor[]             = "#555500";
+static char selSPRLCbgcolor[]            = "#555500";
+static char selTTMIbgcolor[]             = "#C91717";
+static char selTTMICbgcolor[]            = "#C91717";
+static char selfloatbgcolor[]            = "#5C415C";
+
+/* flexwintitle foreground colours */
+static char normTTBfgcolor[]             = "#C6BDBD";
+static char normLTRfgcolor[]             = "#C6BDBD";
+static char normMONOfgcolor[]            = "#C6BDBD";
+static char normGRIDfgcolor[]            = "#C6BDBD";
+static char normGRIDCfgcolor[]           = "#C6BDBD";
+static char normGRD1fgcolor[]            = "#C6BDBD";
+static char normGRD2fgcolor[]            = "#C6BDBD";
+static char normGRDMfgcolor[]            = "#C6BDBD";
+static char normHGRDfgcolor[]            = "#C6BDBD";
+static char normDWDLfgcolor[]            = "#C6BDBD";
+static char normDWDLCfgcolor[]           = "#C6BDBD";
+static char normSPRLfgcolor[]            = "#C6BDBD";
+static char normSPRLCfgcolor[]           = "#C6BDBD";
+static char normTTMIfgcolor[]            = "#C6BDBD";
+static char normTTMICfgcolor[]           = "#C6BDBD";
+static char normfloatfgcolor[]           = "#C6BDBD";
+static char actTTBfgcolor[]              = "#FFF7D4";
+static char actLTRfgcolor[]              = "#FFF7D4";
+static char actMONOfgcolor[]             = "#FFF7D4";
+static char actGRIDfgcolor[]             = "#FFF7D4";
+static char actGRIDCfgcolor[]            = "#FFF7D4";
+static char actGRD1fgcolor[]             = "#FFF7D4";
+static char actGRD2fgcolor[]             = "#FFF7D4";
+static char actGRDMfgcolor[]             = "#FFF7D4";
+static char actHGRDfgcolor[]             = "#FFF7D4";
+static char actDWDLfgcolor[]             = "#FFF7D4";
+static char actDWDLCfgcolor[]            = "#FFF7D4";
+static char actSPRLfgcolor[]             = "#FFF7D4";
+static char actSPRLCfgcolor[]            = "#FFF7D4";
+static char actTTMIfgcolor[]             = "#FFF7D4";
+static char actTTMICfgcolor[]            = "#FFF7D4";
+static char actfloatfgcolor[]            = "#FFF7D4";
+static char selTTBfgcolor[]              = "#FFF7D4";
+static char selLTRfgcolor[]              = "#FFF7D4";
+static char selMONOfgcolor[]             = "#FFF7D4";
+static char selGRIDfgcolor[]             = "#FFF7D4";
+static char selGRIDCfgcolor[]            = "#FFF7D4";
+static char selGRD1fgcolor[]             = "#FFF7D4";
+static char selGRD2fgcolor[]             = "#FFF7D4";
+static char selGRDMfgcolor[]             = "#FFF7D4";
+static char selHGRDfgcolor[]             = "#FFF7D4";
+static char selDWDLfgcolor[]             = "#FFF7D4";
+static char selDWDLCfgcolor[]            = "#FFF7D4";
+static char selSPRLfgcolor[]             = "#FFF7D4";
+static char selSPRLCfgcolor[]            = "#FFF7D4";
+static char selTTMIfgcolor[]             = "#FFF7D4";
+static char selTTMICfgcolor[]            = "#FFF7D4";
+static char selfloatfgcolor[]            = "#FFF7D4";
+>>>>>>> d0a1078 (resolv conflict upstream pull)
 
 
 /* Xresources preferences to load at startup. */
@@ -205,8 +359,12 @@ static char *colors[SchemeLast][4] = {
 /* List of programs to start automatically during startup only. Note that these will not be
  * executed again when doing a restart. */
 static const char *const autostart[] = {
+<<<<<<< HEAD
 	"sh","-c","statusbar_launch","st","-e","ranger",
 
+=======
+	TERMINAL,"-e","ranger", NULL,
+>>>>>>> a01a17d (resolv conflict upstream pull)
 	NULL /* terminate */
 };
 
@@ -251,6 +409,7 @@ static const Rule clientrules[] = {
 	{ .instance = "spterm (w)", .scratchkey = 'w', .flags = Floating },
 	{ .instance = "spcalc (c)", .scratchkey = 'c', .flags = Floating },
 	{ .instance = "spfm (r)", .scratchkey = 'r', .flags = Floating },
+<<<<<<< HEAD
 	{ .class = "gimp", .workspace = "5", .flags = Floating|SwitchWorkspace },
 	{ .class = "firefox", .workspace = "2", .flags = AttachMaster|SwitchWorkspace },
 	{ .class = "libreoffice", .workspace = "8", .flags = AttachMaster|SwitchWorkspace },
@@ -261,6 +420,14 @@ static const Rule clientrules[] = {
 	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
 	{ .role = "browser-window", .workspace = "8", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .role = "browser", .workspace = "6", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
+=======
+	{ .class = "Gimp", .workspace = "5", .flags = Floating|SwitchWorkspace },
+	{ .class = "firefox", .workspace = "2", .flags = AttachMaster|SwitchWorkspace },
+	{ .class = "Steam", .flags = IgnoreCfgReqPos|Floating|Centered },
+	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },
+	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
+	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
+>>>>>>> a01a17d (resolv conflict upstream pull)
 	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
 	{ .class = "Alacritty", .flags = Terminal },
@@ -354,8 +521,13 @@ static const BarRule barrules[] = {
 	{  -1,       0,     5,       0,   0,   0,     BAR_ALIGN_LEFT,         size_ltsymbol,            draw_ltsymbol,           click_ltsymbol,           NULL,                     "layout" },
 	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{  -1,       0,     0,       5,   5,   0,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status0" },
+<<<<<<< HEAD
 	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{   0,       0,     0,       5,   5,   7,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status7" },
+=======
+	{  0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   0,       0,     0,       5,   5,   7,     BAR_ALIGN_RIGHT,         size_status,              draw_status,             click_status,             NULL,                     "status7" },
+>>>>>>> a01a17d (resolv conflict upstream pull)
 	{ 'A',       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{   1,       0,     0,       5,   5,   1,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status1" },
 	{   1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
@@ -375,6 +547,10 @@ static const BarRule barrules[] = {
 	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_NONE,         size_wintitle_sticky,     draw_wintitle_sticky,    click_wintitle_sticky,    NULL,                     "wintitle_sticky" },
 	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_NONE,         size_flexwintitle,        draw_flexwintitle,       click_flexwintitle,       NULL,                     "flexwintitle" },
+<<<<<<< HEAD
+=======
+
+>>>>>>> a01a17d (resolv conflict upstream pull)
 	{  -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_CENTER,       size_pwrl_ifhidfloat,     draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{  -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT_RIGHT,  size_wintitle_hidden,     draw_wintitle_hidden,    click_wintitle_hidden,    NULL,                     "wintitle_hidden" },
 	{  -1,       1,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT_LEFT,    size_wintitle_floating,   draw_wintitle_floating,  click_wintitle_floating,  NULL,                     "wintitle_floating" },
@@ -420,6 +596,7 @@ static const int enablegaps  = 1;    /* whether gaps are enabled by default or n
 
 /* layout(s) */
 static const Layout layouts[] = {
+<<<<<<< HEAD
 	/*{ symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis, symbol func }, name }*/
 	{ "[]=",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL }, "tile" }, //) default tile layout
 	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, MONOCLE, 0, NULL }, "monocle"  }, //1 monocle
@@ -438,6 +615,27 @@ static const Layout layouts[] = {
 	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL_CFACTS, SPIRAL_CFACTS, 0, NULL }, "fibonacci spiral" }, //14 fibonacci spiral
 	{ ">M>",      flextile,         { -1, -1, FLOATING_MASTER, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL }, "floating master" }, //15 floating master
  	{ "><>",      NULL,             {0}, "floating" },    /* 16 no layout function means floating behavior */
+=======
+	/* symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis, symbol func } */
+	{ "[]=",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, //) default tile layout
+	{ "|||",      flextile,         { -1, -1, NO_SPLIT, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //1 columns
+	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, MONOCLE, 0, NULL } }, //2 monocle
+	{ "||=",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, //3 columns (col) layout
+	{ ">M>",      flextile,         { -1, -1, FLOATING_MASTER, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //4 floating master
+	{ "TTT",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //5 bstack
+	{ "===",      flextile,         { -1, -1, NO_SPLIT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, //6 rows
+	{ "===",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, //7 bstackhoriz
+	{ "==#",      flextile,         { -1, -1, SPLIT_HORIZONTAL, TOP_TO_BOTTOM, GAPPLESSGRID_CFACTS, 0, NULL } }, //8 bstackgrid
+	{ "-M-",      flextile,         { -1, -1, SPLIT_CENTERED_HORIZONTAL, TOP_TO_BOTTOM, LEFT_TO_RIGHT, LEFT_TO_RIGHT, NULL } }, //9 centeredmaster horiz
+	{ "[D]",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, MONOCLE, 0, NULL } }, //10 deck
+	{ "|M|",      flextile,         { -1, -1, SPLIT_CENTERED_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, NULL } }, //11 centeredmaster
+	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID_CFACTS, GAPPLESSGRID_CFACTS, 0, NULL } }, //12 gappless grid
+	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE_CFACTS, DWINDLE_CFACTS, 0, NULL } }, //13 fibonacci dwindle
+	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL_CFACTS, SPIRAL_CFACTS, 0, NULL } }, //14 fibonacci spiral
+	{ "[T]",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TATAMI_CFACTS, 0, NULL } }, //15 tatami mats
+ 	{ "><>",      NULL,             {0} },    /* 16 no layout function means floating behavior */
+	{ NULL,       NULL,             {0} },    /*17 end of layouts marker for cyclelayouts */
+>>>>>>> a01a17d (resolv conflict upstream pull)
 };
 
 #define Shift ShiftMask
@@ -451,9 +649,15 @@ static const Layout layouts[] = {
 #define MODKEY Super
 
 #define SCRATCHKEYS(MOD,KEY,CMD) \
+<<<<<<< HEAD
 	{ KeyPress,   MOD,                      KEY,      togglescratch,     {.v = CMD } }, \
 	{ KeyPress,   MOD|Ctrl,                 KEY,      setscratch,        {.v = CMD } }, \
 	{ KeyPress,   MOD|Ctrl|Shift,           KEY,      removescratch,     {.v = CMD } }, \
+=======
+	{ KeyPress,   MODKEY,                      KEY,      togglescratch,     {.v = CMD } }, \
+	{ KeyPress,   MODKEY|Ctrl,                 KEY,      setscratch,        {.v = CMD } }, \
+	{ KeyPress,   MODKEY|Ctrl|Shift,           KEY,      removescratch,     {.v = CMD } }, \
+>>>>>>> a01a17d (resolv conflict upstream pull)
 
 #define WSKEYS(MOD,KEY,NAME) \
 	{ KeyPress,   MOD,                      KEY,      comboviewwsbyname,   {.v = NAME} }, \
@@ -479,7 +683,10 @@ static const Layout layouts[] = {
 
 /* Scratch/Spawn commands:        NULL (scratchkey), command, argument, argument, ..., NULL */
 static const char *termcmd[]  = { NULL, TERMINAL, NULL };
+<<<<<<< HEAD
 static const char *filemanagercmd[]  = { NULL, TERMINAL,"-e",FILEMANAGER, NULL };
+=======
+>>>>>>> a01a17d (resolv conflict upstream pull)
 static const char *dmenucmd[] = {
 	NULL,
 	"dmenu_run",
@@ -490,9 +697,15 @@ static const char *dmenucmd[] = {
 	"-sf", dmenuselfgcolor,
 	NULL
 };
+<<<<<<< HEAD
 static const char *spcmd1[] = {"q", "st", "-n", "spterm (q)", "-g", "120x34", NULL };
 static const char *spcmd2[] = {"c", "st", "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
 static const char *spcmd3[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
+=======
+static const char *spcmd1[] = {"q", TERMINAL, "-n", "spterm (q)", "-g", "120x34", NULL };
+static const char *spcmd2[] = {"c", TERMINAL, "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
+static const char *spcmd3[] = {"r", TERMINAL, "-n", "spfm (r)", "-g", "144x41", "-e", "ranger", NULL };
+>>>>>>> a01a17d (resolv conflict upstream pull)
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
 
 #include <X11/XF86keysym.h>
@@ -504,6 +717,7 @@ static Key keys[] = {
 	{ KeyPress, MODKEY|ShiftMask|ControlMask,		XK_BackSpace,  		restart,		{0} },
 	{ KeyPress, MODKEY|Mod1Mask,								XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && sudo -A shutdown -h now") },
 	{ KeyPress, MODKEY|ControlMask,		XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot computer?\")\" = Yes ] && sudo -A reboot") },
+<<<<<<< HEAD
 	/***********           q used by scratchpad st 	        ***************/	
 	{	KeyPress,	MODKEY,													XK_w,			spawn,		SHCMD("$BROWSER") },
 	{	KeyPress, MODKEY|ShiftMask,								XK_w,			spawn,		SHCMD("$BROWSER_2") },
@@ -531,6 +745,34 @@ static Key keys[] = {
 	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{14}},
 	{	KeyPress, MODKEY|ShiftMask,             	XK_u,      		setlayout,     	{15}},
 	{	KeyPress, MODKEY|ControlMask,            	XK_u,      		setlayout,     	{16}},
+=======
+	/***********           q used by scrtchpad st 	        ***************/	
+	{	KeyPress,	MODKEY,													XK_w,			spawn,		SHCMD("$BROWSER") },
+	{	KeyPress, MODKEY|ShiftMask,								XK_w,			spawn,		SHCMD("$BROWSER_2") },
+	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_w,			spawn,		SHCMD("$BROWSER_3") },
+	{	KeyPress, MODKEY,													XK_e,			spawn,		SHCMD("$EDI") },
+	{	KeyPress, MODKEY|ShiftMask,								XK_e,			spawn,		SHCMD("code") },
+	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
+// XK_r used by skratchpads ranger
+	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{.v = &layouts[0]} },
+	{	KeyPress, MODKEY|ShiftMask,								XK_t,      		setlayout,     	{.v = &layouts[1]} },
+	{	KeyPress, MODKEY|ControlMask,							XK_t,      		setlayout,     	{.v = &layouts[2]} },
+	{	KeyPress, MODKEY|Mod1Mask,								XK_t,      		setlayout,     	{.v = &layouts[3]} },
+	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,			XK_t,      		setlayout,     	{.v = &layouts[4]} },
+	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_t,      		setlayout,     	{.v = &layouts[5]} },
+	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{.v = &layouts[6]}},
+	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{.v = &layouts[7]}},
+	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[8]}},
+	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{.v = &layouts[9]}},
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{.v = &layouts[10]}},
+	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{.v = &layouts[11]}},
+	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{.v = &layouts[12]} },
+	{	KeyPress, MODKEY|ShiftMask,								XK_u,      		setlayout,     	{.v = &layouts[13]} },
+	{	KeyPress, MODKEY|ControlMask,							XK_u,      		setlayout,     	{.v = &layouts[14]} },
+	{	KeyPress, MODKEY|Mod1Mask,								XK_u,      		setlayout,     	{.v = &layouts[15]} },
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_u,      		setlayout,     	{.v = &layouts[16]} },
+//	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_u,      		setlayout,     	{.v = &layouts[17]} },
+>>>>>>> a01a17d (resolv conflict upstream pull)
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
 	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
@@ -576,6 +818,7 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_bracketright, rotatelayoutaxis,       {.i = +3 } }, // cycle through the available tiling arrangements for the primary (first) stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketleft,  rotatelayoutaxis,       {.i = -4 } }, // cycle through the available tiling arrangements for the secondary stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
+<<<<<<< HEAD
   { KeyPress,   MODKEY,                       XK_v,            group,                  {0} }, // groups floating clients together
 	{ KeyPress,   MODKEY|Shift,                 XK_v,            ungroup,                {0} }, // ungroups floating clients
 	{ KeyPress,		MODKEY,                       XK_n,      		spawn,    	SHCMD("slack") },
@@ -590,6 +833,20 @@ static Key keys[] = {
 	{ KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
 	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("Spotify") }, // marks or unmarks the selected client for group action
 	{ KeyPress,   MODKEY|Ctrl,                   XK_m,            spawn,                   SHCMD("vlc") }, // moves the currently focused window to/from the master area (for tiled layouts)
+=======
+	{KeyPress,		MODKEY,												XK_n,	  				spawn	,    	SHCMD("discord") },
+	{KeyPress,		MODKEY|ShiftMask,             XK_n,      		spawn,    	SHCMD("slack") },
+	{KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
+	{KeyPress,	 	MODKEY|ShiftMask|ControlMask, XK_n,      		spawn,    	SHCMD("skype") },
+	{KeyPress,	 	MODKEY|Alt,										XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
+	{KeyPress,	 	MODKEY|Alt|ShiftMask,      		XK_n,      				spawn,    	SHCMD("pkill -9 slack") },
+	{KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
+	{KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
+	{KeyPress,	  MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
+	{KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
+	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("vlc") }, // marks or unmarks the selected client for group action
+	{ KeyPress,   MODKEY|Alt,                   XK_m,            spawn,                   SHCMD("spotify") }, // moves the currently focused window to/from the master area (for tiled layouts)
+>>>>>>> a01a17d (resolv conflict upstream pull)
 	{ KeyPress,   MODKEY|Alt,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
 	{ KeyPress,   MODKEY,                   XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 
@@ -618,12 +875,28 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY,                       XK_Tab,          viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_comma,        movewsdir,              {.i = -1 } }, // move client to workspace on the immediate left of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_period,       movewsdir,              {.i = +1 } }, // move client to workspace on the immediate right of current workspace (on the current monitor)
+<<<<<<< HEAD
 	{ KeyPress,   MODKEY,			XK_slash,			spawn,		SHCMD("st -e sudo openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
 	{ KeyPress,   MODKEY|ControlMask,			XK_slash,			spawn,		SHCMD("st -e sudo pkill openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
 	{ KeyPress,   MODKEY|ShiftMask,		XK_slash,			spawn,		SHCMD("st -e /usr/NX/bin/nxplayer") },
 	{ KeyPress,   0,				XK_Print,		spawn,		SHCMD("maim /hdd/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
 	{ KeyPress,   ShiftMask,			XK_Print,		spawn,		SHCMD("printBarScript") },
 	{ KeyPress,   0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
+=======
+	{ KeyPress, MODKEY,			XK_slash,			spawn,		SHCMD("st -e sudo openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
+	{ KeyPress, MODKEY|ControlMask,			XK_slash,			spawn,		SHCMD("st -e sudo pkill openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
+	{ KeyPress, MODKEY|ShiftMask,		XK_slash,			spawn,		SHCMD("st -e /usr/NX/bin/nxplayer") },
+	{ KeyPress, 0,				XK_Print,		spawn,		SHCMD("maim /hdd/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+	{ KeyPress, ShiftMask,			XK_Print,		spawn,		SHCMD("printscript") },
+	{ KeyPress, 0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
+	{ KeyPress,  0,				XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t") },
+	{ KeyPress,  0,				XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 5") },
+	{ KeyPress,  0,				XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 5") },
+	{ KeyPress,  0,				XF86XK_AudioPrev,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous") },
+	{ KeyPress,  0,				XF86XK_AudioNext,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next") },
+	/* { KeyPress 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc pause") }, */
+	{ KeyPress,  0, XF86XK_AudioPlay,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
+>>>>>>> a01a17d (resolv conflict upstream pull)
 
 	{ KeyPress,  0,				XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t") },
 	{ KeyPress,  0,				XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 5") },
