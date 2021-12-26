@@ -1,5 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 #define TERMINAL "st"
+#define FILEMANAGER "ranger"
 /* appearance */
 static const unsigned int borderpx       = 3;   /* border pixel of windows */
 static const unsigned int snap           = 32;  /* snap pixel */
@@ -399,6 +400,7 @@ static const Rule clientrules[] = {
 	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },
 	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
 	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
+	{ .role = "browser", .workspace = "2", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
 	{ .class = "Alacritty", .flags = Terminal },
@@ -618,6 +620,7 @@ static const Layout layouts[] = {
 
 /* Scratch/Spawn commands:        NULL (scratchkey), command, argument, argument, ..., NULL */
 static const char *termcmd[]  = { NULL, TERMINAL, NULL };
+static const char *filemanagercmd[]  = { NULL, TERMINAL,"-e",FILEMANAGER, NULL };
 static const char *dmenucmd[] = {
 	NULL,
 	"dmenu_run",
@@ -630,7 +633,7 @@ static const char *dmenucmd[] = {
 };
 static const char *spcmd1[] = {"q", TERMINAL, "-n", "spterm (q)", "-g", "120x34", NULL };
 static const char *spcmd2[] = {"c", TERMINAL, "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
-static const char *spcmd3[] = {"r", TERMINAL, "-n", "spfm (r)", "-g", "144x41", "-e", "ranger", NULL };
+static const char *spcmd3[] = {"r", TERMINAL, "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
 
 #include <X11/XF86keysym.h>
@@ -650,7 +653,8 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|ShiftMask,								XK_e,			spawn,		SHCMD("code") },
 	{	KeyPress, MODKEY|ControlMask,								XK_e,			spawn,		SHCMD("phpstorm") },
 	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
-// XK_r used by skratchpads ranger
+// XK_r used by skratchpads ranger except modkey|shift
+	{ KeyPress,   MODKEY|Shift,                 XK_r,         spawn,               {.v = filemanagercmd } }, // draw/spawn filemanager
 	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{.v = &layouts[0]} },
 	{	KeyPress, MODKEY|ShiftMask,								XK_t,      		setlayout,     	{.v = &layouts[1]} },
 	{	KeyPress, MODKEY|ControlMask,							XK_t,      		setlayout,     	{.v = &layouts[2]} },
