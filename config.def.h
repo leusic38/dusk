@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+#define TERMINAL "st"
 #define FILEMANAGER "ranger"
 /* appearance */
 static const unsigned int borderpx       = 3;   /* border pixel of windows */
@@ -623,9 +624,9 @@ static const char *dmenucmd[] = {
 	"-sf", dmenuselfgcolor,
 	NULL
 };
-static const char *spcmd1[] = {"q", "st", "-n", "spterm (q)", "-g", "120x34", NULL };
-static const char *spcmd2[] = {"c", "st", "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
-static const char *spcmd3[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
+static const char *spcmd1[] = {"q", TERMINAL, "-n", "spterm (q)", "-g", "120x34", NULL };
+static const char *spcmd2[] = {"c", TERMINAL, "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
+static const char *spcmd3[] = {"r", TERMINAL, "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
 
 #include <X11/XF86keysym.h>
