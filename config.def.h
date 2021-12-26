@@ -648,6 +648,7 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_w,			spawn,		SHCMD("$BROWSER_3") },
 	{	KeyPress, MODKEY,													XK_e,			spawn,		SHCMD("$EDI") },
 	{	KeyPress, MODKEY|ShiftMask,								XK_e,			spawn,		SHCMD("code") },
+	{	KeyPress, MODKEY|ControlMask,								XK_e,			spawn,		SHCMD("phpstorm") },
 	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
 // XK_r used by skratchpads ranger
 	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{.v = &layouts[0]} },
