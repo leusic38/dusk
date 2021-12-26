@@ -627,7 +627,7 @@ static const char *dmenucmd[] = {
 };
 static const char *spcmd1[] = {"q", TERMINAL, "-n", "spterm (q)", "-g", "120x34", NULL };
 static const char *spcmd2[] = {"c", TERMINAL, "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
-static const char *spcmd3[] = {"r", TERMINAL, "-n", "spfm (r)", "-g", "144x41", "-e", "ranger", NULL };
+static const char *spcmd3[] = {"r", TERMINAL, "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
 
 #include <X11/XF86keysym.h>
