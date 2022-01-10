@@ -363,26 +363,26 @@ static const char *const autorestart[] = {
  *  - a traditional struct table or
  *  - specifying the fields used
  *
- * A traditional struct table looks like this:
+ * a traditional struct table looks like this:
  *    // class      role      instance  title  wintype  opacity   flags   floatpos   scratchkey   workspace
- *    { "Gimp",     NULL,     NULL,     NULL,  NULL,    0,        0,      NULL,      NULL,        "4"        },
- *    { "Firefox",  NULL,     NULL,     NULL,  NULL,    0,        0,      NULL,      NULL,        "9"        },
+ *    { "gimp",     null,     null,     null,  null,    0,        0,      null,      null,        "4"        },
+ *    { "firefox",  null,     null,     null,  null,    0,        0,      null,      null,        "9"        },
  *
- * Alternatively you can specify the fields that are relevant to your rule, e.g.
+ * alternatively you can specify the fields that are relevant to your rule, e.g.
  *
- *    { .class = "Gimp", .workspace = "5" },
- *    { .class = "Firefox", .workspace = "9" },
+ *    { .class = "gimp", .workspace = "5" },
+ *    { .class = "firefox", .workspace = "9" },
  *
- * Any fields that you do not specify will default to 0 or NULL.
+ * any fields that you do not specify will default to 0 or null.
  *
- * Refer to the Rule struct definition for the list of available fields.
+ * refer to the rule struct definition for the list of available fields.
  */
-static const Rule clientrules[] = {
+static const rule clientrules[] = {
 	/* xprop(1):
-	 *	WM_CLASS(STRING) = instance, class
-	 *	WM_NAME(STRING) = title
-	 *	WM_WINDOW_ROLE(STRING) = role
-	 *	_NET_WM_WINDOW_TYPE(ATOM) = wintype
+	 *	wm_class(string) = instance, class
+	 *	wm_name(string) = title
+	 *	wm_window_role(string) = role
+	 *	_net_wm_window_type(atom) = wintype
 	 */
 	{ .wintype = "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE", .flags = Unmanaged },
 	{ .wintype = WTYPE "DESKTOP", .flags = Unmanaged|Lower },
@@ -400,6 +400,7 @@ static const Rule clientrules[] = {
 	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },
 	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
 	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
+	{ .role = "browser-window", .workspace = "6", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .role = "browser", .workspace = "2", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
@@ -718,16 +719,16 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_bracketright, rotatelayoutaxis,       {.i = +3 } }, // cycle through the available tiling arrangements for the primary (first) stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketleft,  rotatelayoutaxis,       {.i = -4 } }, // cycle through the available tiling arrangements for the secondary stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
-	{KeyPress,		MODKEY,												XK_n,	  				spawn	,    	SHCMD("discord") },
-	{KeyPress,		MODKEY|ShiftMask,             XK_n,      		spawn,    	SHCMD("slack") },
-	{KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
-	{KeyPress,	 	MODKEY|ShiftMask|ControlMask, XK_n,      		spawn,    	SHCMD("skype") },
-	{KeyPress,	 	MODKEY|Alt,										XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
-	{KeyPress,	 	MODKEY|Alt|ShiftMask,      		XK_n,      				spawn,    	SHCMD("pkill -9 slack") },
-	{KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
-	{KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
-	{KeyPress,	  MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
-	{KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
+	{ KeyPress,		MODKEY,												XK_n,	  				spawn	,    	SHCMD("discord") },
+	{ KeyPress,		MODKEY|ShiftMask,             XK_n,      		spawn,    	SHCMD("slack") },
+	{ KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
+	{ KeyPress,	 	MODKEY|ShiftMask|ControlMask, XK_n,      		spawn,    	SHCMD("skype") },
+	{ KeyPress,	 	MODKEY|Alt,										XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
+	{ KeyPress,	 	MODKEY|Alt|ShiftMask,      		XK_n,      				spawn,    	SHCMD("pkill -9 slack") },
+	{ KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
+	{ KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
+	{ KeyPress,	  MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
 	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("vlc") }, // marks or unmarks the selected client for group action
 	{ KeyPress,   MODKEY|Alt,                   XK_m,            spawn,                   SHCMD("spotify") }, // moves the currently focused window to/from the master area (for tiled layouts)
 	{ KeyPress,   MODKEY|Alt,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
@@ -758,12 +759,12 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY,                       XK_Tab,          viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_comma,        movewsdir,              {.i = -1 } }, // move client to workspace on the immediate left of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_period,       movewsdir,              {.i = +1 } }, // move client to workspace on the immediate right of current workspace (on the current monitor)
-	{ KeyPress, MODKEY,			XK_slash,			spawn,		SHCMD("st -e sudo openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
-	{ KeyPress, MODKEY|ControlMask,			XK_slash,			spawn,		SHCMD("st -e sudo pkill openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
-	{ KeyPress, MODKEY|ShiftMask,		XK_slash,			spawn,		SHCMD("st -e /usr/NX/bin/nxplayer") },
-	{ KeyPress, 0,				XK_Print,		spawn,		SHCMD("maim /hdd/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
-	{ KeyPress, ShiftMask,			XK_Print,		spawn,		SHCMD("printscript") },
-	{ KeyPress, 0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
+	{ KeyPress,   MODKEY,			XK_slash,			spawn,		SHCMD("st -e sudo openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
+	{ KeyPress,   MODKEY|ControlMask,			XK_slash,			spawn,		SHCMD("st -e sudo pkill openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
+	{ KeyPress,   MODKEY|ShiftMask,		XK_slash,			spawn,		SHCMD("st -e /usr/NX/bin/nxplayer") },
+	{ KeyPress,   0,				XK_Print,		spawn,		SHCMD("maim /hdd/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+	{ KeyPress,   ShiftMask,			XK_Print,		spawn,		SHCMD("printscript") },
+	{ KeyPress,   0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
 
 	{ KeyPress,  0,				XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t") },
 	{ KeyPress,  0,				XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 5") },
