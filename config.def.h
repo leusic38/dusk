@@ -377,7 +377,7 @@ static const char *const autorestart[] = {
  *
  * refer to the rule struct definition for the list of available fields.
  */
-static const rule clientrules[] = {
+static const Rule clientrules[] = {
 	/* xprop(1):
 	 *	wm_class(string) = instance, class
 	 *	wm_name(string) = title
@@ -394,10 +394,10 @@ static const rule clientrules[] = {
 	{ .instance = "spterm (w)", .scratchkey = 'w', .flags = Floating },
 	{ .instance = "spcalc (c)", .scratchkey = 'c', .flags = Floating },
 	{ .instance = "spfm (r)", .scratchkey = 'r', .flags = Floating },
-	{ .class = "Gimp", .workspace = "5", .flags = Floating|SwitchWorkspace },
+	{ .class = "gimp", .workspace = "5", .flags = Floating|SwitchWorkspace },
 	{ .class = "firefox", .workspace = "2", .flags = AttachMaster|SwitchWorkspace },
-	{ .class = "Steam", .flags = IgnoreCfgReqPos|Floating|Centered },
-	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },
+/**	{ .class = "Steam", .flags = IgnoreCfgReqPos|Floating|Centered },
+	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },**/
 	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
 	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
 	{ .role = "browser-window", .workspace = "6", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
@@ -593,9 +593,9 @@ static const Layout layouts[] = {
 #define MODKEY Super
 
 #define SCRATCHKEYS(MOD,KEY,CMD) \
-	{ KeyPress,   MODKEY,                      KEY,      togglescratch,     {.v = CMD } }, \
-	{ KeyPress,   MODKEY|Ctrl,                 KEY,      setscratch,        {.v = CMD } }, \
-	{ KeyPress,   MODKEY|Ctrl|Shift,           KEY,      removescratch,     {.v = CMD } }, \
+	{ KeyPress,   MOD,                      KEY,      togglescratch,     {.v = CMD } }, \
+	{ KeyPress,   MOD|Ctrl,                 KEY,      setscratch,        {.v = CMD } }, \
+	{ KeyPress,   MOD|Ctrl|Shift,           KEY,      removescratch,     {.v = CMD } }, \
 
 #define WSKEYS(MOD,KEY,NAME) \
 	{ KeyPress,   MOD,                      KEY,      comboviewwsbyname,   {.v = NAME} }, \
@@ -632,9 +632,9 @@ static const char *dmenucmd[] = {
 	"-sf", dmenuselfgcolor,
 	NULL
 };
-static const char *spcmd1[] = {"q", TERMINAL, "-n", "spterm (q)", "-g", "120x34", NULL };
-static const char *spcmd2[] = {"c", TERMINAL, "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
-static const char *spcmd3[] = {"r", TERMINAL, "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
+static const char *spcmd1[] = {"q", "st", "-n", "spterm (q)", "-g", "120x34", NULL };
+static const char *spcmd2[] = {"c", "st", "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
+static const char *spcmd3[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
 
 #include <X11/XF86keysym.h>
@@ -719,6 +719,8 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_bracketright, rotatelayoutaxis,       {.i = +3 } }, // cycle through the available tiling arrangements for the primary (first) stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketleft,  rotatelayoutaxis,       {.i = -4 } }, // cycle through the available tiling arrangements for the secondary stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
+  { KeyPress,   MODKEY,                       XK_v,            group,                  {0} }, // groups floating clients together
+	{ KeyPress,   MODKEY|Shift,                 XK_v,            ungroup,                {0} }, // ungroups floating clients
 	{ KeyPress,		MODKEY,												XK_n,	  				spawn	,    	SHCMD("discord") },
 	{ KeyPress,		MODKEY|ShiftMask,             XK_n,      		spawn,    	SHCMD("slack") },
 	{ KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
