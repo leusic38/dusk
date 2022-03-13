@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-#define TERMINAL "alacritty"
+#define TERMINAL "kitty"
 #define FILEMANAGER "ranger"
 /* appearance */
 static const unsigned int borderpx       = 3;   /* border pixel of windows */
@@ -559,18 +559,18 @@ static const Layout layouts[] = {
 	{ "|||",      flextile,         { -1, -1, NO_SPLIT, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //1 columns
 	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, MONOCLE, 0, NULL } }, //2 monocle
 	{ "||=",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, //3 columns (col) layout
-	{ ">M>",      flextile,         { -1, -1, FLOATING_MASTER, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //4 floating master
-	{ "TTT",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //5 bstack
-	{ "===",      flextile,         { -1, -1, NO_SPLIT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, //6 rows
-	{ "===",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, //7 bstackhoriz
-	{ "==#",      flextile,         { -1, -1, SPLIT_HORIZONTAL, TOP_TO_BOTTOM, GAPPLESSGRID_CFACTS, 0, NULL } }, //8 bstackgrid
-	{ "-M-",      flextile,         { -1, -1, SPLIT_CENTERED_HORIZONTAL, TOP_TO_BOTTOM, LEFT_TO_RIGHT, LEFT_TO_RIGHT, NULL } }, //9 centeredmaster horiz
-	{ "[D]",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, MONOCLE, 0, NULL } }, //10 deck
-	{ "|M|",      flextile,         { -1, -1, SPLIT_CENTERED_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, NULL } }, //11 centeredmaster
-	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID_CFACTS, GAPPLESSGRID_CFACTS, 0, NULL } }, //12 gappless grid
-	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE_CFACTS, DWINDLE_CFACTS, 0, NULL } }, //13 fibonacci dwindle
-	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL_CFACTS, SPIRAL_CFACTS, 0, NULL } }, //14 fibonacci spiral
-	{ "[T]",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TATAMI_CFACTS, 0, NULL } }, //15 tatami mats
+	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE_CFACTS, DWINDLE_CFACTS, 0, NULL } }, //4 fibonacci dwindle
+	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL_CFACTS, SPIRAL_CFACTS, 0, NULL } }, //5 fibonacci spiral
+	{ "[T]",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TATAMI_CFACTS, 0, NULL } }, //6 tatami mats
+	{ ">M>",      flextile,         { -1, -1, FLOATING_MASTER, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //7 floating master
+	{ "TTT",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, //8 bstack
+	{ "===",      flextile,         { -1, -1, NO_SPLIT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, //9 rows
+	{ "===",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, //10 bstackhoriz
+	{ "==#",      flextile,         { -1, -1, SPLIT_HORIZONTAL, TOP_TO_BOTTOM, GAPPLESSGRID_CFACTS, 0, NULL } }, //11 bstackgrid
+	{ "-M-",      flextile,         { -1, -1, SPLIT_CENTERED_HORIZONTAL, TOP_TO_BOTTOM, LEFT_TO_RIGHT, LEFT_TO_RIGHT, NULL } }, //12 centeredmaster horiz
+	{ "[D]",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, MONOCLE, 0, NULL } }, //13 deck
+	{ "|M|",      flextile,         { -1, -1, SPLIT_CENTERED_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, NULL } }, //14 centeredmaster
+	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID_CFACTS, GAPPLESSGRID_CFACTS, 0, NULL } }, //15 gappless grid
  	{ "><>",      NULL,             {0} },    /* 16 no layout function means floating behavior */
 	{ NULL,       NULL,             {0} },    /*17 end of layouts marker for cyclelayouts */
 };
@@ -655,18 +655,16 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|Mod1Mask,								XK_t,      		setlayout,     	{.v = &layouts[3]} },
 	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,			XK_t,      		setlayout,     	{.v = &layouts[4]} },
 	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_t,      		setlayout,     	{.v = &layouts[5]} },
-	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{.v = &layouts[6]}},
-	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{.v = &layouts[7]}},
-	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[8]}},
-	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{.v = &layouts[9]}},
-	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{.v = &layouts[10]}},
-	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{.v = &layouts[11]}},
-	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{.v = &layouts[12]} },
-	{	KeyPress, MODKEY|ShiftMask,								XK_u,      		setlayout,     	{.v = &layouts[13]} },
-	{	KeyPress, MODKEY|ControlMask,							XK_u,      		setlayout,     	{.v = &layouts[14]} },
-	{	KeyPress, MODKEY|Mod1Mask,								XK_u,      		setlayout,     	{.v = &layouts[15]} },
-	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_u,      		setlayout,     	{.v = &layouts[16]} },
-//	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_u,      		setlayout,     	{.v = &layouts[17]} },
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_t,      		setlayout,     	{.v = &layouts[6]} },
+	{	KeyPress, MODKEY|Ctrl|Mod1Mask|Shift,    	XK_t,      		setlayout,     	{.v = &layouts[7]}},
+	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{.v = &layouts[8]}},
+	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{.v = &layouts[9]}},
+	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[10]}},
+	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{.v = &layouts[11]}},
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{.v = &layouts[12]}},
+	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{.v = &layouts[13]}},
+	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,     	XK_y,      		setlayout,     	{.v = &layouts[14]}},
+	{	KeyPress, MODKEY|Ctrl|Mod1Mask|Shift,    	XK_y,      		setlayout,     	{.v = &layouts[15]}},
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
 	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
