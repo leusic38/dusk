@@ -351,7 +351,7 @@ static const char *const autostart[] = {
 	NULL /* terminate */
 };
 
-/* There are two options when it comes to per-client rules:
+/* there are two options when it comes to per-client rules:
  *  - a traditional struct table or
  *  - specifying the fields used
  *
@@ -369,7 +369,7 @@ static const char *const autostart[] = {
  *
  * refer to the rule struct definition for the list of available fields.
  */
-static const Rule clientrules[] = {
+static const rule clientrules[] = {
 	/* xprop(1):
 	 *	wm_class(string) = instance, class
 	 *	wm_name(string) = title
