@@ -369,7 +369,7 @@ static const char *const autostart[] = {
  *
  * refer to the rule struct definition for the list of available fields.
  */
-static const rule clientrules[] = {
+static const Rule clientrules[] = {
 	/* xprop(1):
 	 *	wm_class(string) = instance, class
 	 *	wm_name(string) = title
@@ -625,9 +625,9 @@ static const char *dmenucmd[] = {
 	"-sf", dmenuselfgcolor,
 	NULL
 };
-static const char *spcmd1[] = {"q", TERMINAL, "-n", "spterm (q)", "-g", "120x34", NULL };
-static const char *spcmd2[] = {"c", TERMINAL, "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
-static const char *spcmd3[] = {"r", TERMINAL, "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
+static const char *spcmd1[] = {"q", "st", "-n", "spterm (q)", "-g", "120x34", NULL };
+static const char *spcmd2[] = {"c", "st", "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
+static const char *spcmd3[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
 
 #include <X11/XF86keysym.h>
