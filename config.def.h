@@ -712,12 +712,12 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
   { KeyPress,   MODKEY,                       XK_v,            group,                  {0} }, // groups floating clients together
 	{ KeyPress,   MODKEY|Shift,                 XK_v,            ungroup,                {0} }, // ungroups floating clients
-	{ KeyPress,		MODKEY,												XK_n,	  				spawn	,    	SHCMD("discord") },
-	{ KeyPress,		MODKEY|ShiftMask,             XK_n,      		spawn,    	SHCMD("slack") },
+	{ KeyPress,		MODKEY,                       XK_n,      		spawn,    	SHCMD("slack") },
+	{ KeyPress,		MODKEY|ShiftMask,							XK_n,	  				spawn	,    	SHCMD("discord") },
 	{ KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
 	{ KeyPress,	 	MODKEY|ShiftMask|ControlMask, XK_n,      		spawn,    	SHCMD("skype") },
-	{ KeyPress,	 	MODKEY|Alt,										XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
-	{ KeyPress,	 	MODKEY|Alt|ShiftMask,      		XK_n,      				spawn,    	SHCMD("pkill -9 slack") },
+	{ KeyPress,	 	MODKEY|Alt,               		XK_n,      				spawn,    	SHCMD("pkill -9 slack") },
+	{ KeyPress,	 	MODKEY|ShiftMask|Alt,					XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
 	{ KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
 	{ KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
 	{ KeyPress,	  MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
