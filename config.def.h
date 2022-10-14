@@ -538,7 +538,7 @@ static const WorkspaceRule wsrules[] = {
 	   name,  monitor,  pinned,  layout,  mfact,  nmaster,  nstack,  gaps, default,          visible,          selected,         occupied,         def,   vac,  occ,  */
 	{  "1",   -1,       0,       9,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "1",   "",   "[1]", },
 	{  "2",   -1,       0,       2,       .80,   -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "2",   "",   "[2]", },
-	{  "3",   -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "3",   "",   "[3]", },
+	{  "3",   -1,       0,       15,      -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "3",   "",   "[3]", },
 	{  "4",   -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "4",   "",   "[4]", },
 	{  "5",   -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "5",   "",   "[5]", },
 	{  "6",   -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "6",   "",   "[6]", },
@@ -642,10 +642,10 @@ static Key keys[] = {
 	/***********           q used by scratchpad st 	        ***************/	
 	{	KeyPress,	MODKEY,													XK_w,			spawn,		SHCMD("$BROWSER") },
 	{	KeyPress, MODKEY|ShiftMask,								XK_w,			spawn,		SHCMD("$BROWSER_2") },
-	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_w,			spawn,		SHCMD("$BROWSER_3") },
+	{	KeyPress, MODKEY|ControlMask,         		XK_w,			spawn,		SHCMD("$BROWSER_3") },
 	{	KeyPress, MODKEY,													XK_e,			spawn,		SHCMD("$EDI") },
 	{	KeyPress, MODKEY|ShiftMask,								XK_e,			spawn,		SHCMD("code") },
-	{	KeyPress, MODKEY|ControlMask,								XK_e,			spawn,		SHCMD("phpstorm") },
+	{	KeyPress, MODKEY|ControlMask,							XK_e,			spawn,		SHCMD("phpstorm") },
 	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
 // XK_r used by skratchpads ranger except modkey|shift
 	{ KeyPress,   MODKEY|Shift,                 XK_r,         spawn,               {.v = filemanagercmd } }, // draw/spawn filemanager
@@ -656,7 +656,6 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,			XK_t,      		setlayout,     	{.v = &layouts[4]} },
 	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_t,      		setlayout,     	{.v = &layouts[5]} },
 	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_t,      		setlayout,     	{.v = &layouts[6]} },
-	{	KeyPress, MODKEY|Ctrl|Mod1Mask|Shift,    	XK_t,      		setlayout,     	{.v = &layouts[7]}},
 	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{.v = &layouts[8]}},
 	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{.v = &layouts[9]}},
 	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[10]}},
@@ -664,7 +663,8 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{.v = &layouts[12]}},
 	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{.v = &layouts[13]}},
 	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,     	XK_y,      		setlayout,     	{.v = &layouts[14]}},
-	{	KeyPress, MODKEY|Ctrl|Mod1Mask|Shift,    	XK_y,      		setlayout,     	{.v = &layouts[15]}},
+	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{.v = &layouts[15]}},
+	{	KeyPress, MODKEY|ShiftMask,             	XK_u,      		setlayout,     	{.v = &layouts[7]}},
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
 	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
