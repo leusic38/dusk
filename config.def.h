@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-#define TERMINAL "alacritty"
+#define TERMINAL "kitty"
 #define FILEMANAGER "ranger"
 /* appearance */
 static const unsigned int borderpx       = 3;   /* border pixel of windows */
@@ -572,7 +572,6 @@ static const Layout layouts[] = {
 	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL_CFACTS, SPIRAL_CFACTS, 0, NULL }, "fibonacci spiral" }, //14 fibonacci spiral
 	{ "[T]",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TATAMI_CFACTS, 0, NULL }, "tatami mats" }, //15 tatami mats
  	{ "><>",      NULL,             {0}, "floating" },    /* 16 no layout function means floating behavior */
-	{ NULL,       NULL,             {0} },    /*17 end of layouts marker for cyclelayouts */
 };
 
 #define Shift ShiftMask
@@ -655,18 +654,16 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|Mod1Mask,								XK_t,      		setlayout,     	{.v = &layouts[3]} },
 	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,			XK_t,      		setlayout,     	{.v = &layouts[4]} },
 	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_t,      		setlayout,     	{.v = &layouts[5]} },
-	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{.v = &layouts[6]}},
-	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{.v = &layouts[7]}},
-	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[8]}},
-	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{.v = &layouts[9]}},
-	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{.v = &layouts[10]}},
-	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{.v = &layouts[11]}},
-	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{.v = &layouts[12]} },
-	{	KeyPress, MODKEY|ShiftMask,								XK_u,      		setlayout,     	{.v = &layouts[13]} },
-	{	KeyPress, MODKEY|ControlMask,							XK_u,      		setlayout,     	{.v = &layouts[14]} },
-	{	KeyPress, MODKEY|Mod1Mask,								XK_u,      		setlayout,     	{.v = &layouts[15]} },
-	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_u,      		setlayout,     	{.v = &layouts[16]} },
-//	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_u,      		setlayout,     	{.v = &layouts[17]} },
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_t,      		setlayout,     	{.v = &layouts[6]} },
+	{	KeyPress, MODKEY|Ctrl|Mod1Mask|Shift,    	XK_t,      		setlayout,     	{.v = &layouts[7]}},
+	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{.v = &layouts[8]}},
+	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{.v = &layouts[9]}},
+	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[10]}},
+	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{.v = &layouts[11]}},
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{.v = &layouts[12]}},
+	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{.v = &layouts[13]}},
+	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,     	XK_y,      		setlayout,     	{.v = &layouts[14]}},
+	{	KeyPress, MODKEY|Ctrl|Mod1Mask|Shift,    	XK_y,      		setlayout,     	{.v = &layouts[15]}},
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
 	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
