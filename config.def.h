@@ -648,22 +648,22 @@ static Key keys[] = {
 	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
 // XK_r used by skratchpads ranger except modkey|shift
 	{ KeyPress,   MODKEY|Shift,                 XK_r,         spawn,               {.v = filemanagercmd } }, // draw/spawn filemanager
-	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{.v = &layouts[0]} },
-	{	KeyPress, MODKEY|ShiftMask,								XK_t,      		setlayout,     	{.v = &layouts[1]} },
-	{	KeyPress, MODKEY|ControlMask,							XK_t,      		setlayout,     	{.v = &layouts[2]} },
-	{	KeyPress, MODKEY|Mod1Mask,								XK_t,      		setlayout,     	{.v = &layouts[3]} },
-	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,			XK_t,      		setlayout,     	{.v = &layouts[4]} },
-	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_t,      		setlayout,     	{.v = &layouts[5]} },
-	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_t,      		setlayout,     	{.v = &layouts[6]} },
-	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{.v = &layouts[8]}},
-	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{.v = &layouts[9]}},
-	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{.v = &layouts[10]}},
-	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{.v = &layouts[11]}},
-	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{.v = &layouts[12]}},
-	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{.v = &layouts[13]}},
-	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,     	XK_y,      		setlayout,     	{.v = &layouts[14]}},
-	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{.v = &layouts[15]}},
-	{	KeyPress, MODKEY|ShiftMask,             	XK_u,      		setlayout,     	{.v = &layouts[7]}},
+	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{0} },
+	{	KeyPress, MODKEY|ShiftMask,								XK_t,      		setlayout,     	{1} },
+	{	KeyPress, MODKEY|ControlMask,							XK_t,      		setlayout,     	{2} },
+	{	KeyPress, MODKEY|Mod1Mask,								XK_t,      		setlayout,     	{3} },
+	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,			XK_t,      		setlayout,     	{4} },
+	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_t,      		setlayout,     	{5} },
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_t,      		setlayout,     	{6} },
+	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{8}},
+	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{9}},
+	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{10}},
+	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{11}},
+	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{13}},
+	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{14}},
+	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,     	XK_y,      		setlayout,     	{15}},
+	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{12}},
+	{	KeyPress, MODKEY|ShiftMask,             	XK_u,      		setlayout,     	{7}},
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
 	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
