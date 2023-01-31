@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 #define TERMINAL "st"
-#difine HOME (getenv("HOME"))
+#define HOME (getenv("HOME"))
 #define FILEMANAGER "ranger"
 /* appearance */
 static const unsigned int borderpx       = 3;   /* border pixel of windows */
@@ -757,7 +757,7 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|ControlMask,			XK_slash,			spawn,		SHCMD("st -e sudo pkill openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
 	{ KeyPress,   MODKEY|ShiftMask,		XK_slash,			spawn,		SHCMD("st -e /usr/NX/bin/nxplayer") },
 	{ KeyPress,   0,				XK_Print,		spawn,		SHCMD("maim /hdd/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
-	{ KeyPress,   ShiftMask,			XK_Print,		spawn,		SHCMD("printscript") },
+	{ KeyPress,   ShiftMask,			XK_Print,		spawn,		SHCMD("printBarScript") },
 	{ KeyPress,   0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
 
 	{ KeyPress,  0,				XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t") },
