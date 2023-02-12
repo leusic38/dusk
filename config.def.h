@@ -123,150 +123,7 @@ static char dmenunormfgcolor[] = "#BE89AE";
 static char dmenunormbgcolor[] = "#180A13";
 static char dmenuselfgcolor[] = "#FFF7D4";
 static char dmenuselbgcolor[] = "#440000";
-static char selfgcolor[]                 = "#FFF7D4";
-static char selbgcolor[]                 = "#440000";
-static char selbordercolor[]             = "#440000";
 
-static char titlenormfgcolor[]           = "#C6BDBD";
-static char titlenormbgcolor[]           = "#180A13";
-static char titlenormbordercolor[]       = "#440000";
-
-static char titleselfgcolor[]            = "#FFF7D4";
-static char titleselbgcolor[]            = "#440000";
-static char titleselbordercolor[]        = "#440000";
-
-static char wsnormfgcolor[]              = "#C6BDBD";
-static char wsnormbgcolor[]              = "#180A13";
-static char wsvisfgcolor[]               = "#FFF7D4";
-static char wsvisbgcolor[]               = "#5E294B";
-static char wsselfgcolor[]               = "#FFF7D4";
-static char wsselbgcolor[]               = "#6F3A5C";
-static char wsoccfgcolor[]               = "#C6BDBD";
-static char wsoccbgcolor[]               = "#180A13";
-
-static char hidnormfgcolor[]             = "#c278b6";
-static char hidnormbgcolor[]             = "#222222";
-static char hidnormbordercolor[]         = "#440000";
-
-static char hidselfgcolor[]              = "#D288C6";
-static char hidselbgcolor[]              = "#111111";
-static char hidselbordercolor[]          = "#440000";
-
-static char urgfgcolor[]                 = "#bbbbbb";
-static char urgbgcolor[]                 = "#222222";
-static char urgbordercolor[]             = "#d10f3f";
-
-static char markedfgcolor[]              = "#615656";
-static char markedbgcolor[]              = "#ECB820";
-static char markedbordercolor[]          = "#ECB820";
-
-static char scratchnormcolor[]           = "#FFF7D4";
-static char scratchnormbgcolor[]         = "#664C67";
-static char scratchnormbordercolor[]     = "#77547E";
-
-static char scratchselcolor[]            = "#FFF7D4";
-static char scratchselbgcolor[]          = "#77547E";
-static char scratchselbordercolor[]      = "#894B9F";
-
-/* flexwintitle background colours */
-static char normTTBbgcolor[]             = "#330000";
-static char normLTRbgcolor[]             = "#330033";
-static char normMONObgcolor[]            = "#000033";
-static char normGRIDbgcolor[]            = "#003300";
-static char normGRIDCbgcolor[]           = "#003300";
-static char normGRD1bgcolor[]            = "#003300";
-static char normGRD2bgcolor[]            = "#003300";
-static char normGRDMbgcolor[]            = "#506600";
-static char normHGRDbgcolor[]            = "#b96600";
-static char normDWDLbgcolor[]            = "#003333";
-static char normDWDLCbgcolor[]           = "#003333";
-static char normSPRLbgcolor[]            = "#333300";
-static char normSPRLCbgcolor[]           = "#333300";
-static char normTTMIbgcolor[]            = "#B32727";
-static char normTTMICbgcolor[]           = "#B32727";
-static char normfloatbgcolor[]           = "#4C314C";
-static char actTTBbgcolor[]              = "#440000";
-static char actLTRbgcolor[]              = "#440044";
-static char actMONObgcolor[]             = "#000044";
-static char actGRIDbgcolor[]             = "#004400";
-static char actGRIDCbgcolor[]            = "#004400";
-static char actGRD1bgcolor[]             = "#004400";
-static char actGRD2bgcolor[]             = "#004400";
-static char actGRDMbgcolor[]             = "#507711";
-static char actHGRDbgcolor[]             = "#b97711";
-static char actDWDLbgcolor[]             = "#004444";
-static char actDWDLCbgcolor[]            = "#004444";
-static char actSPRLbgcolor[]             = "#444400";
-static char actSPRLCbgcolor[]            = "#444400";
-static char actTTMIbgcolor[]             = "#C81C1C";
-static char actTTMICbgcolor[]            = "#C81C1C";
-static char actfloatbgcolor[]            = "#4C314C";
-static char selTTBbgcolor[]              = "#550000";
-static char selLTRbgcolor[]              = "#550055";
-static char selMONObgcolor[]             = "#212171";
-static char selGRIDbgcolor[]             = "#005500";
-static char selGRIDCbgcolor[]            = "#005500";
-static char selGRD1bgcolor[]             = "#005500";
-static char selGRD2bgcolor[]             = "#005500";
-static char selGRDMbgcolor[]             = "#508822";
-static char selHGRDbgcolor[]             = "#b98822";
-static char selDWDLbgcolor[]             = "#005555";
-static char selDWDLCbgcolor[]            = "#005555";
-static char selSPRLbgcolor[]             = "#555500";
-static char selSPRLCbgcolor[]            = "#555500";
-static char selTTMIbgcolor[]             = "#C91717";
-static char selTTMICbgcolor[]            = "#C91717";
-static char selfloatbgcolor[]            = "#5C415C";
-
-/* flexwintitle foreground colours */
-static char normTTBfgcolor[]             = "#C6BDBD";
-static char normLTRfgcolor[]             = "#C6BDBD";
-static char normMONOfgcolor[]            = "#C6BDBD";
-static char normGRIDfgcolor[]            = "#C6BDBD";
-static char normGRIDCfgcolor[]           = "#C6BDBD";
-static char normGRD1fgcolor[]            = "#C6BDBD";
-static char normGRD2fgcolor[]            = "#C6BDBD";
-static char normGRDMfgcolor[]            = "#C6BDBD";
-static char normHGRDfgcolor[]            = "#C6BDBD";
-static char normDWDLfgcolor[]            = "#C6BDBD";
-static char normDWDLCfgcolor[]           = "#C6BDBD";
-static char normSPRLfgcolor[]            = "#C6BDBD";
-static char normSPRLCfgcolor[]           = "#C6BDBD";
-static char normTTMIfgcolor[]            = "#C6BDBD";
-static char normTTMICfgcolor[]           = "#C6BDBD";
-static char normfloatfgcolor[]           = "#C6BDBD";
-static char actTTBfgcolor[]              = "#FFF7D4";
-static char actLTRfgcolor[]              = "#FFF7D4";
-static char actMONOfgcolor[]             = "#FFF7D4";
-static char actGRIDfgcolor[]             = "#FFF7D4";
-static char actGRIDCfgcolor[]            = "#FFF7D4";
-static char actGRD1fgcolor[]             = "#FFF7D4";
-static char actGRD2fgcolor[]             = "#FFF7D4";
-static char actGRDMfgcolor[]             = "#FFF7D4";
-static char actHGRDfgcolor[]             = "#FFF7D4";
-static char actDWDLfgcolor[]             = "#FFF7D4";
-static char actDWDLCfgcolor[]            = "#FFF7D4";
-static char actSPRLfgcolor[]             = "#FFF7D4";
-static char actSPRLCfgcolor[]            = "#FFF7D4";
-static char actTTMIfgcolor[]             = "#FFF7D4";
-static char actTTMICfgcolor[]            = "#FFF7D4";
-static char actfloatfgcolor[]            = "#FFF7D4";
-static char selTTBfgcolor[]              = "#FFF7D4";
-static char selLTRfgcolor[]              = "#FFF7D4";
-static char selMONOfgcolor[]             = "#FFF7D4";
-static char selGRIDfgcolor[]             = "#FFF7D4";
-static char selGRIDCfgcolor[]            = "#FFF7D4";
-static char selGRD1fgcolor[]             = "#FFF7D4";
-static char selGRD2fgcolor[]             = "#FFF7D4";
-static char selGRDMfgcolor[]             = "#FFF7D4";
-static char selHGRDfgcolor[]             = "#FFF7D4";
-static char selDWDLfgcolor[]             = "#FFF7D4";
-static char selDWDLCfgcolor[]            = "#FFF7D4";
-static char selSPRLfgcolor[]             = "#FFF7D4";
-static char selSPRLCfgcolor[]            = "#FFF7D4";
-static char selTTMIfgcolor[]             = "#FFF7D4";
-static char selTTMICfgcolor[]            = "#FFF7D4";
-static char selfloatfgcolor[]            = "#FFF7D4";
 
 /* Xresources preferences to load at startup. */
 static const ResourcePref resources[] = {
@@ -348,10 +205,17 @@ static char *colors[SchemeLast][4] = {
 /* List of programs to start automatically during startup only. Note that these will not be
  * executed again when doing a restart. */
 static const char *const autostart[] = {
-	"sh","-c","statusbar_launch", NULL,
+	"sh","-c","statusbar_launch","st","-e","ranger",
+
 	NULL /* terminate */
 };
 
+/* List of programs to start automatically during a restart only. These should usually be short
+ * scripts that perform specific operations, e.g. changing a wallpaper. */
+static const char *const autorestart[] = {
+  "sh","-c","statusbar_launch",
+	NULL /* terminate */
+};
 /* there are two options when it comes to per-client rules:
  *  - a traditional struct table or
  *  - specifying the fields used
