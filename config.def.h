@@ -254,6 +254,7 @@ static const Rule clientrules[] = {
 	{ .class = "gimp", .workspace = "5", .flags = Floating|SwitchWorkspace },
 	{ .class = "firefox", .workspace = "2", .flags = AttachMaster|SwitchWorkspace },
 	{ .class = "libreoffice", .workspace = "8", .flags = AttachMaster|SwitchWorkspace },
+	{ .class = "jetbrains-phpstorm", .workspace = "1", .flags = SwitchWorkspace },
 /**	{ .class = "Steam", .flags = IgnoreCfgReqPos|Floating|Centered },
 	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },**/
 	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
