@@ -633,7 +633,6 @@ static Key keys[] = {
 	/* { KeyPress 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc pause") }, */
 	{ KeyPress,  0, XF86XK_AudioPlay,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
 
-
 //	STACKKEYS(AltGr|Ctrl,                                        stackfocus)                           // focus on the nth client in the stack, see the STACKKEYS macro for keybindings
 //	STACKKEYS(AltGr|Ctrl|Shift,                                  stackpush)                            // move the currently focused client to the nth place in the stack
 //	STACKKEYS(AltGr|Shift,                                       stackswap)                            // swap the currently focused client with the nth client in the stack

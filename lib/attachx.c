@@ -100,6 +100,14 @@ attachbottom(Client *c)
 }
 
 void
+attachabove(Client *c, Client *target)
+{
+	Client **tp = clientptr(target);
+	c->next = target;
+	*tp = c;
+}
+
+void
 attachstackx(Client *c, uint64_t mode, Workspace *ws)
 {
 	if (!c)
