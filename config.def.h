@@ -88,7 +88,7 @@ static uint64_t functionality = 0
 //	|DecorationHints // omit drawing the window border if the applications asks not to
 //	|FocusedOnTop // allows focused window to stay on top of other windows
 //	|FocusedOnTopTiled // additional toggle to allow focused tiled clients to show on top of floating windows
-	|FocusFollowMouse // allow window under the mouse cursor to get focus when changing views or killing clients
+//	|FocusFollowMouse // allow window under the mouse cursor to get focus when changing views or killing clients
 //	|FocusOnClick // only allow focus change when the user clicks on windows (disables sloppy focus)
 	|FocusOnNetActive // allow windows demanding attention to receive focus automatically
 	|AllowNoModifierButtons // allow some window operations, like move and resize, to work without having to hold down a modifier key
@@ -105,7 +105,7 @@ static uint64_t functionality = 0
 //	|AutoHideScratchpads // automatically hide open scratchpads when moving to another workspace
 //	|RioDrawIncludeBorders // indicates whether the area drawn using slop includes the window borders
 //	|RioDrawSpawnAsync // spawn the application alongside rather than after drawing area using slop
-	|RestrictFocusstackToMonitor // restrict focusstack to only operate within the monitor, otherwise focus can drift between monitors
+//	|RestrictFocusstackToMonitor // restrict focusstack to only operate within the monitor, otherwise focus can drift between monitors
 //	|WinTitleIcons // adds application icons to window titles in the bar
 //	|WorkspaceLabels // adds the class of the master client next to the workspace icon
 //	|WorkspacePreview // adds preview images when hovering workspace icons in the bar
@@ -250,16 +250,16 @@ static const Rule clientrules[] = {
 	{ .instance = "spterm (w)", .scratchkey = 'w', .flags = Floating },
 	{ .instance = "spcalc (c)", .scratchkey = 'c', .flags = Floating },
 	{ .instance = "spfm (r)", .scratchkey = 'r', .flags = Floating },
-	{ .class = "gimp", .workspace = "5", .flags = Floating|SwitchWorkspace },
-	{ .class = "firefox", .workspace = "2", .flags = AttachMaster|SwitchWorkspace },
-	{ .class = "libreoffice", .workspace = "8", .flags = AttachMaster|SwitchWorkspace },
-	{ .class = "jetbrains-phpstorm", .workspace = "1", .flags = SwitchWorkspace },
+	{ .class = "gimp", .workspace = "7", .flags = Floating|SwitchWorkspace },
+	{ .class = "firefox", .workspace = "3", .flags = AttachMaster|SwitchWorkspace },
+	{ .class = "libreoffice", .workspace = "9", .flags = AttachMaster|SwitchWorkspace },
+	{ .class = "jetbrains-phpstorm", .workspace = "5", .flags = SwitchWorkspace },
 /**	{ .class = "Steam", .flags = IgnoreCfgReqPos|Floating|Centered },
 	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },**/
 	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
 	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
-	{ .role = "browser-window", .workspace = "8", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
-	{ .role = "browser", .workspace = "6", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
+	{ .role = "browser-window", .workspace = "6", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
+	{ .role = "browser", .workspace = "1", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
 	{ .class = "Alacritty", .flags = Terminal },
@@ -401,15 +401,15 @@ static const BarRule barrules[] = {
 static const WorkspaceRule wsrules[] = {
 	/*                                                                     ------------------------------- schemes ------------------------------- ------ icons ------
 	   name,  monitor,  pinned,  layout,  mfact,  nmaster,  nstack,  gaps, default,          visible,          selected,         occupied,         def,   vac,  occ,  */
-	{  "1",    0,       0,       1,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "1",   "",   "[1]", },
-	{  "2",    0,       0,       7,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "2",   "",   "[2]", },
-	{  "3",    0,       0,       7,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "3",   "",   "[3]", },
-	{  "4",    0,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "4",   "",   "[4]", },
-	{  "5",    0,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "5",   "",   "[5]", },
-	{  "6",    1,       1,       1,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "6",   "",   "[6]", },
-	{  "7",    1,       1,       1,      .75,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "7",   "",   "[7]", },
-	{  "8",    1,       1,       2,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "8",   "",   "[8]", },
-	{  "9",    1,       1,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "9",   "",   "[9]", },
+	{  "1",    -1,       0,       1,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "1",   "",   "[1]", },
+	{  "2",    -1,       0,      12,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "2",   "",   "[2]", },
+	{  "3",    -1,       0,       1,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "3",   "",   "[3]", },
+	{  "4",    -1,       0,      10,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "4",   "",   "[4]", },
+	{  "5",    -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "5",   "",   "[5]", },
+	{  "6",    -1,       1,       8,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "6",   "",   "[6]", },
+	{  "7",    -1,       1,       5,      .75,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "7",   "",   "[7]", },
+	{  "8",    -1,       1,      11,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "8",   "",   "[8]", },
+	{  "9",    -1,       1,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "9",   "",   "[9]", },
 };
 
 static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
@@ -499,6 +499,8 @@ static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/s
 
 static Key keys[] = {
 	/* type       modifier                      key              function                argument */
+	{ KeyPress,   MODKEY|Ctrl,                  XK_0,            viewallwsonmon,         {0} },        // view all workspaces on the current monitor
+	{ KeyPress,   MODKEY,                       XK_0,            viewalloccwsonmon,      {0} },        // view all workspaces on the current monitor that has clients
 	{ KeyPress, MODKEY,													XK_BackSpace,  		killclient,	{0} },
 	{ KeyPress, MODKEY|ShiftMask,								XK_BackSpace,  		quit,		{0} },
 	{ KeyPress, MODKEY|ShiftMask|ControlMask,		XK_BackSpace,  		restart,		{0} },
@@ -540,26 +542,19 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY,                       XK_k,            focusstack,             {.i = -1 } }, // focus on the previous client in the stack
 	{ KeyPress,   MODKEY|Alt|Shift,             XK_j,            focusstack,             {.i = +2 } }, // allows focusing on hidden clients
 	{ KeyPress,   MODKEY|Alt|Shift,             XK_k,            focusstack,             {.i = -2 } }, // allows focusing on hidden clients
-	{ KeyPress,   MODKEY,                       XK_Left,         focusdir,               {.i = 0 } }, // focus on the client left of the currently focused client
-	{ KeyPress,   MODKEY,                       XK_Right,        focusdir,               {.i = 1 } }, // focus on the client right of the currently focused client
-	{ KeyPress,   MODKEY,                       XK_Up,           focusdir,               {.i = 2 } }, // focus on the client above the currently focused client
-	{ KeyPress,   MODKEY,                       XK_Down,         focusdir,               {.i = 3 } }, // focus on the client below the currently focused client
-	{ KeyPress,   MODKEY|Ctrl,                  XK_Left,         placedir,               {.i = 0 } }, // swap places with the client window on the immediate left of the current client
-	{ KeyPress,   MODKEY|Ctrl,                  XK_Right,        placedir,               {.i = 1 } }, // swap places with the client window on the immediate right of the current client
-	{ KeyPress,   MODKEY|Ctrl,                  XK_Up,           placedir,               {.i = 2 } }, // swap places with the client window on the immediate up of the current client
-	{ KeyPress,   MODKEY|Ctrl,                  XK_Down,         placedir,               {.i = 3 } }, // swap places with the client window on the immediate down of the current client
 
 	{ KeyPress,   MODKEY|Ctrl,                  XK_j,            pushdown,               {0} }, // move the selected client down the stack
 	{ KeyPress,   MODKEY|Ctrl,                  XK_k,            pushup,                 {0} }, // move the selected client up the stack
 	{ KeyPress,   MODKEY,                       XK_o,            incnmaster,             {.i = +1 } }, // increase the number of clients in the master area
-	{ KeyPress,   MODKEY,                       XK_i,            incnmaster,             {.i = -1 } }, // decrease the number of clients in the master area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_o,            incnstack,              {.i = +1 } }, // increase the number of clients in the primary (first) stack area
+	{ KeyPress,   MODKEY|Shift,                 XK_o,            setcfact,               {0} },
+	{ KeyPress,   MODKEY|Ctrl|Shift,            XK_o,            viewselws,              {0} },        // view the selected workspace (only relevant when viewing multiple workspaces)
+	{ KeyPress,   MODKEY,                       XK_i,            incnmaster,             {.i = -1 } }, // decrease the number of clients in the master area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_i,            incnstack,              {.i = -1 } }, // increase the number of clients in the primary (first) stack area
 	{ KeyPress,   MODKEY,                       XK_h,            setmfact,               {.f = -0.05} }, // decrease the size of the master area compared to the stack area(s)
 	{ KeyPress,   MODKEY,                       XK_l,            setmfact,               {.f = +0.05} }, // increase the size of the master area compared to the stack area(s)
 	{ KeyPress,   MODKEY|Shift,                 XK_h,            setcfact,               {.f = +0.25} }, // increase size respective to other windows within the same area
 	{ KeyPress,   MODKEY|Shift,                 XK_l,            setcfact,               {.f = -0.25} }, // decrease client size respective to other windows within the same area
-	{ KeyPress,   MODKEY|Shift,                 XK_o,            setcfact,               {0} },
 
 	{ KeyPress,   MODKEY,                       XK_backslash,    togglepinnedws,         {0} }, // toggle pinning of currently selected workspace on the current monitor
 	{ KeyPress,   MODKEY,                       XK_z,            showhideclient,         {0} }, // hide the currently selected client (or show if hidden)
@@ -567,6 +562,9 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Ctrl,                  XK_a,            markall,                {1} }, // marks all floating clients on the selected workspace
 	{ KeyPress,   MODKEY|Alt,                   XK_a,            markall,                {2} }, // marks all hidden clients on the selected workspace
 	{ KeyPress,   MODKEY|Shift,                 XK_a,            unmarkall,              {0} }, // unmarks all clients
+	{ KeyPress,	  MODKEY,                  XK_s,            spawn,           SHCMD("screen") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Ctrl,                  XK_s,            spawn,           SHCMD("screen -v") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Shift,                  XK_s,            spawn,           SHCMD("screen -h") }, // flip the master and stack areas
 
 	{ KeyPress,   MODKEY,                       XK_bracketleft,  rotatelayoutaxis,       {.i = -1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
 	{ KeyPress,   MODKEY,                       XK_bracketright, rotatelayoutaxis,       {.i = +1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
@@ -578,6 +576,9 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
   { KeyPress,   MODKEY,                       XK_v,            group,                  {0} }, // groups floating clients together
 	{ KeyPress,   MODKEY|Shift,                 XK_v,            ungroup,                {0} }, // ungroups floating clients
+	//  XK_c is used by calculator 
+	{ KeyPress,	  MODKEY|Ctrl,                  XK_b,            mirrorlayout,           {0} }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Ctrl|Shift,            XK_b,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
 	{ KeyPress,		MODKEY,                       XK_n,      		spawn,    	SHCMD("slack") },
 	{ KeyPress,		MODKEY|ShiftMask,							XK_n,	  				spawn	,    	SHCMD("discord") },
 	{ KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
@@ -586,8 +587,6 @@ static Key keys[] = {
 	{ KeyPress,	 	MODKEY|ShiftMask|Alt,					XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
 	{ KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
 	{ KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
-	{ KeyPress,	  MODKEY|Ctrl,                  XK_m,            mirrorlayout,           {0} }, // flip the master and stack areas
-	{ KeyPress,	  MODKEY|Ctrl|Shift,            XK_m,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
 	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("Spotify") }, // marks or unmarks the selected client for group action
 	{ KeyPress,   MODKEY|Ctrl,                   XK_m,            spawn,                   SHCMD("vlc") }, // moves the currently focused window to/from the master area (for tiled layouts)
 	{ KeyPress,   MODKEY|Alt,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
@@ -607,9 +606,6 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Alt,                   XK_period,       clienttomon,            {.i = +1 } }, // sends the current client to an adjacent monitor
 	{ KeyPress,   MODKEY|Alt|Shift,             XK_comma,        clientstomon,           {.i = +1 } }, // sends all clients to an adjacent monitor
 	{ KeyPress,   MODKEY|Alt|Shift,             XK_period,       clientstomon,           {.i = -1 } }, // sends all clients to an adjacent monitor
-	{ KeyPress,   MODKEY|Ctrl,                  XK_0,            viewallwsonmon,         {0} },        // view all workspaces on the current monitor
-	{ KeyPress,   MODKEY,                       XK_0,            viewalloccwsonmon,      {0} },        // view all workspaces on the current monitor that has clients
-	{ KeyPress,   MODKEY,                       XK_o,            viewselws,              {0} },        // view the selected workspace (only relevant when viewing multiple workspaces)
 	{ KeyPress,   MODKEY|Ctrl,                  XK_comma,        viewwsdir,              {.i = -1 } }, // view the workspace on the immediate left of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl,                  XK_period,       viewwsdir,              {.i = +1 } }, // view the workspace on the immediate right of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY,                       XK_comma,        viewwsdir,              {.i = -2 } }, // view the next workspace left of current workspace that has clients (on the current monitor)
@@ -624,6 +620,15 @@ static Key keys[] = {
 	{ KeyPress,   0,				XK_Print,		spawn,		SHCMD("maim /hdd/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
 	{ KeyPress,   ShiftMask,			XK_Print,		spawn,		SHCMD("printBarScript") },
 	{ KeyPress,   0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
+
+	{ KeyPress,   MODKEY,                       XK_Left,         focusdir,               {.i = 0 } }, // focus on the client left of the currently focused client
+	{ KeyPress,   MODKEY,                       XK_Right,        focusdir,               {.i = 1 } }, // focus on the client right of the currently focused client
+	{ KeyPress,   MODKEY,                       XK_Up,           focusdir,               {.i = 2 } }, // focus on the client above the currently focused client
+	{ KeyPress,   MODKEY,                       XK_Down,         focusdir,               {.i = 3 } }, // focus on the client below the currently focused client
+	{ KeyPress,   MODKEY|Ctrl,                  XK_Left,         placedir,               {.i = 0 } }, // swap places with the client window on the immediate left of the current client
+	{ KeyPress,   MODKEY|Ctrl,                  XK_Right,        placedir,               {.i = 1 } }, // swap places with the client window on the immediate right of the current client
+	{ KeyPress,   MODKEY|Ctrl,                  XK_Up,           placedir,               {.i = 2 } }, // swap places with the client window on the immediate up of the current client
+	{ KeyPress,   MODKEY|Ctrl,                  XK_Down,         placedir,               {.i = 3 } }, // swap places with the client window on the immediate down of the current client
 	{ KeyPress,  0,				XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t") },
 	{ KeyPress,  0,				XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 5") },
 	{ KeyPress,  0,				XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 5") },
