@@ -253,14 +253,14 @@ static const Rule clientrules[] = {
 	{ .instance = "spfm (r)", .scratchkey = 'r', .flags = Floating },
 	{ .class = "gimp", .workspace = "7", .flags = Floating|SwitchWorkspace },
 	{ .class = "firefox", .workspace = "1", .flags = AttachMaster|SwitchWorkspace },
-	{ .class = "libreoffice", .workspace = "7", .flags = AttachMaster|SwitchWorkspace },
-	{ .class = "jetbrains-phpstorm", .workspace = "5", .flags = SwitchWorkspace },
+	{ .class = "libreoffice", .workspace = "8", .flags = AttachMaster|SwitchWorkspace },
+	{ .class = "jetbrains-phpstorm", .workspace = "2", .flags = SwitchWorkspace },
 /**	{ .class = "Steam", .flags = IgnoreCfgReqPos|Floating|Centered },
 	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },**/
 	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
 	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
 	{ .role = "browser-window", .workspace = "6", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
-	{ .role = "browser", .workspace = "2", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
+	{ .role = "browser", .workspace = "1", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
 	{ .class = "Alacritty", .flags = Terminal },
@@ -357,8 +357,8 @@ static const BarRule barrules[] = {
 	{  -1,       0,     0,       5,   5,   0,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status0" },// clock
 	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{   0,       0,     0,       5,   5,   7,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status7" }, // network
-	{ 'A',       0,    10,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{ 'A',       0,    10,       5,   5,   1,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status1" }, // volume
+	{   0,       0,    10,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{   0,       0,    10,       5,   5,   1,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status1" }, // volume
 	{   1,       0,    12,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{   0,       0,    12,       5,   5,   2,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status2" }, // memory
 	{   0,       0,    16,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
@@ -409,7 +409,7 @@ static const WorkspaceRule wsrules[] = {
 	{  "4",    -1,       0,      10,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "4",   "",   "[4]", },
 	{  "5",    -1,       0,       1,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "5",   "",   "[5]", },
 	{  "6",    -1,       1,       9,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "6",   "",   "[6]", },
-	{  "7",    -1,       1,       5,      .75,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "7",   "",   "[7]", },
+	{  "7",    -1,       1,       5,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "7",   "",   "[7]", },
 	{  "8",    -1,       1,       1,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "8",   "",   "[8]", },
 	{  "9",    -1,       1,      10,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "9",   "",   "[9]", },
 };
@@ -560,7 +560,7 @@ static Key keys[] = {
 
 	{ KeyPress,   MODKEY,                       XK_backslash,    togglepinnedws,         {0} }, // toggle pinning of currently selected workspace on the current monitor
 	{ KeyPress,   MODKEY,                       XK_z,            showhideclient,         {0} }, // hide the currently selected client (or show if hidden)
-	{ KeyPress,	  MODKEY,                       XK_x,            spawn,                  SHCMD("setxkeymap frqw") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY,                       XK_x,            spawn,                  SHCMD("st -e setxkeymap frqw") }, // flip the master and stack areas
 	{ KeyPress,   MODKEY,                       XK_a,            markall,                {0} }, // marks all clients on the selected workspace
 	{ KeyPress,   MODKEY|Ctrl,                  XK_a,            markall,                {1} }, // marks all floating clients on the selected workspace
 	{ KeyPress,   MODKEY|Alt,                   XK_a,            markall,                {2} }, // marks all hidden clients on the selected workspace
@@ -590,9 +590,11 @@ static Key keys[] = {
 	{ KeyPress,	 	MODKEY|ShiftMask|Alt,					XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
 	{ KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
 	{ KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
-	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("Spotify") }, // marks or unmarks the selected client for group action
-	{ KeyPress,   MODKEY|Ctrl,                   XK_m,            spawn,                   SHCMD("vlc") }, // moves the currently focused window to/from the master area (for tiled layouts)
-	{ KeyPress,   MODKEY|Alt,                       XK_space,        setlayout,              {0} }, // toggles between current and previous layout
+	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("one-screen.sh") }, //three screen one SPLIT_VERTICAL
+  { KeyPress,   MODKEY|Ctrl,                  XK_m,            spawn,                   SHCMD("two-screen-home.sh") }, // unconnected xps screen
+	{ KeyPress,   MODKEY|ShiftMask,             XK_m,            spawn,                   SHCMD("moonshot-2-up-down.sh") }, // moves the currently focused window to/from the master area (for tiled layouts)
+	{ KeyPress,   MODKEY|Alt,                   XK_m,            spawn,             SHCMD("three-screen-home.sh") }, //three screen one SPLIT_VERTICAL
+	{ KeyPress,   MODKEY|Alt,                   XK_space,        setlayout,              {0} }, // toggles between current and previous layout
 	{ KeyPress,   MODKEY,                   XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
 
 	{ KeyPress,   MODKEY|Ctrl,                  XK_g,            floatpos,               {.v = "50% 50% 80% 80%" } }, // center client and take up 80% of the screen
@@ -617,11 +619,11 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY,                       XK_Tab,          viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_comma,        movewsdir,              {.i = -1 } }, // move client to workspace on the immediate left of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_period,       movewsdir,              {.i = +1 } }, // move client to workspace on the immediate right of current workspace (on the current monitor)
-	{ KeyPress,   MODKEY,			XK_slash,			spawn,		SHCMD("st -e sudo openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
-	{ KeyPress,   MODKEY|ControlMask,			XK_slash,			spawn,		SHCMD("st -e sudo pkill openvpn /home/manu/openVpnConfig/mably-connect-efarcis-config.ovpn") },
-	{ KeyPress,   MODKEY|ShiftMask,		XK_slash,			spawn,		SHCMD("st -e /usr/NX/bin/nxplayer") },
-	{ KeyPress,   0,				XK_Print,		spawn,		SHCMD("maim /hdd/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+	{ KeyPress,   MODKEY,                     	XK_slash,			spawn,		SHCMD("st -e  nmcli connection up moonshotlabs_theia --ask") },
+	{ KeyPress,   MODKEY|Alt,                   XK_slash,			spawn,		SHCMD("st -e  nmcli connection down moonshotlabs_theia") },
+	{ KeyPress,   0,				XK_Print,		spawn,		SHCMD("maim ~/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
 	{ KeyPress,   ShiftMask,			XK_Print,		spawn,		SHCMD("printBarScript") },
+	{ KeyPress,   MODKEY,			XK_Home,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
 	{ KeyPress,   0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
 
 	{ KeyPress,   MODKEY,                       XK_Left,         focusdir,               {.i = 0 } }, // focus on the client left of the currently focused client
@@ -640,13 +642,6 @@ static Key keys[] = {
 	/* { KeyPress 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc pause") }, */
 	{ KeyPress,  0, XF86XK_AudioPlay,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
 
-	{ KeyPress,  0,				XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t") },
-	{ KeyPress,  0,				XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 5") },
-	{ KeyPress,  0,				XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 5") },
-	{ KeyPress,  0,				XF86XK_AudioPrev,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous") },
-	{ KeyPress,  0,				XF86XK_AudioNext,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next") },
-	/* { KeyPress 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc pause") }, */
-	{ KeyPress,  0, XF86XK_AudioPlay,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
 
 //	STACKKEYS(AltGr|Ctrl,                                        stackfocus)                           // focus on the nth client in the stack, see the STACKKEYS macro for keybindings
 //	STACKKEYS(AltGr|Ctrl|Shift,                                  stackpush)                            // move the currently focused client to the nth place in the stack
