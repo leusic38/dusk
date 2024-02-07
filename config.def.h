@@ -118,7 +118,7 @@ static int flexwintitle_hiddenweight     = 0;  // hidden window title weight
 static int flexwintitle_floatweight      = 0;  // floating window title weight, set to 0 to not show floating windows
 static int flexwintitle_separator        = borderpx; // width of client separator
 
-static const char *fonts[]               = { "JetBrains Mono:size=10","monospace:size=10", "JoyPixels:pixelsize=12:antialias=true:autohint=true", "Inconsolata:size=10", "Symbola:size=10", "Twitter Color Emoji:size=10"  };
+static const char *fonts[]               = { "JetBrains Mono:size=12","monospace:size=12", "JoyPixels:pixelsize=14:antialias=true:autohint=true", "Inconsolata:size=10", "Symbola:size=10", "Twitter Color Emoji:size=10"  };
 static const char dmenufont[]            = "monospace:size=10";
 
 static char dmenunormfgcolor[] = "#BE89AE";
@@ -503,11 +503,17 @@ static Key keys[] = {
 	/* type       modifier                      key              function                argument */
 	{ KeyPress,   MODKEY|Ctrl,                  XK_0,            viewallwsonmon,         {0} },        // view all workspaces on the current monitor
 	{ KeyPress,   MODKEY,                       XK_0,            viewalloccwsonmon,      {0} },        // view all workspaces on the current monitor that has clients
+	{ KeyPress,   MODKEY|Shift,                 XK_equal,        changeopacity,          {.f = +0.05 } }, // increase the client opacity (for compositors that support _NET_WM_OPACITY)
+	{ KeyPress,   MODKEY|Shift,                 XK_minus,        changeopacity,          {.f = -0.05 } }, // decrease the client opacity (for compositors that support _NET_WM_OPACITY)
 	{ KeyPress, MODKEY,													XK_BackSpace,  		killclient,	{0} },
 	{ KeyPress, MODKEY|ShiftMask,								XK_BackSpace,  		quit,		{0} },
 	{ KeyPress, MODKEY|ShiftMask|ControlMask,		XK_BackSpace,  		restart,		{0} },
 	{ KeyPress, MODKEY|Mod1Mask,								XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Shutdown computer?\")\" = Yes ] && sudo -A shutdown -h now") },
 	{ KeyPress, MODKEY|ControlMask,		XK_BackSpace,  		spawn,		SHCMD("[ \"$(printf \"No\\nYes\" | dmenu -i -nb darkred -sb red -sf white -nf gray -p \"Reboot computer?\")\" = Yes ] && sudo -A reboot") },
+
+	{ KeyPress,   MODKEY|Shift,                 XK_Tab,          viewwsdir,              {.i = -2 } }, // view the next workspace left of current workspace that has clients (on the current monitor)
+	{ KeyPress,   MODKEY,                       XK_Tab,          viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
+	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_Tab,          togglenomodbuttons,     {0} }, // disables / enables keybindings that are not accompanied by any modifier buttons for a client
 	/***********           q used by scratchpad st 	        ***************/	
 	{	KeyPress,	MODKEY,													XK_w,			spawn,		SHCMD("$BROWSER") },
 	{	KeyPress, MODKEY|ShiftMask,								XK_w,			spawn,		SHCMD("$BROWSER_2 -P") },
@@ -516,7 +522,7 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|ShiftMask,								XK_e,			spawn,		SHCMD("code") },
 	{	KeyPress, MODKEY|ControlMask,							XK_e,			spawn,		SHCMD("phpstorm") },
 	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
-// XK_r used by skratchpads ranger except modkey|shift
+//                                            XK_r used by skratchpads ranger except modkey|shift
 	{ KeyPress,   MODKEY|Shift,                 XK_r,         spawn,               {.v = filemanagercmd } }, // draw/spawn filemanager
 	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{0} },
 	{	KeyPress, MODKEY|ShiftMask,								XK_t,      		setlayout,     	{1} },
@@ -535,40 +541,12 @@ static Key keys[] = {
 	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{14}},
 	{	KeyPress, MODKEY|ShiftMask,             	XK_u,      		setlayout,     	{15}},
 	{	KeyPress, MODKEY|ControlMask,            	XK_u,      		setlayout,     	{16}},
-	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
-	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
-	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
-	{ KeyPress,   MODKEY,                       XK_b,            togglebar,              {0} }, // toggles the display of the bar(s) on the current monitor
-
-	{ KeyPress,   MODKEY,                       XK_j,            focusstack,             {.i = +1 } }, // focus on the next client in the stack
-	{ KeyPress,   MODKEY,                       XK_k,            focusstack,             {.i = -1 } }, // focus on the previous client in the stack
-	{ KeyPress,   MODKEY|Alt|Shift,             XK_j,            focusstack,             {.i = +2 } }, // allows focusing on hidden clients
-	{ KeyPress,   MODKEY|Alt|Shift,             XK_k,            focusstack,             {.i = -2 } }, // allows focusing on hidden clients
-
-	{ KeyPress,   MODKEY|Ctrl,                  XK_j,            pushdown,               {0} }, // move the selected client down the stack
-	{ KeyPress,   MODKEY|Ctrl,                  XK_k,            pushup,                 {0} }, // move the selected client up the stack
 	{ KeyPress,   MODKEY,                       XK_o,            incnmaster,             {.i = +1 } }, // increase the number of clients in the master area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_o,            incnstack,              {.i = +1 } }, // increase the number of clients in the primary (first) stack area
 	{ KeyPress,   MODKEY|Shift,                 XK_o,            setcfact,               {0} },
 	{ KeyPress,   MODKEY|Ctrl|Shift,            XK_o,            viewselws,              {0} },        // view the selected workspace (only relevant when viewing multiple workspaces)
 	{ KeyPress,   MODKEY,                       XK_i,            incnmaster,             {.i = -1 } }, // decrease the number of clients in the master area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_i,            incnstack,              {.i = -1 } }, // increase the number of clients in the primary (first) stack area
-	{ KeyPress,   MODKEY,                       XK_h,            setmfact,               {.f = -0.05} }, // decrease the size of the master area compared to the stack area(s)
-	{ KeyPress,   MODKEY,                       XK_l,            setmfact,               {.f = +0.05} }, // increase the size of the master area compared to the stack area(s)
-	{ KeyPress,   MODKEY|Shift,                 XK_h,            setcfact,               {.f = +0.25} }, // increase size respective to other windows within the same area
-	{ KeyPress,   MODKEY|Shift,                 XK_l,            setcfact,               {.f = -0.25} }, // decrease client size respective to other windows within the same area
-
-	{ KeyPress,   MODKEY,                       XK_backslash,    togglepinnedws,         {0} }, // toggle pinning of currently selected workspace on the current monitor
-	{ KeyPress,   MODKEY,                       XK_z,            showhideclient,         {0} }, // hide the currently selected client (or show if hidden)
-	{ KeyPress,	  MODKEY,                       XK_x,            spawn,                  SHCMD("st -e setxkeymap frqw") }, // flip the master and stack areas
-	{ KeyPress,   MODKEY,                       XK_a,            markall,                {0} }, // marks all clients on the selected workspace
-	{ KeyPress,   MODKEY|Ctrl,                  XK_a,            markall,                {1} }, // marks all floating clients on the selected workspace
-	{ KeyPress,   MODKEY|Alt,                   XK_a,            markall,                {2} }, // marks all hidden clients on the selected workspace
-	{ KeyPress,   MODKEY|Shift,                 XK_a,            unmarkall,              {0} }, // unmarks all clients
-	{ KeyPress,	  MODKEY,                  XK_s,            spawn,           SHCMD("screen") }, // flip the master and stack areas
-	{ KeyPress,	  MODKEY|Ctrl,                  XK_s,            spawn,           SHCMD("screen -v") }, // flip the master and stack areas
-	{ KeyPress,	  MODKEY|Shift,                  XK_s,            spawn,           SHCMD("screen -h") }, // flip the master and stack areas
-
 	{ KeyPress,   MODKEY,                       XK_bracketleft,  rotatelayoutaxis,       {.i = -1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
 	{ KeyPress,   MODKEY,                       XK_bracketright, rotatelayoutaxis,       {.i = +1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
 	{ KeyPress,   MODKEY|Alt,                   XK_bracketleft,  rotatelayoutaxis,       {.i = -2 } }, // cycle through the available tiling arrangements for the master area
@@ -577,9 +555,41 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_bracketright, rotatelayoutaxis,       {.i = +3 } }, // cycle through the available tiling arrangements for the primary (first) stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketleft,  rotatelayoutaxis,       {.i = -4 } }, // cycle through the available tiling arrangements for the secondary stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
+	{ KeyPress,   MODKEY,                       XK_backslash,    togglepinnedws,         {0} }, // toggle pinning of currently selected workspace on the current monitor
+	{ KeyPress,   MODKEY,                       XK_a,            markall,                {0} }, // marks all clients on the selected workspace
+	{ KeyPress,   MODKEY|Ctrl,                  XK_a,            markall,                {1} }, // marks all floating clients on the selected workspace
+	{ KeyPress,   MODKEY|Alt,                   XK_a,            markall,                {2} }, // marks all hidden clients on the selected workspace
+	{ KeyPress,   MODKEY|Shift,                 XK_a,            unmarkall,              {0} }, // unmarks all clients
+
+	{ KeyPress,	  MODKEY,                       XK_s,            spawn,           SHCMD("one-screen.sh") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Ctrl,                  XK_s,            spawn,           SHCMD("two-screen-home") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Shift,                 XK_s,            spawn,           SHCMD("two-screen.sh") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Alt,                   XK_s,            spawn,           SHCMD("three-screen-home.sh") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Ctrl|Alt,              XK_s,            spawn,           SHCMD("screen.sh") }, // flip the master and stack areas
+	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
+	{ KeyPress,   MODKEY,                       XK_f,            togglefullscreen,       {0} }, // toggles fullscreen for the currently selected client
+	{ KeyPress,   MODKEY|Shift,                 XK_f,            togglefakefullscreen,   {0} }, // toggles "fake" fullscreen for the selected window
+	{ KeyPress,   MODKEY|Ctrl,                  XK_g,            floatpos,               {.v = "50% 50% 80% 80%" } }, // center client and take up 80% of the screen
+	{ KeyPress,   MODKEY,                       XK_g,            togglefloating,         {0} }, // toggles between tiled and floating arrangement for the currently focused client
+	{ KeyPress,   MODKEY,                       XK_j,            focusstack,             {.i = +1 } }, // focus on the next client in the stack
+	{ KeyPress,   MODKEY,                       XK_k,            focusstack,             {.i = -1 } }, // focus on the previous client in the stack
+	{ KeyPress,   MODKEY|Alt|Shift,             XK_j,            focusstack,             {.i = +2 } }, // allows focusing on hidden clients
+	{ KeyPress,   MODKEY|Alt|Shift,             XK_k,            focusstack,             {.i = -2 } }, // allows focusing on hidden clients
+	{ KeyPress,   MODKEY|Ctrl,                  XK_j,            pushdown,               {0} }, // move the selected client down the stack
+	{ KeyPress,   MODKEY|Ctrl,                  XK_k,            pushup,                 {0} }, // move the selected client up the stack
+	{ KeyPress,   MODKEY,                       XK_h,            setmfact,               {.f = -0.05} }, // decrease the size of the master area compared to the stack area(s)
+	{ KeyPress,   MODKEY,                       XK_l,            setmfact,               {.f = +0.05} }, // increase the size of the master area compared to the stack area(s)
+	{ KeyPress,   MODKEY|Shift,                 XK_h,            setcfact,               {.f = +0.25} }, // increase size respective to other windows within the same area
+	{ KeyPress,   MODKEY|Shift,                 XK_l,            setcfact,               {.f = -0.25} }, // decrease client size respective to other windows within the same area
+	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
+	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
+
+	{ KeyPress,   MODKEY,                       XK_z,            showhideclient,         {0} }, // hide the currently selected client (or show if hidden)
+	{ KeyPress,	  MODKEY,                       XK_x,            spawn,                  SHCMD("st -e setxkeymap frqw") }, // flip the master and stack areas
+	//                                          XK_c is used by calculator 
   { KeyPress,   MODKEY,                       XK_v,            group,                  {0} }, // groups floating clients together
 	{ KeyPress,   MODKEY|Shift,                 XK_v,            ungroup,                {0} }, // ungroups floating clients
-	//  XK_c is used by calculator 
+	{ KeyPress,   MODKEY,                       XK_b,            togglebar,              {0} }, // toggles the display of the bar(s) on the current monitor
 	{ KeyPress,	  MODKEY|Ctrl,                  XK_b,            mirrorlayout,           {0} }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Ctrl|Shift,            XK_b,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
 	{ KeyPress,		MODKEY,                       XK_n,      		spawn,    	SHCMD("slack") },
@@ -594,16 +604,6 @@ static Key keys[] = {
   { KeyPress,   MODKEY|Ctrl,                  XK_m,            spawn,                   SHCMD("two-screen-home.sh") }, // unconnected xps screen
 	{ KeyPress,   MODKEY|ShiftMask,             XK_m,            spawn,                   SHCMD("moonshot-2-up-down.sh") }, // moves the currently focused window to/from the master area (for tiled layouts)
 	{ KeyPress,   MODKEY|Alt,                   XK_m,            spawn,             SHCMD("three-screen-home.sh") }, //three screen one SPLIT_VERTICAL
-	{ KeyPress,   MODKEY|Alt,                   XK_space,        setlayout,              {0} }, // toggles between current and previous layout
-	{ KeyPress,   MODKEY,                   XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
-
-	{ KeyPress,   MODKEY|Ctrl,                  XK_g,            floatpos,               {.v = "50% 50% 80% 80%" } }, // center client and take up 80% of the screen
-	{ KeyPress,   MODKEY,                       XK_g,            togglefloating,         {0} }, // toggles between tiled and floating arrangement for the currently focused client
-	{ KeyPress,   MODKEY,                       XK_f,            togglefullscreen,       {0} }, // toggles fullscreen for the currently selected client
-	{ KeyPress,   MODKEY|Shift,                 XK_f,            togglefakefullscreen,   {0} }, // toggles "fake" fullscreen for the selected window
-	{ KeyPress,   Ctrl|Alt,                     XK_Tab,          togglenomodbuttons,     {0} }, // disables / enables keybindings that are not accompanied by any modifier buttons for a client
-	{ KeyPress,   MODKEY|Shift,                 XK_equal,        changeopacity,          {.f = +0.05 } }, // increase the client opacity (for compositors that support _NET_WM_OPACITY)
-	{ KeyPress,   MODKEY|Shift,                 XK_minus,        changeopacity,          {.f = -0.05 } }, // decrease the client opacity (for compositors that support _NET_WM_OPACITY)
 
 	{ KeyPress,   MODKEY|Shift,                 XK_comma,        focusmon,               {.i = -1 } }, // focus on the previous monitor, if any
 	{ KeyPress,   MODKEY|Shift,                 XK_period,       focusmon,               {.i = +1 } }, // focus on the next monitor, if any
@@ -615,12 +615,13 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Ctrl,                  XK_period,       viewwsdir,              {.i = +1 } }, // view the workspace on the immediate right of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY,                       XK_comma,        viewwsdir,              {.i = -2 } }, // view the next workspace left of current workspace that has clients (on the current monitor)
 	{ KeyPress,   MODKEY,                       XK_period,       viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
-	{ KeyPress,   MODKEY|Shift,                 XK_Tab,          viewwsdir,              {.i = -2 } }, // view the next workspace left of current workspace that has clients (on the current monitor)
-	{ KeyPress,   MODKEY,                       XK_Tab,          viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_comma,        movewsdir,              {.i = -1 } }, // move client to workspace on the immediate left of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_period,       movewsdir,              {.i = +1 } }, // move client to workspace on the immediate right of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY,                     	XK_slash,			spawn,		SHCMD("st -e  nmcli connection up moonshotlabs_theia --ask") },
 	{ KeyPress,   MODKEY|Alt,                   XK_slash,			spawn,		SHCMD("st -e  nmcli connection down moonshotlabs_theia") },
+	{ KeyPress,   MODKEY|Alt,                   XK_space,        setlayout,              {0} }, // toggles between current and previous layout
+	{ KeyPress,   MODKEY,                   XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
+                                                                                              //
 	{ KeyPress,   0,				XK_Print,		spawn,		SHCMD("maim ~/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
 	{ KeyPress,   ShiftMask,			XK_Print,		spawn,		SHCMD("printBarScript") },
 	{ KeyPress,   MODKEY,			XK_Home,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
