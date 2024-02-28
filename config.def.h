@@ -58,11 +58,20 @@ static char *custom_2d_indicator_5 = "^c#CB9700^^r0,h,w,1^^r0,0,w,1^"; // top an
 static char *custom_2d_indicator_6 = "^c#F0A523^^r6,2,1,-4^^r-6,2,1,-4^"; // orange vertical bars
 
 /* The below are only used if the WorkspaceLabels functionality is enabled */
-static char *occupied_workspace_label_format = "%s: %s";  /* format of a workspace label */
-static char *vacant_workspace_label_format = "%s";        /* format of an empty / vacant workspace */
-static int lowercase_workspace_labels = 1;                /* whether to change workspace labels to lower case */
-static int prefer_window_icons_over_workspace_labels = 0; /* whether to use window icons instead of labels if present */
+static char *occupied_workspace_label_format = "%s: %s";     /* format of a workspace label */
+static char *vacant_workspace_label_format = "%s";           /* format of an empty / vacant workspace */
+static int lowercase_workspace_labels = 1;                   /* whether to change workspace labels to lower case */
+static int prefer_window_icons_over_workspace_labels = 0;    /* whether to use window icons instead of labels if present */
 static int swap_occupied_workspace_label_format_strings = 0; /* 0 gives "icon: label", 1 gives "label: icon" */
+
+/* This determines what happens with pinned workspaces on a monitor when that monitor is removed.
+ *   0 - the workspaces becomes unpinned and is moved to another monitor or
+ *   1 - the workspace clients are moved to the selected workspace on the first monitor, but
+ *       the workspace itself is hidden
+ *
+ * Non-pinned workspaces are always redistributed among the remaining monitors.
+ */
+static const int workspaces_per_mon = 0;
 
 /* See util.h for options */
 static uint64_t functionality = 0
@@ -76,8 +85,8 @@ static uint64_t functionality = 0
 	|Swallow // allows X applications started from the command line to swallow the terminal
 	|SwallowFloating // allow floating windows to swallow the terminal by default
 	|CenteredWindowName // center the window titles on the bar
-//	|BarActiveGroupBorderColor // use border color of active group, otherwise title scheme is used
-	|BarMasterGroupBorderColor // use border color of master group, otherwise title scheme is used
+//	|BarActiveGroupBorderColor // use border color of active group for the bar, otherwise normal scheme is used
+//	|BarMasterGroupBorderColor // use border color of master group for the bar, otherwise normal scheme is used
 	|FlexWinBorders // use the SchemeFlex* color schemes, falls back to SchemeTitle* if disabled
 	|SpawnCwd // spawn applications in the currently selected client's working directory
 	|ColorEmoji // enables color emoji support (removes Xft workaround)
@@ -119,12 +128,13 @@ static int flexwintitle_floatweight      = 0;  // floating window title weight, 
 static int flexwintitle_separator        = borderpx; // width of client separator
 
 static const char *fonts[]               = { "JetBrains Mono:size=12","monospace:size=12", "JoyPixels:pixelsize=14:antialias=true:autohint=true", "Inconsolata:size=10", "Symbola:size=10", "Twitter Color Emoji:size=10"  };
-static const char dmenufont[]            = "monospace:size=10";
+static const char dmenufont[60]            = "monospace:size=10";
 
 static char dmenunormfgcolor[] = "#D9CFC5";
 static char dmenunormbgcolor[] = "#492B2D";
 static char dmenuselfgcolor[] = "#D9CFC5";
 static char dmenuselbgcolor[] = "#82363A";
+static char dmenubordercolor[] = "#492B2D";
 
 /* Xresources preferences to load at startup. */
 static const ResourcePref resources[] = {
@@ -132,6 +142,7 @@ static const ResourcePref resources[] = {
 	{ "dmenu.norm.bg.color", STRING, &dmenunormbgcolor },
 	{ "dmenu.sel.fg.color", STRING, &dmenuselfgcolor },
 	{ "dmenu.sel.bg.color", STRING, &dmenuselbgcolor },
+	{ "dmenu.border.bg.color", STRING, &dmenubordercolor },
 	{ "dmenu.font", STRING, &dmenufont },
 };
 
@@ -141,50 +152,50 @@ static char *colors[SchemeLast][4] = {
 	/*                       fg         bg         border     resource prefix */
 	[SchemeNorm]         = { "#D9CFC5", "#492B2D", "#492B2D", "norm" },
 	[SchemeSel]          = { "#D9CFC5", "#82363A", "#82363A", "sel" },
-	[SchemeTitleNorm]    = { "#D9CFC5", "#492B2D", "#492B2D", "titlenorm" },
+	[SchemeTitleNorm]    = { "#D9CFC5", "#492B2D", "#643B3E", "titlenorm" },
 	[SchemeTitleSel]     = { "#D9CFC5", "#82363A", "#82363A", "titlesel" },
 	[SchemeWsNorm]       = { "#D9CFC5", "#492B2D", "#000000", "wsnorm" },
 	[SchemeWsVisible]    = { "#D9CFC5", "#82363A", "#000000", "wsvis" },
 	[SchemeWsSel]        = { "#D9CFC5", "#82363A", "#000000", "wssel" },
 	[SchemeWsOcc]        = { "#D9CFC5", "#492B2D", "#000000", "wsocc" },
-	[SchemeHidNorm]      = { "#D9CFC5", "#492B2D", "#492B2D", "hidnorm" },
+	[SchemeHidNorm]      = { "#D9CFC5", "#492B2D", "#643B3E", "hidnorm" },
 	[SchemeHidSel]       = { "#D9CFC5", "#82363A", "#82363A", "hidsel" },
 	[SchemeUrg]          = { "#E0E0E0", "#A23419", "#A23419", "urg" },
 	[SchemeMarked]       = { "#DDC470", "#724559", "#724559", "marked" },
-	[SchemeScratchNorm]  = { "#D9CFC5", "#492B2D", "#492B2D", "scratchnorm" },
+	[SchemeScratchNorm]  = { "#D9CFC5", "#492B2D", "#643B3E", "scratchnorm" },
 	[SchemeScratchSel]   = { "#D9CFC5", "#82363A", "#82363A", "scratchsel" },
-	[SchemeFlexActTTB]   = { "#D9CFC5", "#492B2D", "#492B2D", "act.TTB" },
-	[SchemeFlexActLTR]   = { "#D9CFC5", "#492B2D", "#492B2D", "act.LTR" },
-	[SchemeFlexActMONO]  = { "#D9CFC5", "#492B2D", "#492B2D", "act.MONO" },
-	[SchemeFlexActGRID]  = { "#D9CFC5", "#492B2D", "#492B2D", "act.GRID" },
-	[SchemeFlexActGRIDC] = { "#D9CFC5", "#492B2D", "#492B2D", "act.GRIDC" },
-	[SchemeFlexActGRD1]  = { "#D9CFC5", "#492B2D", "#492B2D", "act.GRD1" },
-	[SchemeFlexActGRD2]  = { "#D9CFC5", "#492B2D", "#492B2D", "act.GRD2" },
-	[SchemeFlexActGRDM]  = { "#D9CFC5", "#492B2D", "#492B2D", "act.GRDM" },
-	[SchemeFlexActHGRD]  = { "#D9CFC5", "#492B2D", "#492B2D", "act.HGRD" },
-	[SchemeFlexActDWDL]  = { "#D9CFC5", "#492B2D", "#492B2D", "act.DWDL" },
-	[SchemeFlexActDWDLC] = { "#D9CFC5", "#492B2D", "#492B2D", "act.DWDLC" },
-	[SchemeFlexActSPRL]  = { "#D9CFC5", "#492B2D", "#492B2D", "act.SPRL" },
-	[SchemeFlexActSPRLC] = { "#D9CFC5", "#492B2D", "#492B2D", "act.SPRLC" },
-	[SchemeFlexActTTMI]  = { "#D9CFC5", "#492B2D", "#492B2D", "act.TTMI" },
-	[SchemeFlexActTTMIC] = { "#D9CFC5", "#492B2D", "#492B2D", "act.TTMIC" },
-	[SchemeFlexActFloat] = { "#D9CFC5", "#492B2D", "#643b3e", "act.float" },
-	[SchemeFlexInaTTB]   = { "#D9CFC5", "#492B2D", "#492B2D", "norm.TTB" },
-	[SchemeFlexInaLTR]   = { "#D9CFC5", "#492B2D", "#492B2D", "norm.LTR" },
-	[SchemeFlexInaMONO]  = { "#D9CFC5", "#492B2D", "#492B2D", "norm.MONO" },
-	[SchemeFlexInaGRID]  = { "#D9CFC5", "#492B2D", "#492B2D", "norm.GRID" },
-	[SchemeFlexInaGRIDC] = { "#D9CFC5", "#492B2D", "#492B2D", "norm.GRIDC" },
-	[SchemeFlexInaGRD1]  = { "#D9CFC5", "#492B2D", "#492B2D", "norm.GRD1" },
-	[SchemeFlexInaGRD2]  = { "#D9CFC5", "#492B2D", "#492B2D", "norm.GRD2" },
-	[SchemeFlexInaGRDM]  = { "#D9CFC5", "#492B2D", "#492B2D", "norm.GRDM" },
-	[SchemeFlexInaHGRD]  = { "#D9CFC5", "#492B2D", "#492B2D", "norm.HGRD" },
-	[SchemeFlexInaDWDL]  = { "#D9CFC5", "#492B2D", "#492B2D", "norm.DWDL" },
-	[SchemeFlexInaDWDLC] = { "#D9CFC5", "#492B2D", "#492B2D", "norm.DWDLC" },
-	[SchemeFlexInaSPRL]  = { "#D9CFC5", "#492B2D", "#492B2D", "norm.SPRL" },
-	[SchemeFlexInaSPRLC] = { "#D9CFC5", "#492B2D", "#492B2D", "norm.SPRLC" },
-	[SchemeFlexInaTTMI]  = { "#D9CFC5", "#492B2D", "#492B2D", "norm.TTMI" },
-	[SchemeFlexInaTTMIC] = { "#D9CFC5", "#492B2D", "#492B2D", "norm.TTMIC" },
-	[SchemeFlexInaFloat] = { "#D9CFC5", "#492B2D", "#643b3e", "norm.float" },
+	[SchemeFlexActTTB]   = { "#D9CFC5", "#492B2D", "#643B3E", "act.TTB" },
+	[SchemeFlexActLTR]   = { "#D9CFC5", "#492B2D", "#643B3E", "act.LTR" },
+	[SchemeFlexActMONO]  = { "#D9CFC5", "#492B2D", "#643B3E", "act.MONO" },
+	[SchemeFlexActGRID]  = { "#D9CFC5", "#492B2D", "#643B3E", "act.GRID" },
+	[SchemeFlexActGRIDC] = { "#D9CFC5", "#492B2D", "#643B3E", "act.GRIDC" },
+	[SchemeFlexActGRD1]  = { "#D9CFC5", "#492B2D", "#643B3E", "act.GRD1" },
+	[SchemeFlexActGRD2]  = { "#D9CFC5", "#492B2D", "#643B3E", "act.GRD2" },
+	[SchemeFlexActGRDM]  = { "#D9CFC5", "#492B2D", "#643B3E", "act.GRDM" },
+	[SchemeFlexActHGRD]  = { "#D9CFC5", "#492B2D", "#643B3E", "act.HGRD" },
+	[SchemeFlexActDWDL]  = { "#D9CFC5", "#492B2D", "#643B3E", "act.DWDL" },
+	[SchemeFlexActDWDLC] = { "#D9CFC5", "#492B2D", "#643B3E", "act.DWDLC" },
+	[SchemeFlexActSPRL]  = { "#D9CFC5", "#492B2D", "#643B3E", "act.SPRL" },
+	[SchemeFlexActSPRLC] = { "#D9CFC5", "#492B2D", "#643B3E", "act.SPRLC" },
+	[SchemeFlexActTTMI]  = { "#D9CFC5", "#492B2D", "#643B3E", "act.TTMI" },
+	[SchemeFlexActTTMIC] = { "#D9CFC5", "#492B2D", "#643B3E", "act.TTMIC" },
+	[SchemeFlexActFloat] = { "#D9CFC5", "#492B2D", "#643B3E", "act.float" },
+	[SchemeFlexInaTTB]   = { "#D9CFC5", "#492B2D", "#643B3E", "norm.TTB" },
+	[SchemeFlexInaLTR]   = { "#D9CFC5", "#492B2D", "#643B3E", "norm.LTR" },
+	[SchemeFlexInaMONO]  = { "#D9CFC5", "#492B2D", "#643B3E", "norm.MONO" },
+	[SchemeFlexInaGRID]  = { "#D9CFC5", "#492B2D", "#643B3E", "norm.GRID" },
+	[SchemeFlexInaGRIDC] = { "#D9CFC5", "#492B2D", "#643B3E", "norm.GRIDC" },
+	[SchemeFlexInaGRD1]  = { "#D9CFC5", "#492B2D", "#643B3E", "norm.GRD1" },
+	[SchemeFlexInaGRD2]  = { "#D9CFC5", "#492B2D", "#643B3E", "norm.GRD2" },
+	[SchemeFlexInaGRDM]  = { "#D9CFC5", "#492B2D", "#643B3E", "norm.GRDM" },
+	[SchemeFlexInaHGRD]  = { "#D9CFC5", "#492B2D", "#643B3E", "norm.HGRD" },
+	[SchemeFlexInaDWDL]  = { "#D9CFC5", "#492B2D", "#643B3E", "norm.DWDL" },
+	[SchemeFlexInaDWDLC] = { "#D9CFC5", "#492B2D", "#643B3E", "norm.DWDLC" },
+	[SchemeFlexInaSPRL]  = { "#D9CFC5", "#492B2D", "#643B3E", "norm.SPRL" },
+	[SchemeFlexInaSPRLC] = { "#D9CFC5", "#492B2D", "#643B3E", "norm.SPRLC" },
+	[SchemeFlexInaTTMI]  = { "#D9CFC5", "#492B2D", "#643B3E", "norm.TTMI" },
+	[SchemeFlexInaTTMIC] = { "#D9CFC5", "#492B2D", "#643B3E", "norm.TTMIC" },
+	[SchemeFlexInaFloat] = { "#D9CFC5", "#492B2D", "#643B3E", "norm.float" },
 	[SchemeFlexSelTTB]   = { "#D9CFC5", "#82363A", "#82363A", "sel.TTB" },
 	[SchemeFlexSelLTR]   = { "#D9CFC5", "#82363A", "#82363A", "sel.LTR" },
 	[SchemeFlexSelMONO]  = { "#D9CFC5", "#82363A", "#82363A", "sel.MONO" },
@@ -490,6 +501,7 @@ static const char *dmenucmd[] = {
 	"-nf", dmenunormfgcolor,
 	"-sb", dmenuselbgcolor,
 	"-sf", dmenuselfgcolor,
+//	"-bb", dmenubordercolor,
 	NULL
 };
 static const char *spcmd1[] = {"q", "st", "-n", "spterm (q)", "-g", "120x34", NULL };
@@ -763,6 +775,7 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( clientstomon, ARG_TYPE_SINT ),
 	IPCCOMMAND( cyclelayout, ARG_TYPE_SINT ),
 	IPCCOMMAND( enable, ARG_TYPE_STR ),
+	IPCCOMMAND( enablewsbyindex, ARG_TYPE_SINT ),
 	IPCCOMMAND( enablewsbyname, ARG_TYPE_STR ),
 	IPCCOMMAND( defaultgaps, ARG_TYPE_NONE ),
 	IPCCOMMAND( disable, ARG_TYPE_STR ),
@@ -789,9 +802,13 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( mark, ARG_TYPE_NONE ),
 	IPCCOMMAND( markall, ARG_TYPE_SINT ), // 0 = mark all, 1 = mark floating, 2 = mark hidden
 	IPCCOMMAND( mirrorlayout, ARG_TYPE_NONE ),
+	IPCCOMMAND( movetowsbyindex, ARG_TYPE_SINT ),
 	IPCCOMMAND( movetowsbyname, ARG_TYPE_STR ),
+	IPCCOMMAND( sendtowsbyindex, ARG_TYPE_SINT ),
 	IPCCOMMAND( sendtowsbyname, ARG_TYPE_STR ),
+	IPCCOMMAND( movealltowsbyindex, ARG_TYPE_SINT ),
 	IPCCOMMAND( movealltowsbyname, ARG_TYPE_STR ),
+	IPCCOMMAND( moveallfromwsbyindex, ARG_TYPE_SINT ),
 	IPCCOMMAND( moveallfromwsbyname, ARG_TYPE_STR ),
 	IPCCOMMAND( movewsdir, ARG_TYPE_SINT ),
 	IPCCOMMAND( rotatelayoutaxis, ARG_TYPE_SINT ),
@@ -818,6 +835,7 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( stackswap, ARG_TYPE_SINT ),
 	IPCCOMMAND( swallow, ARG_TYPE_NONE ),
 	IPCCOMMAND( switchcol, ARG_TYPE_NONE ),
+	IPCCOMMAND( swapwsbyindex, ARG_TYPE_SINT ),
 	IPCCOMMAND( swapwsbyname, ARG_TYPE_STR ),
 	IPCCOMMAND( toggle, ARG_TYPE_STR ), // toggle functionality on and off
 	IPCCOMMAND( togglebar, ARG_TYPE_NONE ),
@@ -842,6 +860,7 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( viewallwsonmon, ARG_TYPE_NONE ),
 	IPCCOMMAND( viewalloccwsonmon, ARG_TYPE_NONE ),
 	IPCCOMMAND( viewselws, ARG_TYPE_NONE ),
+	IPCCOMMAND( viewwsbyindex, ARG_TYPE_SINT ),
 	IPCCOMMAND( viewwsbyname, ARG_TYPE_STR ),
 	IPCCOMMAND( viewwsdir, ARG_TYPE_SINT ),
 	IPCCOMMAND( xrdb, ARG_TYPE_NONE ), // reload xrdb / Xresources

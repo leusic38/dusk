@@ -505,7 +505,7 @@ static Cur *cursor[CurLast];
 static Clr **scheme;
 static Display *dpy;
 static Drw *drw;
-static Monitor *mons, *selmon;
+static Monitor *mons, *selmon, *dummymon;
 static Workspace *workspaces, *selws;
 static Window root, wmcheckwin;
 
@@ -962,6 +962,7 @@ cleanup(void)
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
 	while (mons)
 		cleanupmon(mons);
+	free(dummymon);
 	if (systray) {
 		while (systray->icons)
 			removesystrayicon(systray->icons);
@@ -1019,10 +1020,7 @@ cleanupmon(Monitor *mon)
 			continue;
 		}
 
-		assignworkspacetomonitor(ws, mons);
-		ws->visible = 0;
-		ws->pinned = 0;
-		hidewsclients(ws->stack);
+		handleabandoned(ws);
 	}
 
 	for (bar = mon->bar; bar; bar = mon->bar) {
@@ -1076,7 +1074,7 @@ clientmessage(XEvent *e)
 		}
 
 		if (cme->message_type == netatom[NetCurrentDesktop]) {
-			if ((ws = getwsbyindex(cme->data.l[0])))
+			if ((ws = getwsbynum(cme->data.l[0])))
 				viewwsonmon(ws, selmon, 0);
 		}
 
@@ -1182,7 +1180,7 @@ clientmessage(XEvent *e)
 	} else if (cme->message_type == netatom[NetCloseWindow]) {
 		killclient(&((Arg) { .v = c }));
 	} else if (cme->message_type == netatom[NetWMDesktop]) {
-		if ((ws = getwsbyindex(cme->data.l[0])))
+		if ((ws = getwsbynum(cme->data.l[0])))
 			movetows(c, ws, enabled(ViewOnWs));
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
 		if (enabled(FocusOnNetActive) && !NOFOCUSONNETACTIVE(c)) {
@@ -3682,6 +3680,7 @@ updategeom(int width, int height)
 			else
 				mons = createmon(i);
 		}
+		dummymon = createmon(7);
 
 		for (m = mons; m && m->num < nn; m = m->next) {
 			if (m->num >= n
