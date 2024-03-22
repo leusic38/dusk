@@ -516,6 +516,8 @@ static Key keys[] = {
 	/* type       modifier                      key              function                argument */
 	{ KeyPress,   MODKEY|Ctrl,                  XK_0,            viewallwsonmon,         {0} },        // view all workspaces on the current monitor
 	{ KeyPress,   MODKEY,                       XK_0,            viewalloccwsonmon,      {0} },        // view all workspaces on the current monitor that has clients
+	{ KeyPress,   MODKEY,                       XK_minus,        setmfact,               {.f = -0.05} }, // decrease the size of the master area compared to the stack area(s)
+	{ KeyPress,   MODKEY,                       XK_equal,        setmfact,               {.f = +0.05} }, // increase the size of the master area compared to the stack area(s)
 	{ KeyPress,   MODKEY|Shift,                 XK_equal,        changeopacity,          {.f = +0.05 } }, // increase the client opacity (for compositors that support _NET_WM_OPACITY)
 	{ KeyPress,   MODKEY|Shift,                 XK_minus,        changeopacity,          {.f = -0.05 } }, // decrease the client opacity (for compositors that support _NET_WM_OPACITY)
 	{ KeyPress, MODKEY,													XK_BackSpace,  		killclient,	{0} },
@@ -598,7 +600,7 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
 
 	{ KeyPress,   MODKEY,                       XK_z,            showhideclient,         {0} }, // hide the currently selected client (or show if hidden)
-	{ KeyPress,	  MODKEY,                       XK_x,            spawn,                  SHCMD("st -e setxkeymap frqw") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY,                       XK_x,            spawn,                  SHCMD("setxkbmap frqw") }, // flip the master and stack areas
 	//                                          XK_c is used by calculator 
   { KeyPress,   MODKEY,                       XK_v,            group,                  {0} }, // groups floating clients together
 	{ KeyPress,   MODKEY|Shift,                 XK_v,            ungroup,                {0} }, // ungroups floating clients
