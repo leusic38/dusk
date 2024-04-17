@@ -567,10 +567,10 @@ static Key keys[] = {
 	{ KeyPress,	 	MODKEY|ShiftMask|Alt,					XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
 	{ KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
 	{ KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
-	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("one-screen.sh") }, //three screen one SPLIT_VERTICAL
-  { KeyPress,   MODKEY|Ctrl,                  XK_m,            spawn,                   SHCMD("two-screen-home.sh") }, // unconnected xps screen
-	{ KeyPress,   MODKEY|ShiftMask,             XK_m,            spawn,                   SHCMD("moonshot-2-up-down.sh") }, // moves the currently focused window to/from the master area (for tiled layouts)
-	{ KeyPress,   MODKEY|Alt,                   XK_m,            spawn,             SHCMD("three-screen-home.sh") }, //three screen one SPLIT_VERTICAL
+	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("spotify") }, //three screen one SPLIT_VERTICAL
+  { KeyPress,   MODKEY|Ctrl,                  XK_m,            spawn,                   SHCMD("vlc") }, // unconnected xps screen
+	/* { KeyPress,   MODKEY|ShiftMask,             XK_m,            spawn,                   SHCMD("moonshot-2-up-down.sh") }, // moves the currently focused window to/from the master area (for tiled layouts) */
+	/* { KeyPress,   MODKEY|Alt,                   XK_m,            spawn,             SHCMD("three-screen-home.sh") }, //three screen one SPLIT_VERTICAL */
 
 	{ KeyPress,   MODKEY|Shift,                 XK_comma,        focusmon,               {.i = -1 } }, // focus on the previous monitor, if any
 	{ KeyPress,   MODKEY|Shift,                 XK_period,       focusmon,               {.i = +1 } }, // focus on the next monitor, if any
