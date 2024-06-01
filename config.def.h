@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-#define TERMINAL "st"
+#define TERMINAL "kitty"
 #define HOME (getenv("HOME"))
 #define FILEMANAGER "ranger"
 
@@ -128,7 +128,7 @@ static int flexwintitle_hiddenweight     = 0;  // hidden window title weight
 static int flexwintitle_floatweight      = 0;  // floating window title weight, set to 0 to not show floating windows
 static int flexwintitle_separator        = borderpx; // width of client separator
 
-static const char *fonts[]               = { "JetBrains Mono:size=12","monospace:size=12", "JoyPixels:pixelsize=14:antialias=true:autohint=true", "Inconsolata:size=10", "Symbola:size=10", "Twitter Color Emoji:size=10"  };
+static const char *fonts[]               = { "JetBrainsMono Nerd Font:size=12","monospace:size=12", "JoyPixels:pixelsize=14:antialias=true:autohint=true", "Inconsolata:size=10", "Symbola:size=10", "Twitter Color Emoji:size=10"  };
 static const char dmenufont[60]            = "monospace:size=10";
 
 static char dmenunormfgcolor[] = "#D9CFC5";
@@ -226,7 +226,7 @@ static const Rule clientrules[] = {
 	{ .role = "browser-window", .workspace = "5", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .role = "browser", .workspace = "1", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
-	{ .class = "Slack", .workspace = "6", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
+	{ .class = "slack", .workspace = "6", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
 	{ .class = "Alacritty", .flags = Terminal },
 	{ .class = TERMINAL, .flags = Terminal },
@@ -510,9 +510,9 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|Mod1Mask|ShiftMask,			XK_t,      		setlayout,     	{4} },
 	{	KeyPress, MODKEY|ControlMask|ShiftMask,		XK_t,      		setlayout,     	{5} },
 	{	KeyPress, MODKEY|ControlMask|Mod1Mask,		XK_t,      		setlayout,     	{6} },
-	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{7}},
-	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{8}},
-	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{9}},
+	{	KeyPress, MODKEY,                       	XK_y,      		setlayout,     	{7} },
+	{	KeyPress, MODKEY|ShiftMask,             	XK_y,      		setlayout,     	{8} },
+	{	KeyPress, MODKEY|ControlMask,             XK_y,      		setlayout,     	{9} },
 	{	KeyPress, MODKEY|Mod1Mask,             		XK_y,      		setlayout,     	{10}},
 	{	KeyPress, MODKEY|ControlMask|Mod1Mask, 		XK_y,      		setlayout,     	{11}},
 	{	KeyPress, MODKEY|ControlMask|ShiftMask, 	XK_y,      		setlayout,     	{12}},
