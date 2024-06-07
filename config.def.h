@@ -458,7 +458,6 @@ static const StackerIcon stackericons[] = {
 static const char *termcmd[]  = { NULL, TERMINAL, NULL };
 static const char *filemanagercmd[]  = { NULL, TERMINAL,"-e",FILEMANAGER, NULL };
 static const char *dmenucmd[] = {
-	NULL,
 	"dmenu_run",
 	"-fn", dmenufont,
 	"-nb", dmenunormbgcolor,
@@ -484,6 +483,8 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY,                       XK_equal,        setmfact,               {.f = +0.05} }, // increase the size of the master area compared to the stack area(s)
 	{ KeyPress,   MODKEY|Shift,                 XK_equal,        changeopacity,          {.f = +0.05 } }, // increase the client opacity (for compositors that support _NET_WM_OPACITY)
 	{ KeyPress,   MODKEY|Shift,                 XK_minus,        changeopacity,          {.f = -0.05 } }, // decrease the client opacity (for compositors that support _NET_WM_OPACITY)
+	{ KeyPress,   MODKEY|ControlMask,           XK_minus,            setcfact,               {.f = +0.25} }, // increase size respective to other windows within the same area
+	{ KeyPress,   MODKEY|ControlMask,           XK_equal,            setcfact,               {.f = -0.25} }, // decrease client size respective to other windows within the same area
 	{ KeyPress, MODKEY,													XK_BackSpace,  		killclient,	{0} },
 	{ KeyPress, MODKEY|ShiftMask,								XK_BackSpace,  		quit,		{0} },
 	{ KeyPress, MODKEY|ShiftMask|ControlMask,		XK_BackSpace,  		restart,		{0} },
@@ -812,6 +813,7 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( togglefloating, ARG_TYPE_NONE ),
 	IPCCOMMAND( togglefullscreen, ARG_TYPE_NONE ),
 	IPCCOMMAND( togglegaps, ARG_TYPE_NONE ),
+	IPCCOMMAND( togglekeybindings, ARG_TYPE_NONE ),
 	IPCCOMMAND( togglemark, ARG_TYPE_NONE ),
 	IPCCOMMAND( togglenomodbuttons, ARG_TYPE_NONE ),
 	IPCCOMMAND( togglepinnedws, ARG_TYPE_NONE ),
