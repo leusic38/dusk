@@ -212,7 +212,7 @@ static const Rule clientrules[] = {
 	{ .wintype = WTYPE "UTILITY", .flags = AlwaysOnTop|Centered|Floating },
 	{ .wintype = WTYPE "TOOLBAR", .flags = AlwaysOnTop|Centered|Floating },
 	{ .wintype = WTYPE "SPLASH", .flags = AlwaysOnTop|Centered|Floating },
-	{ .instance = "spterm (w)", .scratchkey = 'w', .flags = Floating },
+	{ .instance = "spterm (q)", .scratchkey = 'q', .flags = Floating },
 	{ .instance = "spcalc (c)", .scratchkey = 'c', .flags = Floating },
 	{ .instance = "spfm (r)", .scratchkey = 'r', .flags = Floating },
 	{ .class = "gimp", .workspace = "7", .flags = Floating|SwitchWorkspace },
@@ -226,7 +226,7 @@ static const Rule clientrules[] = {
 	{ .role = "browser-window", .workspace = "5", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .role = "browser", .workspace = "1", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
-	{ .class = "slack", .workspace = "6", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
+	{ .class = "slack", .role = "browser-window", .workspace = "7", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
 	{ .class = "Alacritty", .flags = Terminal },
 	{ .class = TERMINAL, .flags = Terminal },
@@ -370,7 +370,7 @@ static const WorkspaceRule wsrules[] = {
 	   name,  monitor,  pinned,  layout,  mfact,  nmaster,  nstack,  gaps, default,          visible,          selected,         occupied,         def,   vac,  occ,  */
 	{  "1",    -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "1",   "",   "[1]", },
 	{  "2",    -1,       0,       1,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "2",   "",   "[2]", },
-	{  "3",    -1,       0,      12,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "3",   "",   "[3]", },
+	{  "3",    -1,       0,       7,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "3",   "",   "[3]", },
 	{  "4",     1,       0,      10,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "4",   "",   "[4]", },
 	{  "5",     1,       0,       1,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "5",   "",   "[5]", },
 	{  "6",     2,       1,       9,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "6",   "",   "[6]", },
@@ -467,9 +467,9 @@ static const char *dmenucmd[] = {
 //	"-bb", dmenubordercolor,
 	NULL
 };
-static const char *spcmd1[] = {"q", "st", "-n", "spterm (q)", "-g", "120x34", NULL };
-static const char *spcmd2[] = {"c", "st", "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
-static const char *spcmd3[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
+static const char *spcmd_q[] = {"q", "st", "-n", "spterm (q)", "-g", "120x34", NULL };
+static const char *spcmd_c[] = {"c", "st", "-n", "spcalc (c)", "-g", "50x20", "-e", "bc", "-lq", NULL };
+static const char *spcmd_r[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", FILEMANAGER, NULL };
 
 static const char *statusclickcmd[] = { NULL, "/home/manu/.local/bin/statusbar/statusbar_click", NULL };
 
@@ -521,12 +521,12 @@ static Key keys[] = {
 	{	KeyPress, MODKEY,                       	XK_u,      		setlayout,     	{14}},
 	{	KeyPress, MODKEY|ShiftMask,             	XK_u,      		setlayout,     	{15}},
 	{	KeyPress, MODKEY|ControlMask,            	XK_u,      		setlayout,     	{16}},
+	{ KeyPress,   MODKEY,                       XK_i,            incnmaster,             {.i = -1 } }, // decrease the number of clients in the master area
+	{ KeyPress,   MODKEY|Ctrl,                  XK_i,            incnstack,              {.i = -1 } }, // increase the number of clients in the primary (first) stack area
 	{ KeyPress,   MODKEY,                       XK_o,            incnmaster,             {.i = +1 } }, // increase the number of clients in the master area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_o,            incnstack,              {.i = +1 } }, // increase the number of clients in the primary (first) stack area
 	{ KeyPress,   MODKEY|Shift,                 XK_o,            setcfact,               {0} },
 	{ KeyPress,   MODKEY|Ctrl|Shift,            XK_o,            viewselws,              {0} },        // view the selected workspace (only relevant when viewing multiple workspaces)
-	{ KeyPress,   MODKEY,                       XK_i,            incnmaster,             {.i = -1 } }, // decrease the number of clients in the master area
-	{ KeyPress,   MODKEY|Ctrl,                  XK_i,            incnstack,              {.i = -1 } }, // increase the number of clients in the primary (first) stack area
 	{ KeyPress,   MODKEY,                       XK_bracketleft,  rotatelayoutaxis,       {.i = -1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
 	{ KeyPress,   MODKEY,                       XK_bracketright, rotatelayoutaxis,       {.i = +1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
 	{ KeyPress,   MODKEY|Alt,                   XK_bracketleft,  rotatelayoutaxis,       {.i = -2 } }, // cycle through the available tiling arrangements for the master area
@@ -542,7 +542,7 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_a,            unmarkall,              {0} }, // unmarks all clients
 
 	{ KeyPress,	  MODKEY,                       XK_s,            spawn,           SHCMD("one-screen.sh") }, // flip the master and stack areas
-	{ KeyPress,	  MODKEY|Ctrl,                  XK_s,            spawn,           SHCMD("two-screen-home") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Ctrl,                  XK_s,            spawn,           SHCMD("two-screen-home.sh") }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Shift,                 XK_s,            spawn,           SHCMD("two-screen.sh") }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Alt,                   XK_s,            spawn,           SHCMD("three-screen-home.sh") }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Ctrl|Alt,              XK_s,            spawn,           SHCMD("screen.sh") }, // flip the master and stack areas
@@ -628,9 +628,9 @@ static Key keys[] = {
 //	STACKKEYS(AltGr|Ctrl|Shift,                                  stackpush)                            // move the currently focused client to the nth place in the stack
 //	STACKKEYS(AltGr|Shift,                                       stackswap)                            // swap the currently focused client with the nth client in the stack
 
-	SCRATCHKEYS(MODKEY,                    XK_q,                                    spcmd1)
-	SCRATCHKEYS(MODKEY,                    XK_c,                                    spcmd2)
-	SCRATCHKEYS(MODKEY,                    XK_r,                                    spcmd3)
+	SCRATCHKEYS(MODKEY,                    XK_q,                                    spcmd_q)
+	SCRATCHKEYS(MODKEY,                    XK_c,                                    spcmd_c)
+	SCRATCHKEYS(MODKEY,                    XK_r,                                    spcmd_r)
 
 	WSKEYS(MODKEY,                         XK_1,                                    "1")
 	WSKEYS(MODKEY,                         XK_2,                                    "2")
