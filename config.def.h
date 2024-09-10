@@ -42,12 +42,16 @@ static const double resizeopacity        = 0;   /* client opacity when being res
 static const double placeopacity         = 0;   /* client opacity when being placed, 0 means don't apply opacity */
 
 /* Indicators: see lib/bar_indicators.h for options */
-static int wsindicatortype               = INDICATOR_BOTTOM_BAR_SLIM;
-static int wspinnedindicatortype         = INDICATOR_TOP_RIGHT_PIN;
-static int fakefsindicatortype           = INDICATOR_PLUS;
-static int floatfakefsindicatortype      = INDICATOR_PLUS_AND_LARGER_SQUARE;
-static int floatindicatortype            = INDICATOR_TOP_LEFT_LARGER_SQUARE;
-static int tiledindicatortype            = INDICATOR_NONE;
+static int indicators[IndicatorLast] = {
+	[IndicatorWs] = INDICATOR_NONE,
+	[IndicatorPinnedWs] = INDICATOR_NONE,
+	[IndicatorFakeFullScreen] = INDICATOR_PLUS,
+	[IndicatorFakeFullScreenActive] = INDICATOR_PLUS_AND_LARGER_SQUARE,
+	[IndicatorFloatFakeFullScreen] = INDICATOR_PLUS,
+	[IndicatorFloatFakeFullScreenActive] = INDICATOR_PLUS_AND_LARGER_SQUARE,
+	[IndicatorTiled] = INDICATOR_NONE,
+	[IndicatorFloating] = INDICATOR_TOP_LEFT_LARGER_SQUARE,
+};
 
 /* Custom indicators using status2d markup, e.g. enabled via INDICATOR_CUSTOM_3 */
 static char *custom_2d_indicator_1 = "^c#00A523^^r0,h,w,2^"; // green underline
@@ -105,6 +109,7 @@ static uint64_t functionality = 0
 	|CenterSizeHintsClients // center tiled clients subject to size hints within their tiled area
 //	|ResizeHints // respect size hints also when windows are tiled
 	|SnapToWindows // snap to windows when moving floating clients
+	|SnapToGaps // snap to outer gaps when moving floating clients
 //	|SortScreens // monitors are numbered from left to right
 //	|ViewOnWs // follow a window to the workspace it is being moved to
 //	|Xresources // add support for changing colours via Xresources
@@ -537,10 +542,11 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketleft,  rotatelayoutaxis,       {.i = -4 } }, // cycle through the available tiling arrangements for the secondary stack area
 	{ KeyPress,   MODKEY|Ctrl,                  XK_bracketright, rotatelayoutaxis,       {.i = +4 } }, // cycle through the available tiling arrangements for the secondary stack area
 	{ KeyPress,   MODKEY,                       XK_backslash,    togglepinnedws,         {0} }, // toggle pinning of currently selected workspace on the current monitor
-	{ KeyPress,   MODKEY,                       XK_a,            markall,                {0} }, // marks all clients on the selected workspace
-	{ KeyPress,   MODKEY|Ctrl,                  XK_a,            markall,                {1} }, // marks all floating clients on the selected workspace
-	{ KeyPress,   MODKEY|Alt,                   XK_a,            markall,                {2} }, // marks all hidden clients on the selected workspace
+	{ KeyPress,   MODKEY,                       XK_a,            markall,                {MARKALL_ALL} }, // marks all clients on the selected workspace
+	{ KeyPress,   MODKEY|Ctrl,                  XK_a,            markall,                {MARKALL_FLOATING} }, // marks all floating clients on the selected workspace
+	{ KeyPress,   MODKEY|Alt,                   XK_a,            markall,                {MARKALL_HIDDEN} }, // marks all hidden clients on the selected workspace
 	{ KeyPress,   MODKEY|Shift,                 XK_a,            unmarkall,              {0} }, // unmarks all clients
+	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_a,            togglemark,             {0} }, // marks or unmarks the selected client for group action
 
 	{ KeyPress,	  MODKEY,                       XK_s,            spawn,           SHCMD("one-screen.sh") }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Ctrl,                  XK_s,            spawn,           SHCMD("two-screen-home.sh") }, // flip the master and stack areas
@@ -601,12 +607,13 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY,                     	XK_slash,			spawn,		SHCMD("st -e  nmcli connection up moonshotlabs_theia --ask") },
 	{ KeyPress,   MODKEY|Alt,                   XK_slash,			spawn,		SHCMD("st -e  nmcli connection down moonshotlabs_theia") },
 	{ KeyPress,   MODKEY|Alt,                   XK_space,        setlayout,              {0} }, // toggles between current and previous layout
-	{ KeyPress,   MODKEY,                   XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
+	{ KeyPress,   MODKEY,                       XK_space,            zoom,                   {0} }, // moves the currently focused window to/from the master area (for tiled layouts)
                                                                                               //
-	{ KeyPress,   0,				XK_Print,		spawn,		SHCMD("maim ~/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
-	{ KeyPress,   ShiftMask,			XK_Print,		spawn,		SHCMD("printBarScript") },
-	{ KeyPress,   MODKEY,			XK_Home,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
-	{ KeyPress,   0,			XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
+	{ KeyPress,   0,				            XK_Print,		spawn,		SHCMD("maim ~/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+	{ KeyPress,   ShiftMask,			        XK_Print,		spawn,		SHCMD("printBarScript") },
+	{ KeyPress,   MODKEY,			            XK_Home,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
+	{ KeyPress,   0,			                XK_Pause,		spawn,		SHCMD("slock & xset dpms force off;dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
+	{ KeyPress,   MODKEY,			            XK_Pause,		spawn,		SHCMD("changelocktime.sh") },
 
 	{ KeyPress,   MODKEY,                       XK_Left,         focusdir,               {.i = 0 } }, // focus on the client left of the currently focused client
 	{ KeyPress,   MODKEY,                       XK_Right,        focusdir,               {.i = 1 } }, // focus on the client right of the currently focused client
@@ -749,6 +756,7 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( disable, ARG_TYPE_STR ),
 	IPCCOMMAND( floatpos, ARG_TYPE_STR ),
 	IPCCOMMAND( focusdir, ARG_TYPE_SINT ),
+	IPCCOMMAND( focushidden, ARG_TYPE_SINT ),
 	IPCCOMMAND( focusmaster, ARG_TYPE_NONE ),
 	IPCCOMMAND( focusmon, ARG_TYPE_SINT ),
 	IPCCOMMAND( focusstack, ARG_TYPE_SINT ),
@@ -769,6 +777,9 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( layoutconvert, ARG_TYPE_NONE ),
 	IPCCOMMAND( mark, ARG_TYPE_NONE ),
 	IPCCOMMAND( markall, ARG_TYPE_SINT ), // 0 = mark all, 1 = mark floating, 2 = mark hidden
+	IPCCOMMAND( maximize, ARG_TYPE_NONE ),
+	IPCCOMMAND( maximizevert, ARG_TYPE_NONE ),
+	IPCCOMMAND( maximizehorz, ARG_TYPE_NONE ),
 	IPCCOMMAND( mirrorlayout, ARG_TYPE_NONE ),
 	IPCCOMMAND( movetowsbyindex, ARG_TYPE_SINT ),
 	IPCCOMMAND( movetowsbyname, ARG_TYPE_STR ),
@@ -789,6 +800,7 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( rioresize, ARG_TYPE_NONE ),
 	IPCCOMMAND( setattachdefault, ARG_TYPE_STR),
 	IPCCOMMAND( setborderpx, ARG_TYPE_SINT ),
+	IPCCOMMAND( setclientborderpx, ARG_TYPE_SINT ),
 	IPCCOMMAND( setlayoutaxisex, ARG_TYPE_SINT ),
 	IPCCOMMAND( setlayout, ARG_TYPE_SINT ),
 	IPCCOMMAND( setcfact, ARG_TYPE_FLOAT ),
@@ -825,6 +837,8 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( transfer, ARG_TYPE_NONE ),
 	IPCCOMMAND( transferall, ARG_TYPE_NONE ),
 	IPCCOMMAND( unfloatvisible, ARG_TYPE_NONE ),
+	IPCCOMMAND( unhideall, ARG_TYPE_NONE ),
+	IPCCOMMAND( unhidepop, ARG_TYPE_NONE ),
 	IPCCOMMAND( unmark, ARG_TYPE_NONE ),
 	IPCCOMMAND( unmarkall, ARG_TYPE_NONE ),
 	IPCCOMMAND( unswallow, ARG_TYPE_NONE ),

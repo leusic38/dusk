@@ -473,7 +473,6 @@ static void killclient(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
-static void maximize(Client *c, int maximize_vert, int maximize_horz);
 static void motionnotify(XEvent *e);
 static unsigned long long now(void);
 static void propertynotify(XEvent *e);
@@ -506,7 +505,6 @@ static pid_t spawncmd(const Arg *arg, int buttonclick, int orphan);
 static void structurenotify(XEvent *e);
 static unsigned int textw_clamp(const char *str, unsigned int n);
 static void togglefloating(const Arg *arg);
-static void togglemaximize(Client *c, int maximize_vert, int maximize_horz);
 static void unfocus(Client *c, int setfocus, Client *nextfocus);
 static void unmanage(Client *c, int destroyed);
 static Workspace *unmapnotify(XEvent *e);
@@ -768,8 +766,11 @@ reapplyrules(Client *c)
 			drawbar(client_ws->mon);
 	}
 
-	if (NOBORDER(c))
+	if (NOBORDER(c)) {
 		c->bw = 0;
+		removeflag(c, NoBorder);
+	}
+
 	if (c->opacity)
 		opacity(c, c->opacity);
 
@@ -881,7 +882,10 @@ applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact)
 		if (c->maxh)
 			*h = MIN(*h, c->maxh);
 	}
-	return *x != c->x || *y != c->y || *w != c->w || *h != c->h;
+
+	if (noborder(c, *x, *y, *w, *h))
+		addflag(c, NoBorder);
+	return *x != c->x || *y != c->y || *w != c->w || *h != c->h || NOBORDER(c);
 }
 
 void
@@ -1460,10 +1464,11 @@ configure(Client *c)
 	ce.height = c->h;
 	ce.border_width = c->bw;
 
-	if (noborder(c)) {
+	if (NOBORDER(c)) {
 		ce.width += c->bw * 2;
 		ce.height += c->bw * 2;
 		ce.border_width = 0;
+		removeflag(c, NoBorder);
 	}
 
 	ce.above = None;
@@ -1600,15 +1605,19 @@ configurerequest(XEvent *e)
 				attachstack(c);
 			}
 
-			if ((ev->value_mask & (CWX|CWY)) && !(ev->value_mask & (CWWidth|CWHeight)))
+			if ((ev->value_mask & (CWX|CWY)) && !(ev->value_mask & (CWWidth|CWHeight))) {
+				setflag(c, NoBorder, enabled(NoBorders) && WASNOBORDER(c));
 				configure(c);
+			}
 			if (ISVISIBLE(c))
 				XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
 			else
 				addflag(c, NeedResize);
 			savefloats(c);
-		} else
+		} else {
+			setflag(c, NoBorder, enabled(NoBorders) && WASNOBORDER(c));
 			configure(c);
+		}
 	} else {
 		wc.x = ev->x;
 		wc.y = ev->y;
@@ -2073,28 +2082,26 @@ gettextprop(Window w, Atom atom, char *text, unsigned int size)
 void
 grabbuttons(Client *c, int focused)
 {
+	unsigned int i, j;
 	updatenumlockmask();
-	{
-		unsigned int i, j;
-		unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
-		XUngrabButton(dpy, AnyButton, AnyModifier, c->win);
-		if (!focused) {
-			XGrabButton(dpy, AnyButton, AnyModifier, c->win, False,
-				BUTTONMASK, GrabModeSync, GrabModeSync, None, None);
-		}
-		for (i = 0; i < LENGTH(buttons); i++) {
-			if (buttons[i].click != ClkClientWin)
-				continue;
+	unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
+	XUngrabButton(dpy, AnyButton, AnyModifier, c->win);
+	if (!focused) {
+		XGrabButton(dpy, AnyButton, AnyModifier, c->win, False,
+			BUTTONMASK, GrabModeSync, GrabModeSync, None, None);
+	}
+	for (i = 0; i < LENGTH(buttons); i++) {
+		if (buttons[i].click != ClkClientWin)
+			continue;
 
-			if ((disabled(AllowNoModifierButtons) || ONLYMODBUTTONS(c)) && buttons[i].mask == 0)
-				continue;
+		if ((disabled(AllowNoModifierButtons) || ONLYMODBUTTONS(c)) && buttons[i].mask == 0)
+			continue;
 
-			for (j = 0; j < LENGTH(modifiers); j++) {
-				XGrabButton(dpy, buttons[i].button,
-					buttons[i].mask | modifiers[j],
-					c->win, False, BUTTONMASK,
-					GrabModeAsync, GrabModeSync, None, None);
-			}
+		for (j = 0; j < LENGTH(modifiers); j++) {
+			XGrabButton(dpy, buttons[i].button,
+				buttons[i].mask | modifiers[j],
+				c->win, False, BUTTONMASK,
+				GrabModeAsync, GrabModeSync, None, None);
 		}
 	}
 }
@@ -2104,8 +2111,8 @@ void
 grabkeys(void)
 {
 	unsigned int i, j;
-	unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
 	updatenumlockmask();
+	unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
 
 	for (i = 0; i < LENGTH(keys); i++)
@@ -2119,8 +2126,8 @@ grabkeys(void)
 {
 	unsigned int i, j, k;
 	int start, end, skip;
-	unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
 	updatenumlockmask();
+	unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
 
 	KeySym *syms;
@@ -2275,7 +2282,6 @@ manage(Window w, XWindowAttributes *wa)
 	Client *c = NULL, *t = NULL, *term = NULL;
 	Monitor *m = NULL;
 	Window trans = None;
-	XWindowChanges wc = { 0 };
 	int focusclient = 1;
 
 	if (selws == stickyws)
@@ -2359,6 +2365,7 @@ manage(Window w, XWindowAttributes *wa)
 	}
 
 	c->bw = (NOBORDER(c) ? 0 : c->ws->mon->borderpx);
+	removeflag(c, NoBorder);
 
 	if (c->opacity)
 		opacity(c, c->opacity);
@@ -2383,11 +2390,6 @@ manage(Window w, XWindowAttributes *wa)
 	if (getatomprop(c, netatom[NetWMState], XA_ATOM) == netatom[NetWMFullscreen] || ISFULLSCREEN(c)) {
 		setflag(c, FullScreen, 0);
 		setfullscreen(c, 1, 0);
-		term = NULL; /* do not allow terminals to be swallowed by windows that start in fullscreen */
-	} else {
-		wc.border_width = c->bw;
-		XConfigureWindow(dpy, w, CWBorderWidth, &wc);
-		configure(c); /* propagates border_width, if size doesn't change */
 	}
 
 	updateclientdesktop(c);
@@ -2472,9 +2474,12 @@ manage(Window w, XWindowAttributes *wa)
 		}
 	}
 
+	if (!ISTRUEFULLSCREEN(c) && !noborder(c, 0, 0, 0, 0))
+		restoreborder(c);
+
 	arrange(c->ws);
 
-	if (ISFLOATING(c))
+	if (FREEFLOW(c))
 		XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
 
 	if (ISVISIBLE(c))
@@ -2531,27 +2536,6 @@ maprequest(XEvent *e)
 	}
 	if (!wintoclient(ev->window))
 		manage(ev->window, &wa);
-}
-
-void
-maximize(Client *c, int maximize_vert, int maximize_horz)
-{
-	if (!maximize_vert && !maximize_horz)
-		return;
-	Workspace *ws = c->ws;
-
-	SETFLOATING(c);
-	XRaiseWindow(dpy, c->win);
-
-	if (maximize_vert && maximize_horz)
-		setfloatpos(c, "0% 0% 100% 100%", 1, 0);
-	else if (maximize_vert)
-		setfloatpos(c, "-1x 0% -1w 100%", 1, 0);
-	else
-		setfloatpos(c, "0% -1y 100% -1h", 1, 0);
-
-	resizeclient(c, c->x, c->y, c->w, c->h);
-	drawbar(ws->mon);
 }
 
 void
@@ -2929,7 +2913,7 @@ resizeclientpad(Client *c, int x, int y, int w, int h, int tw, int th)
 		return;
 	}
 
-	if (noborder(c)) {
+	if (NOBORDER(c)) {
 		wc.width += c->bw * 2;
 		wc.height += c->bw * 2;
 		wc.border_width = 0;
@@ -3130,6 +3114,7 @@ setfullscreen(Client *c, int fullscreen, int restorefakefullscreen)
 {
 	Monitor *m = c->ws->mon;
 	int savestate = 0, restorestate = 0;
+	int x, y, w, h;
 
 	if ((!ISFAKEFULLSCREEN(c) && fullscreen && !ISFULLSCREEN(c)) // normal fullscreen
 			|| (RESTOREFAKEFULLSCREEN(c) && fullscreen)) // fake fullscreen --> actual fullscreen
@@ -3184,11 +3169,11 @@ setfullscreen(Client *c, int fullscreen, int restorefakefullscreen)
 		 * height and width may be larger than the monitor's window area, so we cap that by
 		 * ensuring max / min values. */
 		if (ISFLOATING(c)) {
-			c->x = MAX(m->wx, c->oldx);
-			c->y = MAX(m->wy, c->oldy);
-			c->w = MIN(m->ww - c->x + m->wx - 2*c->bw, c->oldw);
-			c->h = MIN(m->wh - c->y + m->wy - 2*c->bw, c->oldh);
-			resizeclient(c, c->x, c->y, c->w, c->h);
+			x = MAX(m->wx, c->oldx);
+			y = MAX(m->wy, c->oldy);
+			w = MIN(m->ww - c->x + m->wx - 2*c->bw, c->oldw);
+			h = MIN(m->wh - c->y + m->wy - 2*c->bw, c->oldh);
+			resize(c, x, y, w, h, 0);
 			restack(c->ws);
 		} else
 			arrange(c->ws);
@@ -3201,6 +3186,9 @@ setfullscreen(Client *c, int fullscreen, int restorefakefullscreen)
 	 */
 	if (!ISFULLSCREEN(c))
 		skipfocusevents();
+
+	if (ISFAKEFULLSCREEN(c))
+		drawbar(m);
 }
 
 void
@@ -3234,10 +3222,12 @@ setlayout(const Arg *arg)
 
 	strlcpy(ws->ltsymbol, ws->layout->symbol, sizeof ws->ltsymbol);
 
-	if (ws->layout->arrange)
+	if (ws->layout->arrange) {
 		arrange(ws);
-	else
+	} else {
 		showwsclients(ws->stack);
+		drawbar(ws->mon);
+	}
 	setfloatinghints(ws);
 }
 
@@ -3609,47 +3599,6 @@ togglefloating(const Arg *arg)
 		drawbar(ws->mon);
 		arrange(ws);
 	}
-}
-
-void
-togglemaximize(Client *c, int maximize_vert, int maximize_horz)
-{
-	if (!maximize_vert && !maximize_horz)
-		return;
-	Workspace *ws = c->ws;
-	Monitor *m = ws->mon;
-
-	if (ISFLOATING(c)) {
-		if (maximize_vert && maximize_horz) {
-			if (abs(c->x - m->wx) <= m->gappov && abs(c->y - m->wy) <= m->gappoh) {
-				if (!WASFLOATING(c))
-					togglefloating(&((Arg) { .v = c }));
-				else
-					restorefloats(c);
-				return;
-			}
-		} else if (maximize_vert && abs(c->y - m->wy) <= m->gappoh) {
-			resizeclient(c,
-				c->x,
-				ws->wy + (c->sfy - m->wy) * ws->wh / m->wh,
-				c->w,
-				c->sfh * ws->wh / m->wh
-			);
-			return;
-		} else if (maximize_horz && abs(c->x - m->wx) <= m->gappov) {
-			resizeclient(
-				c,
-				ws->wx + (c->sfx - m->wx) * ws->ww / m->ww,
-				c->y,
-				c->sfw * ws->ww / m->ww,
-				c->h
-			);
-			return;
-		}
-		savefloats(c);
-	}
-
-	maximize(c, maximize_vert, maximize_horz);
 }
 
 void

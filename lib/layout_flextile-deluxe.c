@@ -523,8 +523,10 @@ arrange_monocle(Workspace *ws, int x, int y, int h, int w, int ih, int iv, int n
 		c->area = grp;
 		c->arr = arr;
 		if (c == f) {
-			if (!ISLOCKED(c))
-				XMoveWindow(dpy, c->win, x, y);
+			/* If this is full monocle then draw the client without a border if relevant (it still
+			 * needs to be drawn with a border in a deck layout for example). */
+			if (enabled(NoBorders) && n == an)
+				addflag(c, NoBorder);
 			resize(c, x, y, w - (2 * c->bw), h - (2 * c->bw), 0);
 		} else {
 			hide(c);

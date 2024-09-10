@@ -38,6 +38,7 @@ dump_settings(yajl_gen gen)
 			YSTR("CenterSizeHintsClients"); YBOOL(enabled(CenterSizeHintsClients));
 			YSTR("ResizeHints"); YBOOL(enabled(ResizeHints));
 			YSTR("SnapToWindows"); YBOOL(enabled(SnapToWindows));
+			YSTR("SnapToGaps"); YBOOL(enabled(SnapToGaps));
 			YSTR("SortScreens"); YBOOL(enabled(SortScreens));
 			YSTR("ViewOnWs"); YBOOL(enabled(ViewOnWs));
 			YSTR("Xresources"); YBOOL(enabled(Xresources));
@@ -240,6 +241,7 @@ dump_client(yajl_gen gen, Client *c)
 			YSTR("ScratchpadStayOnMon"); YBOOL(SCRATCHPADSTAYONMON(c));
 			YSTR("SkipTaskbar"); YBOOL(SKIPTASKBAR(c));
 			YSTR("SwallowRetainSize"); YBOOL(SWALLOWRETAINSIZE(c));
+			YSTR("SwallowNoInheritFullScreen"); YBOOL(SWALLOWNOINHERITFULLSCREEN(c));
 			YSTR("SwitchWorkspace"); YBOOL(SWITCHWORKSPACE(c));
 			YSTR("EnableWorkspace"); YBOOL(ENABLEWORKSPACE(c));
 			YSTR("RevertWorkspace"); YBOOL(REVERTWORKSPACE(c));
