@@ -647,7 +647,7 @@ applyrules(Client *c)
 
 			if (r->workspace)
 				for (ws = workspaces; ws && strcmp(ws->name, r->workspace) != 0; ws = ws->next);
-			c->ws = ws ? ws : selws;
+			c->ws = ws && ws->mon != dummymon ? ws : selws;
 
 			if (r->floatpos)
 				setfloatpos(c, r->floatpos, 0, 1);
@@ -721,8 +721,6 @@ reapplyrules(Client *c)
 		c->flags = flags;
 		return 0;
 	}
-
-	removeflag(c, ReapplyRules);
 
 	if (DISALLOWED(c)) {
 		killclient(&((Arg) { .v = c }));
@@ -808,6 +806,9 @@ reapplyrules(Client *c)
 
 	if (SEMISCRATCHPAD(c) && c->scratchkey)
 		initsemiscratchpad(c);
+
+	if (SWITCHWORKSPACE(c) && !c->ws->visible)
+		viewwsonmon(c->ws, c->ws->mon, 0);
 
 	if (ISVISIBLE(c))
 		show(c);
@@ -1157,8 +1158,9 @@ clientmessage(XEvent *e)
 		}
 
 		if (cme->message_type == netatom[NetCurrentDesktop]) {
-			if ((ws = getwsbynum(cme->data.l[0])))
+			if ((ws = getwsbynum(cme->data.l[0])) && ws != stickyws) {
 				viewwsonmon(ws, selmon, 0);
+			}
 		}
 
 		return;
@@ -1263,8 +1265,9 @@ clientmessage(XEvent *e)
 	} else if (cme->message_type == netatom[NetCloseWindow]) {
 		killclient(&((Arg) { .v = c }));
 	} else if (cme->message_type == netatom[NetWMDesktop]) {
-		if ((ws = getwsbynum(cme->data.l[0])))
+		if ((ws = getwsbynum(cme->data.l[0])) && ws != stickyws) {
 			movetows(c, ws, enabled(ViewOnWs));
+		}
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
 		if (enabled(FocusOnNetActive) && !NOFOCUSONNETACTIVE(c)) {
 			if (ISINVISIBLE(c) && c->scratchkey) {
