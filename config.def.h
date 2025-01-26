@@ -551,11 +551,11 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_a,            unmarkall,              {0} }, // unmarks all clients
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_a,            togglemark,             {0} }, // marks or unmarks the selected client for group action
 
-	{ KeyPress,	  MODKEY,                       XK_s,            spawn,           SHCMD("one-screen.sh") }, // flip the master and stack areas
-	{ KeyPress,	  MODKEY|Ctrl,                  XK_s,            spawn,           SHCMD("two-screen-left-home.sh") }, // flip the master and stack areas
-	{ KeyPress,	  MODKEY|Shift,                 XK_s,            spawn,           SHCMD("two-screen.sh") }, // flip the master and stack areas
-	{ KeyPress,	  MODKEY|Alt,                   XK_s,            spawn,           SHCMD("two-screen-right-home.sh") }, // flip the master and stack areas
-	{ KeyPress,	  MODKEY|Ctrl|Alt,              XK_s,            spawn,           SHCMD("screen.sh") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY,                       XK_s,            spawn,           SHCMD("screenConfig") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Ctrl,                  XK_s,            spawn,           SHCMD("screenConfig --pos left") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Shift,                 XK_s,            spawn,           SHCMD("screenConfig --pos top") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Alt,                   XK_s,            spawn,           SHCMD("screenConfig --pos right") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Ctrl|Alt,              XK_s,            spawn,           SHCMD("screenConfig --pos mirror") }, // flip the master and stack areas
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_f,            togglefullscreen,       {0} }, // toggles fullscreen for the currently selected client
 	{ KeyPress,   MODKEY|Shift,                 XK_f,            togglefakefullscreen,   {0} }, // toggles "fake" fullscreen for the selected window
@@ -616,8 +616,10 @@ static Key keys[] = {
 	{ KeyPress,   ShiftMask,			        XK_Print,		spawn,		SHCMD("printBarScript") },
 	{ KeyPress,   MODKEY,			            XK_Home,		spawn,		SHCMD("slock & sleep 1; xset dpms force off; dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
 	{ KeyPress,   MODKEY|ShiftMask,			    XK_Home,		spawn,		SHCMD("changelocktime.sh") },
+	{ KeyPress,   MODKEY|Ctrl|ShiftMask,	    XK_Home,		spawn,		SHCMD("xset dpms 1200 2400 2400") },
 	{ KeyPress,   0,			                XK_Pause,		spawn,		SHCMD("slock & sleep 1; xset dpms force off; dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
 	{ KeyPress,   MODKEY,			            XK_Pause,		spawn,		SHCMD("changelocktime.sh") },
+	{ KeyPress,   MODKEY|Ctrl,  	            XK_Pause,		spawn,		SHCMD("xset dpms 1200 2400 2400") },
 
 	{ KeyPress,   MODKEY,                       XK_Left,         focusdir,               {.i = 0 } }, // focus on the client left of the currently focused client
 	{ KeyPress,   MODKEY,                       XK_Right,        focusdir,               {.i = 1 } }, // focus on the client right of the currently focused client
