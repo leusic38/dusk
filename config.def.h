@@ -595,16 +595,16 @@ static Key keys[] = {
 	/* { KeyPress,   MODKEY|ShiftMask,             XK_m,            spawn,                   SHCMD("moonshot-2-up-down.sh") }, // moves the currently focused window to/from the master area (for tiled layouts) */
 	/* { KeyPress,   MODKEY|Alt,                   XK_m,            spawn,             SHCMD("three-screen-home.sh") }, //three screen one SPLIT_VERTICAL */
 
-	{ KeyPress,   MODKEY|Shift,                 XK_comma,        focusmon,               {.i = -1 } }, // focus on the previous monitor, if any
-	{ KeyPress,   MODKEY|Shift,                 XK_period,       focusmon,               {.i = +1 } }, // focus on the next monitor, if any
+	{ KeyPress,   MODKEY,                       XK_comma,        focusmon,               {.i = -1 } }, // focus on the previous monitor, if any
+	{ KeyPress,   MODKEY,                       XK_period,       focusmon,               {.i = +1 } }, // focus on the next monitor, if any
 	{ KeyPress,   MODKEY|Alt,                   XK_comma,        clienttomon,            {.i = -1 } }, // sends the current client to an adjacent monitor
 	{ KeyPress,   MODKEY|Alt,                   XK_period,       clienttomon,            {.i = +1 } }, // sends the current client to an adjacent monitor
 	{ KeyPress,   MODKEY|Alt|Shift,             XK_comma,        clientstomon,           {.i = +1 } }, // sends all clients to an adjacent monitor
 	{ KeyPress,   MODKEY|Alt|Shift,             XK_period,       clientstomon,           {.i = -1 } }, // sends all clients to an adjacent monitor
 	{ KeyPress,   MODKEY|Ctrl,                  XK_comma,        viewwsdir,              {.i = -1 } }, // view the workspace on the immediate left of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl,                  XK_period,       viewwsdir,              {.i = +1 } }, // view the workspace on the immediate right of current workspace (on the current monitor)
-	{ KeyPress,   MODKEY,                       XK_comma,        viewwsdir,              {.i = -2 } }, // view the next workspace left of current workspace that has clients (on the current monitor)
-	{ KeyPress,   MODKEY,                       XK_period,       viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
+	{ KeyPress,   MODKEY|Shift,                 XK_comma,        viewwsdir,              {.i = -2 } }, // view the next workspace left of current workspace that has clients (on the current monitor)
+	{ KeyPress,   MODKEY|Shift,                 XK_period,       viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_comma,        movewsdir,              {.i = -1 } }, // move client to workspace on the immediate left of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_period,       movewsdir,              {.i = +1 } }, // move client to workspace on the immediate right of current workspace (on the current monitor)
 	{ KeyPress,   MODKEY,                     	XK_slash,			spawn,		SHCMD("st -e  nmcli connection up moonshotlabs_theia --ask") },
