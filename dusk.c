@@ -41,6 +41,7 @@
 #include <X11/extensions/Xinerama.h>
 #endif /* XINERAMA */
 #include <X11/Xft/Xft.h>
+#include <inttypes.h>
 
 #include "drw.h"
 #include "util.h"
@@ -73,6 +74,7 @@
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)))
 #define TEXT2DW(X)              (status2dtextlength((X)))
 #define CLIENT                  (arg && arg->v ? (Client*)arg->v : selws->sel)
+#define WORKSPACE               (arg && arg->v ? (Workspace*)arg->v : selws);
 #define NAME(X)                 ((X) ? (X)->name : "NULL")
 
 /* enums */
@@ -275,7 +277,6 @@ struct Client {
 	int bw, oldbw;
 	int group;
 	int area;  /* arrangement area (master, stack, secondary stack) */
-	int arr;   /* tile arrangement (left to right, top to bottom, etc.) */
 	int scheme;
 	int shown;
 	int expecting_unmap;
@@ -323,7 +324,7 @@ typedef struct {
 	int masteraxis;  /* master stack area */
 	int stack1axis;  /* primary stack area */
 	int stack2axis;  /* secondary stack area, e.g. centered master */
-	void (*symbolfunc)(Workspace *, unsigned int);
+	void (*symbolfunc)(Workspace *, int);
 } LayoutPreset;
 
 typedef struct {
@@ -339,10 +340,10 @@ struct Monitor {
 	char name[16];        /* monitor name (text index) */
 	int mx, my, mw, mh;   /* screen size */
 	int wx, wy, ww, wh;   /* window area  */
-	int gappih;           /* horizontal gap between windows */
-	int gappiv;           /* vertical gap between windows */
-	int gappoh;           /* horizontal outer gaps */
-	int gappov;           /* vertical outer gaps */
+	int ih;               /* horizontal gap between windows */
+	int iv;               /* vertical gap between windows */
+	int oh;               /* horizontal outer gaps */
+	int ov;               /* vertical outer gaps */
 	int showbar;
 	int orientation;      /* screen orientation: 0 = Horizontal, 1 = Vertical */
 	uint64_t wsmask;
@@ -499,7 +500,6 @@ static void run(void);
 static void scan(void);
 static int sendevent(Window w, Atom proto, int m, long d0, long d1, long d2, long d3, long d4);
 static void setbackground(void);
-static void setclientstate(Client *c, long state);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen, int setfakefullscreen);
 static void setlayout(const Arg *arg);
@@ -684,7 +684,7 @@ applyrules(Client *c)
 					"    instance:  %s\n"
 					"    title:     %s\n"
 					"    wintype:   %s\n"
-					"    flags:     %lu\n"
+					"    flags:     %" PRIu64 "\n"
 					"    floatpos:  %s\n"
 					"    workspace: %s\n"
 					"    label:     %s\n",
@@ -845,28 +845,30 @@ int
 applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact)
 {
 	int baseismin;
+	int bw;
 	Monitor *m = c->ws->mon;
 
 	/* set minimum possible */
 	*w = MAX(1, *w);
 	*h = MAX(1, *h);
+	bw = 2 * c->bw;
 	if (interact) {
 		if (*x > sw)
 			*x = sw - WIDTH(c);
 		if (*y > sh)
 			*y = sh - HEIGHT(c);
-		if (*x + *w + 2 * c->bw < 0)
+		if (*x + *w + bw < 0)
 			*x = 0;
-		if (*y + *h + 2 * c->bw < 0)
+		if (*y + *h + bw < 0)
 			*y = 0;
 	} else {
 		if (*x >= m->wx + m->ww)
 			*x = m->wx + m->ww - WIDTH(c);
 		if (*y >= m->wy + m->wh)
 			*y = m->wy + m->wh - HEIGHT(c);
-		if (*x + *w + 2 * c->bw <= m->wx)
+		if (*x + *w + bw <= m->wx)
 			*x = m->wx;
-		if (*y + *h + 2 * c->bw <= m->wy)
+		if (*y + *h + bw <= m->wy)
 			*y = m->wy;
 	}
 	if (*h < bh)
@@ -1119,13 +1121,13 @@ void
 clientfittomon(Client *c, Monitor *m, int *cx, int *cy, int *cw, int *ch)
 {
 	if (*cx < m->wx)
-		*cx = m->wx + m->gappov;
+		*cx = m->wx + m->ov;
 	if (*cy < m->wy)
-		*cy = m->wy + m->gappoh;
+		*cy = m->wy + m->oh;
 	if (*cx + *cw > m->wx + m->ww)
-		*cx = m->wx + m->ww - *cw - m->gappov;
+		*cx = m->wx + m->ww - *cw - m->ov;
 	if (*cy + *ch > m->wy + m->wh)
-		*cy = m->my + m->wh - *ch - m->gappoh;
+		*cy = m->my + m->wh - *ch - m->oh;
 }
 
 void
@@ -1379,7 +1381,7 @@ clientscheme(Client *c, Client *s)
 		return sel ? SchemeFlexSelFloat : active ? SchemeFlexActFloat : SchemeFlexInaFloat;
 
 	if (fwb)
-		return c->arr + (sel ? SchemeFlexSelTTB : active ? SchemeFlexActTTB : SchemeFlexInaTTB);
+		return c->ws->ltaxis[c->area] + (sel ? SchemeFlexSelTTB : active ? SchemeFlexActTTB : SchemeFlexInaTTB);
 	return sel ? SchemeTitleSel : SchemeTitleNorm;
 }
 
@@ -1394,20 +1396,20 @@ clientscheme(Client *c, Client *s)
 void
 clientrelposmon(Client *c, Monitor *o, Monitor *n, int *cx, int *cy, int *cw, int *ch)
 {
-	int ncw = MIN(*cw, MIN(o->ww, n->ww) - 2 * c->bw - 2 * n->gappov);
-	int nch = MIN(*ch, MIN(o->wh, n->wh) - 2 * c->bw - 2 * n->gappoh);
+	int ncw = MIN(*cw, MIN(o->ww, n->ww) - 2 * c->bw - 2 * n->ov);
+	int nch = MIN(*ch, MIN(o->wh, n->wh) - 2 * c->bw - 2 * n->oh);
 
 	clientfittomon(c, o, cx, cy, cw, ch);
 
 	if (*cw != ncw || (o->ww - *cw <= 0)) {
 		*cw = ncw;
-		*cx = n->wx + n->gappov;
+		*cx = n->wx + n->ov;
 	} else
 		*cx = n->wx + (n->ww - *cw) * (*cx - o->wx) / (o->ww - *cw);
 
 	if (*ch != nch || (o->wh - *ch <= 0)) {
 		*ch = nch;
-		*cy = n->wy + n->gappoh;
+		*cy = n->wy + n->oh;
 	} else
 		*cy = n->wy + (n->wh - *ch) * (*cy - o->wy) / (o->wh - *ch);
 
@@ -1645,10 +1647,10 @@ createmon(int num)
 	m = ecalloc(1, sizeof(Monitor));
 	m->showbar = initshowbar;
 	m->borderpx = borderpx;
-	m->gappih = gappih;
-	m->gappiv = gappiv;
-	m->gappoh = gappoh;
-	m->gappov = gappov;
+	m->ih = gappih;
+	m->iv = gappiv;
+	m->oh = gappoh;
+	m->ov = gappov;
 	m->wsmask = 0;
 	m->nullws = 0;
 	m->prevwsmask = 0;
@@ -2753,7 +2755,21 @@ propertynotify(XEvent *e)
 				arrange(c->ws);
 			break;
 		case XA_WM_NORMAL_HINTS:
-			addflag(c, RefreshSizeHints);
+			if (ISVISIBLE(c)) {
+				float mina = c->mina;
+				float maxa = c->maxa;
+				updatesizehints(c);
+				if (mina != c->mina || maxa != c->maxa) {
+					addflag(c, NeedResize);
+					if (ISTILED(c)) {
+						arrangews(c->ws);
+					} else {
+						resize(c, c->x, c->y, c->w, c->h, 0);
+					}
+				}
+			} else {
+				addflag(c, RefreshSizeHints);
+			}
 			break;
 		case XA_WM_HINTS:
 			updatewmhints(c);
@@ -3176,15 +3192,6 @@ setbackground(void)
 	XClearWindow(dpy, root);
 }
 
-void
-setclientstate(Client *c, long state)
-{
-	long data[] = { state, None };
-
-	XChangeProperty(dpy, c->win, wmatom[WMState], wmatom[WMState], 32,
-		PropModeReplace, (unsigned char *)data, 2);
-}
-
 int
 sendevent(Window w, Atom proto, int mask, long d0, long d1, long d2, long d3, long d4)
 {
@@ -3264,12 +3271,7 @@ setfullscreen(Client *c, int fullscreen, int restorefakefullscreen)
 	}
 
 	if (fullscreen != ISFULLSCREEN(c)) { // only send property change if necessary
-		if (fullscreen)
-			XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
-				PropModeReplace, (unsigned char*)&netatom[NetWMFullscreen], 1);
-		else
-			XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
-				PropModeReplace, (unsigned char*)0, 0);
+		setclientnetstate(c, fullscreen ? NetWMFullscreen : 0);
 	}
 
 	setflag(c, FullScreen, fullscreen);
@@ -3650,12 +3652,15 @@ spawncmd(const Arg *arg, int buttonclick, int orphan)
 char *
 subst_home_directory(char *str)
 {
-	if (strncmp(str, "~/", 2) != 0)
-		return str;
-
 	int buffer_length = env_homelen + strlen(str);
 	char *buffer = ecalloc(1, buffer_length);
-	snprintf(buffer, buffer_length, "%s%s", env_home, str + 1);
+
+	if (strncmp(str, "~/", 2) != 0) {
+		strlcat(buffer, str, buffer_length);
+	} else {
+		snprintf(buffer, buffer_length, "%s%s", env_home, str + 1);
+	}
+
 	return buffer;
 }
 
@@ -3771,7 +3776,6 @@ unmanage(Client *c, int destroyed)
 {
 	Client *s;
 	Workspace *ws, *revertws;
-	XWindowChanges wc;
 
 	if (SEMISCRATCHPAD(c))
 		c = unmanagesemiscratchpad(c);
@@ -3804,11 +3808,9 @@ unmanage(Client *c, int destroyed)
 	freeicon(c);
 
 	if (!destroyed) {
-		wc.border_width = c->oldbw;
 		XGrabServer(dpy); /* avoid race conditions */
 		XSetErrorHandler(xerrordummy);
 		XSelectInput(dpy, c->win, NoEventMask);
-		XConfigureWindow(dpy, c->win, CWBorderWidth, &wc); /* restore border */
 		XUngrabButton(dpy, AnyButton, AnyModifier, c->win);
 		XSync(dpy, False);
 		XSetErrorHandler(xerror);
@@ -4253,7 +4255,7 @@ main(int argc, char *argv[])
 	setup();
 	autostart_exec();
 #ifdef __OpenBSD__
-	if (pledge("stdio rpath proc exec ps", NULL) == -1)
+	if (pledge("stdio rpath proc exec ps unix inet", NULL) == -1)
 		die("pledge");
 #endif /* __OpenBSD__ */
 	scan();

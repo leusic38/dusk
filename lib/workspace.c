@@ -371,10 +371,10 @@ ismaximized(Client *c, int x, int y, int w, int h)
 		h = c->h;
 	}
 
-	return abs(y - m->wy) <= m->gappoh &&
-	       abs(x - m->wx) <= m->gappov &&
-	       abs(w - m->ww) <= (m->gappov + c->bw) * 2 &&
-	       abs(h - m->wh) <= (m->gappoh + c->bw) * 2;
+	return abs(y - m->wy) <= m->oh &&
+	       abs(x - m->wx) <= m->ov &&
+	       abs(w - m->ww) <= (m->ov + c->bw) * 2 &&
+	       abs(h - m->wh) <= (m->oh + c->bw) * 2;
 }
 
 int
@@ -514,11 +514,11 @@ movews(const Arg *arg)
 	movetows(c, ws, enabled(ViewOnWs));
 }
 
-unsigned int
+int
 numtiled(Workspace *ws)
 {
 	Client *c;
-	unsigned int n;
+	int n;
 	for (n = 0, c = nexttiled(ws->clients); c; c = nexttiled(c->next), n++);
 	return n;
 }

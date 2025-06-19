@@ -9,6 +9,8 @@
 #endif
 #define BETWEEN(X, A, B)        ((A) <= (X) && (X) <= (B))
 #define NVL(A, B)               ((A) == NULL ? (B) : (A))
+#define CLAMP(A, MIN, MAX)      ((A) < (MIN) ? (MIN) : ((A) > (MAX) ? (MAX) : (A)))
+#define WRAP(A, MIN, MAX)       ((A) < (MIN) ? (MAX) : ((A) > (MAX) ? (MIN) : (A)))
 
 #ifdef _DEBUG
 #define DEBUG(...) fprintf(stderr, __VA_ARGS__)
@@ -94,5 +96,7 @@ int disabled(const uint64_t functionality);
 void enablefunc(const uint64_t functionality);
 void disablefunc(const uint64_t functionality);
 void togglefunc(const uint64_t functionality);
+#ifdef __linux__
 size_t strlcpy(char * __restrict dst, const char * __restrict src, size_t dsize);
 size_t strlcat(char *dst, const char *src, size_t siz);
+#endif /* __linux__ */
