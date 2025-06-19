@@ -512,7 +512,7 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|ControlMask,							XK_e,			spawn,		SHCMD("phpstorm") },
 	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
 //                                            XK_r used by skratchpads ranger except modkey|shift
-	{ KeyPress,   MODKEY|Shift,                 XK_r,         spawn,               {.v = filemanagercmd } }, // draw/spawn filemanager
+	{ KeyPress,   MODKEY|Shift,                 XK_r,         spawn,               SHCMD("thunar") }, // thunar file manager
 	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{0} },
 	{	KeyPress, MODKEY|ShiftMask,								XK_t,      		setlayout,     	{1} },
 	{	KeyPress, MODKEY|ControlMask,							XK_t,      		setlayout,     	{2} },
@@ -555,6 +555,7 @@ static Key keys[] = {
 	{ KeyPress,	  MODKEY|Ctrl,                  XK_s,            spawn,           SHCMD("screenConfig --pos left") }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Shift,                 XK_s,            spawn,           SHCMD("screenConfig --pos top") }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Alt,                   XK_s,            spawn,           SHCMD("screenConfig --pos right") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Ctrl|Shift,            XK_s,            spawn,           SHCMD("screenConfig --pos vertLeft") }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Ctrl|Alt,              XK_s,            spawn,           SHCMD("screenConfig --pos mirror") }, // flip the master and stack areas
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_f,            togglefullscreen,       {0} }, // toggles fullscreen for the currently selected client
