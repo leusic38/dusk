@@ -222,16 +222,16 @@ static const Rule clientrules[] = {
 	{ .instance = "spcalc (c)", .scratchkey = 'c', .flags = Floating },
 	{ .instance = "spfm (r)", .scratchkey = 'r', .flags = Floating },
 	{ .class = "gimp", .workspace = "7", .flags = Floating|SwitchWorkspace },
-	{ .class = "firefox", .workspace = "1", .flags = AttachMaster|SwitchWorkspace },
+	{ .class = "firefox", .workspace = "5", .flags = AttachMaster|SwitchWorkspace },
 	{ .class = "libreoffice", .workspace = "8", .flags = AttachMaster|SwitchWorkspace },
 	{ .class = "jetbrains-phpstorm", .workspace = "2", .flags = SwitchWorkspace },
 /**	{ .class = "Steam", .flags = IgnoreCfgReqPos|Floating|Centered },
 	{ .class = "steam_app_", .flags = SteamGame|IgnoreCfgReqPos|Floating|Centered },**/
 	{ .class = "Google-chrome", .role = "GtkFileChooserDialog", .floatpos = "50% 50%", .flags = AlwaysOnTop|Floating },
 	{ .role = "pop-up", .flags = AlwaysOnTop|Floating|Centered },
-	{ .role = "browser-window", .workspace = "5", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
-	{ .role = "browser", .workspace = "1", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
-	{ .class = "Diffuse", .workspace = "4", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
+	{ .role = "browser-window", .workspace = "9", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
+	{ .role = "browser", .workspace = "4", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
+	{ .class = "Diffuse", .workspace = "8", .flags = NoSwallow|SwitchWorkspace|RevertWorkspace },
 	{ .class = "slack", .role = "browser-window", .workspace = "7", .flags = AttachBelow|OnlyModButtons|SwitchWorkspace },
 	{ .class = "File-roller", .workspace = "9", .flags = Centered|Floating|SwitchWorkspace|RevertWorkspace },
 	{ .class = "Alacritty", .flags = Terminal },
@@ -327,8 +327,8 @@ static const BarRule barrules[] = {
 	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{  -1,       0,     5,       0,   0,   0,     BAR_ALIGN_LEFT,         size_ltsymbol,            draw_ltsymbol,           click_ltsymbol,           NULL,                     "layout" },
-	{  -1,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
-	{  -1,       0,     0,       5,   5,   0,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status0" },// clock
+	{  -1,       0,     4,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
+	{  -1,       0,     4,       5,   5,   0,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status0" },// clock
 	{   0,       0,     0,       0,   0,   PWRL,  BAR_ALIGN_LEFT,         size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
 	{   0,       0,     0,       5,   5,   7,     BAR_ALIGN_RIGHT,        size_status,              draw_status,             click_status,             NULL,                     "status7" }, // network
 	{   0,       0,    10,       0,   0,   PWRL,  BAR_ALIGN_RIGHT,        size_powerline,           draw_powerline,          NULL,                     NULL,                     "powerline join" },
@@ -512,7 +512,8 @@ static Key keys[] = {
 	{	KeyPress, MODKEY|ControlMask,							XK_e,			spawn,		SHCMD("phpstorm") },
 	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/
 //                                            XK_r used by skratchpads ranger except modkey|shift
-	{ KeyPress,   MODKEY|Shift,                 XK_r,         spawn,               SHCMD("thunar") }, // thunar file manager
+	{ KeyPress,   MODKEY|Shift,                 XK_r,     spawn,    SHCMD("thunar") }, // thunar file manager
+	{ KeyPress,   MODKEY|Mod1Mask,              XK_r,     spawn,    {.v = filemanagercmd } }, // thunar file manager
 	{	KeyPress, MODKEY,                       	XK_t,      		setlayout,     	{0} },
 	{	KeyPress, MODKEY|ShiftMask,								XK_t,      		setlayout,     	{1} },
 	{	KeyPress, MODKEY|ControlMask,							XK_t,      		setlayout,     	{2} },
