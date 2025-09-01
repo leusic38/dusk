@@ -243,6 +243,13 @@ enum {
 	LTAXIS_LAST,
 }; /* named flextile constants */
 
+enum {
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN
+}; /* focusdir and placedir directions */
+
 typedef union {
 	long i;
 	unsigned long ui;
@@ -264,10 +271,10 @@ typedef struct {
 typedef struct Workspace Workspace;
 typedef struct Client Client;
 struct Client {
-	char name[256];
-	char altname[256];
-	char label[32];
-	char iconpath[256];  /* maximum file path length under linux is 4096 bytes */
+	char *name;
+	char *alttitle;
+	char *label;
+	char *iconpath;  /* maximum file path length under linux is 4096 bytes */
 	float mina, maxa;
 	float cfact;
 	int x, y, w, h;
@@ -378,8 +385,8 @@ typedef struct {
 
 struct Workspace {
 	int wx, wy, ww, wh;  /* workspace area */
-	char ltsymbol[64];
-	char name[16];
+	char *ltsymbol;
+	char *name;
 	float mfact;
 	float wfact;
 	int scheme[4];
@@ -408,7 +415,7 @@ struct Workspace {
 };
 
 typedef struct {
-	char name[16];
+	char *name;
 	int monitor;
 	int pinned;
 	int layout;
@@ -468,7 +475,7 @@ static Atom getatomprop(Client *c, Atom prop, Atom req);
 static Client *getpointerclient(void);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
-static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
+static int gettextprop(Window w, Atom atom, char **text);
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
 static void hide(Client *c);
@@ -611,7 +618,7 @@ applyrules(Client *c)
 	const Rule *r;
 	const char *class, *instance;
 	Atom game_id = None, da = None, *win_types = NULL;
-	char role[64] = {0};
+	char *role = NULL;
 	int di;
 	unsigned long dl, nitems;
 	unsigned char *p = NULL;
@@ -628,7 +635,8 @@ applyrules(Client *c)
 	XGetClassHint(dpy, c->win, &ch);
 	class    = ch.res_class ? ch.res_class : broken;
 	instance = ch.res_name  ? ch.res_name  : broken;
-	gettextprop(c->win, wmatom[WMWindowRole], role, sizeof(role));
+	if (!gettextprop(c->win, wmatom[WMWindowRole], &role))
+		role = strdup(broken);
 	game_id = getatomprop(c, duskatom[SteamGameID], AnyPropertyType);
 	transient = ISTRANSIENT(c) ? 1 : 0;
 
@@ -665,8 +673,9 @@ applyrules(Client *c)
 
 			if (REVERTWORKSPACE(c) && !c->ws->visible)
 				c->revertws = c->ws->mon->selws;
+
 			if (r->label)
-				strlcpy(c->label, r->label, sizeof c->label);
+				freestrdup(&c->label, r->label);
 			else
 				saveclientclass(c);
 
@@ -674,7 +683,7 @@ applyrules(Client *c)
 				load_icon_from_png_image(c, r->iconpath);
 
 			if (r->alttitle)
-				strlcpy(c->altname, r->alttitle, sizeof c->altname);
+				freestrdup(&c->alttitle, r->alttitle);
 
 			if (enabled(Debug) || DEBUGGING(c)) {
 				fprintf(stderr,
@@ -717,6 +726,7 @@ applyrules(Client *c)
 		XFree(ch.res_name);
 	if (p)
 		XFree(p);
+	free(role);
 }
 
 /* This mimics most of what the manage function does when initially managing the window. It returns
@@ -1087,6 +1097,7 @@ cleanup(void)
 	for (ws = workspaces; ws; ws = next) {
 		next = ws->next;
 		removepreview(ws);
+		free(ws->ltsymbol);
 		free(ws);
 	}
 
@@ -1147,10 +1158,20 @@ clientmessage(XEvent *e)
 
 	if (cme->window == root) {
 		if (enabled(Debug)) {
-			fprintf(stderr, "clientmessage: received message type of %s (%ld) for root window\n", XGetAtomName(dpy, cme->message_type), cme->message_type);
-			fprintf(stderr, "    - data 0 = %s (%ld)\n", XGetAtomName(dpy, cme->data.l[0]), cme->data.l[0]);
-			fprintf(stderr, "    - data 1 = %s (%ld)\n", XGetAtomName(dpy, cme->data.l[1]), cme->data.l[1]);
-			fprintf(stderr, "    - data 2 = %s (%ld)\n", XGetAtomName(dpy, cme->data.l[2]), cme->data.l[2]);
+			char *type_name = XGetAtomName(dpy, cme->message_type);
+			char *data_0 = XGetAtomName(dpy, cme->data.l[0]);
+			char *data_1 = XGetAtomName(dpy, cme->data.l[1]);
+			char *data_2 = XGetAtomName(dpy, cme->data.l[2]);
+
+			fprintf(stderr, "clientmessage: received message type of %s (%ld) for root window\n", type_name, cme->message_type);
+			fprintf(stderr, "    - data 0 = %s (%ld)\n", data_0, cme->data.l[0]);
+			fprintf(stderr, "    - data 1 = %s (%ld)\n", data_1, cme->data.l[1]);
+			fprintf(stderr, "    - data 2 = %s (%ld)\n", data_2, cme->data.l[2]);
+
+			XFree(type_name);
+			XFree(data_0);
+			XFree(data_1);
+			XFree(data_2);
 		}
 
 		if (cme->message_type == netatom[NetCurrentDesktop]) {
@@ -1167,10 +1188,16 @@ clientmessage(XEvent *e)
 		return;
 
 	if (enabled(Debug) || DEBUGGING(c)) {
-		fprintf(stderr, "clientmessage: received message type of %s (%ld) for client %s\n", XGetAtomName(dpy, cme->message_type), cme->message_type, c->name);
+		char *type_name = XGetAtomName(dpy, cme->message_type);
+		char *data_1 = XGetAtomName(dpy, cme->data.l[1]);
+		char *data_2 = XGetAtomName(dpy, cme->data.l[2]);
+		fprintf(stderr, "clientmessage: received message type of %s (%ld) for client %s\n", type_name, cme->message_type, c->name);
 		fprintf(stderr, "    - data 0 = %s (%ld)\n", (cme->data.l[0] == 0 ? "_NET_WM_STATE_REMOVE" : cme->data.l[0] == 1 ? "_NET_WM_STATE_ADD" : cme->data.l[0] == 2 ? "_NET_WM_STATE_TOGGLE" : "?"), cme->data.l[0]);
-		fprintf(stderr, "    - data 1 = %s (%ld)\n", XGetAtomName(dpy, cme->data.l[1]), cme->data.l[1]);
-		fprintf(stderr, "    - data 2 = %s (%ld)\n", XGetAtomName(dpy, cme->data.l[2]), cme->data.l[2]);
+		fprintf(stderr, "    - data 1 = %s (%ld)\n", data_1, cme->data.l[1]);
+		fprintf(stderr, "    - data 2 = %s (%ld)\n", data_2, cme->data.l[2]);
+		XFree(type_name);
+		XFree(data_1);
+		XFree(data_2);
 	}
 
 	/* To change the state of a mapped window, a client MUST send a _NET_WM_STATE client message
@@ -1616,8 +1643,13 @@ configurerequest(XEvent *e)
 				setflag(c, NoBorder, enabled(NoBorders) && WASNOBORDER(c));
 				configure(c);
 			}
-			XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
+
 			savefloats(c);
+			if (ISVISIBLE(c)) {
+				XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
+			} else {
+				addflag(c, NeedResize);
+			}
 		} else {
 			setflag(c, NoBorder, enabled(NoBorders) && WASNOBORDER(c));
 			configure(c);
@@ -1821,6 +1853,9 @@ enternotify(XEvent *e)
 	if (!c)
 		c = wintoclient(ev->window);
 
+	if (SWALLOWED(c))
+		return;
+
 	m = c ? c->ws->mon : wintomon(ev->window);
 	if (selws == m->selws && (!c || (m->selws && c == m->selws->sel)))
 		return;
@@ -1861,7 +1896,7 @@ focus(Client *c)
 
 	if (enabled(FocusFollowMouse) && !monitorchanged && (!c || ISINVISIBLE(c))) {
 		c = getpointerclient();
-		if (c && c->ws->mon != selmon) {
+		if ((c && c->ws->mon != selmon) || SWALLOWED(c)) {
 			c = NULL;
 		}
 	}
@@ -2078,24 +2113,24 @@ getstate(Window w)
 }
 
 int
-gettextprop(Window w, Atom atom, char *text, unsigned int size)
+gettextprop(Window w, Atom atom, char **text)
 {
 	char **list = NULL;
 	int n;
 	XTextProperty name;
 
-	if (!text || size == 0)
-		return 0;
-	text[0] = '\0';
 	if (!XGetTextProperty(dpy, w, &name, atom) || !name.nitems)
 		return 0;
 	if (name.encoding == XA_STRING) {
-		strlcpy(text, (char *)name.value, size);
+		if (text != NULL) {
+			*text = strdup((char *)name.value);
+		}
 	} else if (XmbTextPropertyToTextList(dpy, &name, &list, &n) >= Success && n > 0 && *list) {
-		strlcpy(text, *list, size);
+		if (text != NULL) {
+			*text = strdup(*list);
+		}
 		XFreeStringList(list);
 	}
-	text[size - 1] = '\0';
 	XFree(name.value);
 	return 1;
 }
@@ -2175,24 +2210,17 @@ grabkeys(void)
 void
 show(Client *c)
 {
-	if (c->shown)
-		return;
-
 	c->shown = 1;
+	XMoveWindow(dpy, c->win, c->x, c->y);
 	setclientstate(c, NormalState);
-	XMapWindow(dpy, c->win);
 }
 
 void
 hide(Client *c)
 {
-	if (!c->shown)
-		return;
-
 	c->shown = 0;
-	c->expecting_unmap++;
 	setclientstate(c, IconicState);
-	XUnmapWindow(dpy, c->win);
+	XMoveWindow(dpy, c->win, c->x, HEIGHT(c) * -2);
 }
 
 void
@@ -2326,6 +2354,10 @@ manage(Window w, XWindowAttributes *wa)
 		selws = stickyws->next;
 
 	c = ecalloc(1, sizeof(Client));
+	c->name = NULL;
+	c->alttitle = NULL;
+	c->label = NULL;
+	c->iconpath = NULL;
 	c->win = w;
 	c->pid = winpid(w);
 
@@ -2344,11 +2376,12 @@ manage(Window w, XWindowAttributes *wa)
 	updatetitle(c);
 	updatesizehints(c);
 	if (enabled(Debug))
-		fprintf(stderr, "manage --> client %s\n", c->name);
+		fprintf(stderr, "manage --> client %s\n", NAME(c));
 	getclientflags(c);
 	getclientfields(c);
 	getclientopacity(c);
 	getclientlabel(c);
+	getclientalttitle(c);
 	getclienticonpath(c);
 
 	updateicon(c);
@@ -2386,7 +2419,7 @@ manage(Window w, XWindowAttributes *wa)
 		else if (RAISE(c))
 			XRaiseWindow(dpy, c->win);
 		if (enabled(Debug))
-			fprintf(stderr, "manage <-- unmanaged (%s)\n", c->name);
+			fprintf(stderr, "manage <-- unmanaged (%s)\n", NAME(c));
 		free(c);
 		return;
 	}
@@ -2466,6 +2499,9 @@ manage(Window w, XWindowAttributes *wa)
 	/* Do not attach client if it swallows a terminal */
 	if (term && swallowclient(term, c)) {
 		focusclient = (c == selws->sel);
+	} else if (ISTERMINAL(c) && swallowterm(c)) {
+		XMapWindow(dpy, c->win);
+		return;
 	} else {
 		attachx(c, AttachDefault, NULL);
 
@@ -2530,16 +2566,17 @@ manage(Window w, XWindowAttributes *wa)
 	if (!ISTRUEFULLSCREEN(c) && !noborder(c, 0, 0, 0, 0))
 		restoreborder(c);
 
-	arrange(c->ws);
-
 	if (FREEFLOW(c))
 		XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
+
+	arrange(c->ws);
 
 	if (ISVISIBLE(c)) {
 		show(c);
 	} else {
 		hide(c);
 	}
+	XMapWindow(dpy, c->win);
 
 	if (focusclient)
 		focus(c);
@@ -2552,7 +2589,7 @@ manage(Window w, XWindowAttributes *wa)
 		drawbar(c->ws->mon);
 
 	if (enabled(Debug))
-		fprintf(stderr, "manage <-- (%s) on workspace %s\n", c->name, c->ws->name);
+		fprintf(stderr, "manage <-- (%s) on workspace %s\n", NAME(c), NAME(c->ws));
 }
 
 void
@@ -2700,7 +2737,9 @@ propertynotify(XEvent *e)
 	} else if (pn_prev_count > 3) {
 		if (pn_prev_count == 4 && enabled(Debug)) {
 			pn_prev_count++; /* Only print the below log line once. */
-			fprintf(stderr, "propertynotify: throttling repeating %s (%ld) property notificatons for window %ld\n", XGetAtomName(dpy, ev->atom), ev->atom, ev->window);
+			char *atom_name = XGetAtomName(dpy, ev->atom);
+			fprintf(stderr, "propertynotify: throttling repeating %s (%ld) property notificatons for window %ld\n", atom_name, ev->atom, ev->window);
+			XFree(atom_name);
 		}
 		while (XCheckMaskEvent(dpy, PropertyChangeMask, e)) {
 			ev = &e->xproperty;
@@ -2730,19 +2769,27 @@ propertynotify(XEvent *e)
 
 	if (ev->state == PropertyDelete) {
 		if (enabled(Debug)) {
+			char *atom_name = XGetAtomName(dpy, ev->atom);
 			if ((c = wintoclient(ev->window))) {
-				fprintf(stderr, "propertynotify: ignored property delete event %s (%ld) for client %s\n", XGetAtomName(dpy, ev->atom), ev->atom, c->name);
+				fprintf(stderr, "propertynotify: ignored property delete event %s (%ld) for client %s\n", atom_name, ev->atom, c->name);
 			} else {
-				fprintf(stderr, "propertynotify: ignored property delete event %s (%ld) for unknown client\n", XGetAtomName(dpy, ev->atom), ev->atom);
+				fprintf(stderr, "propertynotify: ignored property delete event %s (%ld) for unknown client\n", atom_name, ev->atom);
 			}
+			XFree(atom_name);
 		}
 		return; /* ignore */
 	}
 
 	if ((c = wintoclient(ev->window))) {
 
-		if ((enabled(Debug) || DEBUGGING(c)) && ev->atom != netatom[NetWMUserTime])
-			fprintf(stderr, "propertynotify: received message type of %s (%ld) for client %s\n", XGetAtomName(dpy, ev->atom), ev->atom, c->name);
+		if ((enabled(Debug) || DEBUGGING(c)) && ev->atom != netatom[NetWMUserTime]) {
+			char *atom_name = XGetAtomName(dpy, ev->atom);
+			fprintf(stderr, "propertynotify: received message type of %s (%ld) for client %s\n", atom_name, ev->atom, c->name);
+			XFree(atom_name);
+		}
+
+		if (SWALLOWED(c))
+			return; /* ignore property notification for swallowed windows */
 
 		switch (ev->atom) {
 		default: break;
@@ -2907,7 +2954,9 @@ recttoclient(int x, int y, int w, int h, int include_floating)
 	for (c = selws->stack; c; c = c->snext) {
 		if (!ISVISIBLE(c) || (ISFLOATING(c) && !include_floating))
 			continue;
-		if ((a = INTERSECTC(x, y, w, h, c)) >= area && (!r || r->idx < c->idx)) {
+		if (getstate(c->win) != NormalState)
+			continue;
+		if ((!r || r->idx < c->idx) && (a = INTERSECTC(x, y, w, h, c)) >= area) {
 			area = a;
 			r = c;
 		}
@@ -3141,7 +3190,6 @@ run(void)
 void
 scan(void)
 {
-	char swin[256] = {0};
 	unsigned int i, num;
 	Window d1, d2, *wins = NULL;
 	XWindowAttributes wa;
@@ -3156,8 +3204,6 @@ scan(void)
 			if (mapexternalbar(wins[i]))
 				continue;
 			if (wa.map_state == IsViewable || getstate(wins[i]) == IconicState)
-				manage(wins[i], &wa);
-			else if (gettextprop(wins[i], netatom[NetClientList], swin, sizeof swin))
 				manage(wins[i], &wa);
 		}
 		for (i = 0; i < num; i++) { /* now the transients */
@@ -3352,7 +3398,7 @@ setlayout(const Arg *arg)
 	ws->ltaxis[STACK]  = ws->layout->preset.stack1axis;
 	ws->ltaxis[STACK2] = ws->layout->preset.stack2axis;
 
-	strlcpy(ws->ltsymbol, ws->layout->symbol, sizeof ws->ltsymbol);
+	freestrdup(&ws->ltsymbol, ws->layout->symbol);
 
 	if (ws->layout->arrange) {
 		arrange(ws);
@@ -3386,7 +3432,6 @@ setup(void)
 	Monitor *m;
 	int i, colorscheme;
 	XSetWindowAttributes wa;
-	Atom utf8string;
 	struct sigaction chld, hup, term;
 
 	/* Record the HOME environment variable (for ~ substitution) */
@@ -3806,6 +3851,10 @@ unmanage(Client *c, int destroyed)
 	detach(c);
 	detachstack(c);
 	freeicon(c);
+	free(c->name);
+	free(c->alttitle);
+	free(c->label);
+	free(c->iconpath);
 
 	if (!destroyed) {
 		XGrabServer(dpy); /* avoid race conditions */
@@ -3864,13 +3913,13 @@ unmapnotify(XUnmapEvent *ev)
 	last_window = ev->window;
 
 	if ((c = wintoclient(ev->window))) {
-		if (c->expecting_unmap == 0) {
-			ws = c->ws;
-			if (enabled(Debug) || DEBUGGING(c))
-				fprintf(stderr, "unmapnotify: window %ld --> client %s (%s)\n", ev->window, c->name, "unmanage");
-			unmanage(c, 0);
+		ws = c->ws;
+		if (enabled(Debug) || DEBUGGING(c))
+			fprintf(stderr, "unmapnotify: window %ld --> client %s (%s)\n", ev->window, c->name, ev->send_event ? "WithdrawnState" : "unmanage");
+		if (ev->send_event) {
+			setclientstate(c, WithdrawnState);
 		} else {
-			c->expecting_unmap--;
+			unmanage(c, 0);
 		}
 	} else if (systray && (c = wintosystrayicon(ev->window))) {
 		removesystrayicon(c);
@@ -3981,11 +4030,11 @@ updategeom(int width, int height)
 void
 updatelegacystatus(void)
 {
-	char buffer[STATUS_BUFFER * NUM_STATUSES];
+	char *buffer = NULL;
 	int status_no = 0;
 	char *text, *s, ch;
 
-	if (!gettextprop(root, XA_WM_NAME, buffer, sizeof(buffer) - 1))
+	if (!gettextprop(root, XA_WM_NAME, &buffer))
 		return;
 
 	for (text = s = buffer; *s; s++) {
@@ -3999,6 +4048,7 @@ updatelegacystatus(void)
 		}
 	}
 	setstatus(status_no, text);
+	free(buffer);
 }
 
 void
@@ -4076,10 +4126,15 @@ updatesizehints(Client *c)
 void
 updatetitle(Client *c)
 {
-	if (!gettextprop(c->win, netatom[NetWMName], c->name, sizeof c->name))
-		gettextprop(c->win, XA_WM_NAME, c->name, sizeof c->name);
-	if (c->name[0] == '\0') /* hack to mark broken clients */
-		strlcpy(c->name, broken, sizeof c->name);
+	free(c->name);
+
+	if (gettextprop(c->win, netatom[NetWMName], &c->name))
+		return;
+
+	if (gettextprop(c->win, XA_WM_NAME, &c->name))
+		return;
+
+	c->name = strdup(broken); /* hack to mark broken clients */
 }
 
 void

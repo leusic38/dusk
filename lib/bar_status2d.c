@@ -44,10 +44,10 @@ draw_status(Bar *bar, BarArg *a)
 int
 drw_2dtext(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, char *text2d, int invert, int drawbg, int defscheme)
 {
-	if (!w && drawbg)
+	if ((!w && drawbg) || text2d == NULL)
 		return 0;
 
-	int i, j, caret, tw, dx = x, len, mw = w - 2 * lpad;
+	int i, j, caret, tw, dx = x, stored_dx = 0, stored_mw = 0, len, mw = w - lpad;
 	int rx, ry, rw, rh;
 	int fillbg = drawbg;
 	short isCode = 0;
@@ -139,7 +139,7 @@ drw_2dtext(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int 
 				} else if (text[i] == 'r') {
 					if (++i >= len)
 						goto abort;
-					rx = (strncmp(text + i, "w", 1) == 0 ? w - 1 : atoi(text + i));
+					rx = (strncmp(text + i, "w", 1) == 0 ? mw - 1 : atoi(text + i));
 					if (rx < 0)
 						rx += mw;
 					while (i < len && text[++i] != ',');
@@ -151,7 +151,13 @@ drw_2dtext(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int 
 					while (i < len && text[++i] != ',');
 					if (++i >= len)
 						goto abort;
-					rw = (strncmp(text + i, "w", 1) == 0 ? w : atoi(text + i));
+					if (!strncmp(text + i, "w", 1)) {
+						rw = mw;
+					} else if (!strncmp(text + i, "d", 1)) {
+						rw = abs(stored_dx - dx);
+					} else {
+						rw = atoi(text + i);
+					}
 					if (rw < 0)
 						rw += mw;
 					while (i < len && text[++i] != ',');
@@ -199,9 +205,31 @@ drw_2dtext(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int 
 				} else if (text[i] == 'f') {
 					if (++i >= len)
 						goto abort;
-					rx = (strncmp(text + i, "p", 1) == 0 ? 0 : atoi(text + i));
-					if (rx < 0)
-						rx += mw;
+
+					if (!strncmp(text + i, "p", 1)) {
+						rx = lpad;
+					} else if (!strncmp(text + i, "s", 1)) {
+						rx = 0;
+						stored_dx = dx;
+						stored_mw = mw;
+					} else if (!strncmp(text + i, "r", 1)) {
+						int tmp = dx;
+						rx = 0;
+						dx = stored_dx;
+						stored_dx = tmp;
+						tmp = mw;
+						mw = stored_mw;
+						stored_mw = mw;
+					} else if (!strncmp(text + i, "x", 1)) {
+						rx = 0;
+						stored_dx = dx;
+						stored_mw = mw;
+						dx = x + lpad;
+						mw = w - 2 * lpad;
+					} else {
+						rx = atoi(text + i);
+					}
+
 					dx += rx;
 					mw -= rx;
 				}
@@ -380,7 +408,8 @@ loadimage(char *path, int use_cache)
 		image->icon = None;
 		image->icw = 0;
 		image->ich = 0;
-		image->iconpath[0] = '\0';
+		free(image->iconpath);
+		image->iconpath = NULL;
 		imagebuffer[least].atime = 0;
 	}
 
@@ -407,7 +436,7 @@ loadimagefromfile(Image *image, char *path)
 		return 0; /* no readable file */
 	}
 
-	strlcpy(image->iconpath, path, sizeof image->iconpath);
+	freestrdup(&image->iconpath, path);
 	im = imlib_load_image_immediately_without_cache(path);
 	if (!im) {
 		return 0; /* corrupt or otherwise not loadable file */
@@ -441,6 +470,8 @@ cleanup2dimagebuffer(void)
 
 	for (i = 0; i < LENGTH(imagebuffer); i++) {
 		if (imagebuffer[i].image.icon != None) {
+			free(imagebuffer[i].image.iconpath);
+			imagebuffer[i].image.iconpath = NULL;
 			XRenderFreePicture(dpy, imagebuffer[i].image.icon);
 		}
 	}

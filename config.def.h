@@ -81,7 +81,7 @@ static const int workspaces_per_mon = 0;
 static uint64_t functionality = 0
 //	|AutoReduceNmaster // automatically reduce the number of master clients if one is closed
 //	|BanishMouseCursor // like xbanish, hides mouse cursor when using the keyboard
-//	|BanishMouseCursorToCorner // makes BanishMouseCursor move the cursor to the top right corner of the screen
+//	|BanishMouseCursorToCorner // makes BanishMouseCursor move the cursor to one of the corners of the focused window
 //	|SmartGaps // enables no or increased gaps if there is only one visible window
 //	|SmartGapsMonocle // enforces no gaps in monocle layout
 	|Systray // enables a systray in the bar
@@ -96,6 +96,7 @@ static uint64_t functionality = 0
 	|ColorEmoji // enables color emoji support (removes Xft workaround)
 //	|Status2DNoAlpha // option to not use alpha when drawing status2d status
 	|BarBorder // draw a border around the bar
+//	|BarBorderColBg // optionally use the bar background colour for the bar border (rather than border colour)
 	|BarPadding // add vertical and side padding as per vertpad and sidepad variables above
 //	|NoBorders // as per the noborder patch, show no border when only one client in tiled mode
 //	|Warp // warp cursor to currently focused window
@@ -634,10 +635,10 @@ static Key keys[] = {
 	{ KeyPress,  0,				XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t") },
 	{ KeyPress,  0,				XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 5") },
 	{ KeyPress,  0,				XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 5") },
-	{ KeyPress,  0,				XF86XK_AudioPrev,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous") },
-	{ KeyPress,  0,				XF86XK_AudioNext,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next") },
+	{ KeyPress,  0,				XF86XK_AudioPrev,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.Deezer /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous") },
+	{ KeyPress,  0,				XF86XK_AudioNext,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.Deezer /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next") },
 	/* { KeyPress 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc pause") }, */
-	{ KeyPress,  0, XF86XK_AudioPlay,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
+	{ KeyPress,  0, XF86XK_AudioPlay,		spawn,		SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.Deezer /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") },
 
 
 //	STACKKEYS(AltGr|Ctrl,                                        stackfocus)                           // focus on the nth client in the stack, see the STACKKEYS macro for keybindings
