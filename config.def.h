@@ -617,10 +617,10 @@ static Key keys[] = {
                                                                                               //
 	{ KeyPress,   0,				            XK_Print,		spawn,		SHCMD("maim ~/Images/screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
 	{ KeyPress,   ShiftMask,			        XK_Print,		spawn,		SHCMD("printBarScript") },
-	{ KeyPress,   MODKEY,			            XK_Home,		spawn,		SHCMD("slock & sleep 1; xset dpms force off; dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
+	{ KeyPress,   MODKEY,			            XK_Home,		spawn,		SHCMD("slock & sleep 1; xset dpms force off; dbus-send --print-reply --dest=org.mpris.MediaPlayer2.Deezer /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
 	{ KeyPress,   MODKEY|ShiftMask,			    XK_Home,		spawn,		SHCMD("changelocktime.sh") },
 	{ KeyPress,   MODKEY|Ctrl|ShiftMask,	    XK_Home,		spawn,		SHCMD("xset dpms 1200 2400 2400") },
-	{ KeyPress,   0,			                XK_Pause,		spawn,		SHCMD("slock & sleep 1; xset dpms force off; dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
+	{ KeyPress,   0,			                XK_Pause,		spawn,		SHCMD("slock & sleep 1; xset dpms force off; dbus-send --print-reply --dest=org.mpris.MediaPlayer2.Deezer /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause") },
 	{ KeyPress,   MODKEY,			            XK_Pause,		spawn,		SHCMD("changelocktime.sh") },
 	{ KeyPress,   MODKEY|Ctrl,  	            XK_Pause,		spawn,		SHCMD("xset dpms 1200 2400 2400") },
 
