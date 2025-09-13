@@ -538,6 +538,12 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Ctrl,                  XK_o,            incnstack,              {.i = +1 } }, // increase the number of clients in the primary (first) stack area
 	{ KeyPress,   MODKEY|Shift,                 XK_o,            setcfact,               {0} },
 	{ KeyPress,   MODKEY|Ctrl|Shift,            XK_o,            viewselws,              {0} },        // view the selected workspace (only relevant when viewing multiple workspaces)
+	{ KeyPress,	  MODKEY,                       XK_p,            spawn,           SHCMD("allupgrade") }, // upgdate all
+	{ KeyPress,	  MODKEY|Ctrl,                  XK_p,            spawn,           SHCMD("pacUpgrade") }, // update official packages
+	{ KeyPress,	  MODKEY|Shift,                 XK_p,            spawn,           SHCMD("popAurUpgrade") }, // update aur packages
+ // { KeyPress,	  MODKEY|Alt,                   XK_p,            spawn,           SHCMD("") }, // flip the master and stack areas
+ // { KeyPress,	  MODKEY|Ctrl|Shift,            XK_p,            spawn,           SHCMD("") }, // flip the master and stack areas
+ // { KeyPress,	  MODKEY|Ctrl|Alt,              XK_p,            spawn,           SHCMD("") }, // flip the master and stack areas
 	{ KeyPress,   MODKEY,                       XK_bracketleft,  rotatelayoutaxis,       {.i = -1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
 	{ KeyPress,   MODKEY,                       XK_bracketright, rotatelayoutaxis,       {.i = +1 } }, // cycle through the available layout splits (horizontal, vertical, centered, no split, etc.)
 	{ KeyPress,   MODKEY|Alt,                   XK_bracketleft,  rotatelayoutaxis,       {.i = -2 } }, // cycle through the available tiling arrangements for the master area
@@ -587,16 +593,10 @@ static Key keys[] = {
 	{ KeyPress,	  MODKEY|Ctrl|Shift,            XK_b,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
 	{ KeyPress,		MODKEY,                       XK_n,      		spawn,    	SHCMD("slack") },
 	{ KeyPress,		MODKEY|ShiftMask,							XK_n,	  				spawn	,    	SHCMD("discord") },
-	{ KeyPress,	 	MODKEY|ControlMask,						XK_n,      		spawn	,    	SHCMD("teams") },
-	{ KeyPress,	 	MODKEY|ShiftMask|ControlMask, XK_n,      		spawn,    	SHCMD("skype") },
 	{ KeyPress,	 	MODKEY|Alt,               		XK_n,      				spawn,    	SHCMD("pkill -9 slack") },
 	{ KeyPress,	 	MODKEY|ShiftMask|Alt,					XK_n,      		spawn	,    	SHCMD("pkill -9 Discord") },
-	{ KeyPress,	 	MODKEY|Alt|ControlMask,				XK_n,		      	 spawn	,    	SHCMD("pkill -9 teams") },
-	{ KeyPress,	 	MODKEY|Alt|ShiftMask|ControlMask,             XK_n,      		spawn,    	SHCMD("pkill -9 skype") },
-	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("spotify") }, //three screen one SPLIT_VERTICAL
+	{ KeyPress,   MODKEY,                       XK_m,            spawn,             SHCMD("deezer-enhanced") },
   { KeyPress,   MODKEY|Ctrl,                  XK_m,            spawn,                   SHCMD("vlc") }, // unconnected xps screen
-	/* { KeyPress,   MODKEY|ShiftMask,             XK_m,            spawn,                   SHCMD("moonshot-2-up-down.sh") }, // moves the currently focused window to/from the master area (for tiled layouts) */
-	/* { KeyPress,   MODKEY|Alt,                   XK_m,            spawn,             SHCMD("three-screen-home.sh") }, //three screen one SPLIT_VERTICAL */
 
 	{ KeyPress,   MODKEY,                       XK_comma,        focusmon,               {.i = -1 } }, // focus on the previous monitor, if any
 	{ KeyPress,   MODKEY,                       XK_period,       focusmon,               {.i = +1 } }, // focus on the next monitor, if any
