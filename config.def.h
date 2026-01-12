@@ -15,35 +15,35 @@ static const unsigned int smartgaps_fact = 0;   /* smartgaps factor when there i
 
 static unsigned int attachdefault        = AttachAside; // AttachMaster, AttachAbove, AttachSide, AttachBelow, AttachBottom
 
-static const int initshowbar             = 1;   /* 0 means no bar */
+static int initshowbar                   = 1;   /* 0 means no bar */
 
-static const int bar_height              = 0;   /* 0 means derive from font, >= 1 explicit height */
-static const int vertpad                 = borderpx;  /* vertical (outer) padding of bar */
-static const int sidepad                 = borderpx;  /* horizontal (outer) padding of bar */
+static int bar_height                    = 0;   /* 0 means derive from font, >= 1 explicit height */
+static int vertpad                       = 5;   /* vertical (outer) padding of bar */
+static int sidepad                       = 5;   /* horizontal (outer) padding of bar */
 
-static const int iconsize                = 16;  /* icon size */
-static const int iconspacing             = 5;   /* space between icon and title */
+static int iconsize                      = 16;  /* icon size */
+static int iconspacing                   = 5;   /* space between icon and title */
 
-static const float pfact                 = 0.25; /* size of workspace previews relative to monitor size */
+static float pfact                       = 0.25; /* size of workspace previews relative to monitor size */
 
 static int floatposgrid_x                = 5;   /* float grid columns */
 static int floatposgrid_y                = 5;   /* float grid rows */
 
-static const int horizpadbar             = 2;   /* horizontal (inner) padding for statusbar (increases lrpad) */
-static const int vertpadbar              = 0;   /* vertical (inner) padding for statusbar (increases bh, overridden by bar_height) */
+static int horizpadbar                   = 2;   /* horizontal (inner) padding for statusbar (increases lrpad) */
+static int vertpadbar                    = 0;   /* vertical (inner) padding for statusbar (increases bh, overridden by bar_height) */
 
 static const char slopspawnstyle[]       = "-t 0 -c 0.92,0.85,0.69,0.3 -o"; /* do NOT define -f (format) here */
 static const char slopresizestyle[]      = "-t 0 -c 0.92,0.85,0.69,0.3"; /* do NOT define -f (format) here */
-static const unsigned int systrayspacing = 2;   /* systray spacing */
+static unsigned int systrayspacing       = 2;   /* systray spacing */
 static const char *toggle_float_pos      = "50% 50% 80% 80%"; // default floating position when triggering togglefloating
-static const double defaultopacity       = 0;   /* client default opacity, e.g. 0.75. 0 means don't apply opacity */
-static const double moveopacity          = 0;   /* client opacity when being moved, 0 means don't apply opacity */
-static const double resizeopacity        = 0;   /* client opacity when being resized, 0 means don't apply opacity */
-static const double placeopacity         = 0;   /* client opacity when being placed, 0 means don't apply opacity */
+static double defaultopacity             = 0;   /* client default opacity, e.g. 0.75. 0 means don't apply opacity */
+static double moveopacity                = 0;   /* client opacity when being moved, 0 means don't apply opacity */
+static double resizeopacity              = 0;   /* client opacity when being resized, 0 means don't apply opacity */
+static double placeopacity               = 0;   /* client opacity when being placed, 0 means don't apply opacity */
 
 /* Indicators: see lib/bar_indicators.h for options */
 static int indicators[IndicatorLast] = {
-	[IndicatorWs] = INDICATOR_NONE,
+	[IndicatorWsOcc] = INDICATOR_NONE,
 	[IndicatorPinnedWs] = INDICATOR_NONE,
 	[IndicatorFakeFullScreen] = INDICATOR_PLUS,
 	[IndicatorFakeFullScreenActive] = INDICATOR_PLUS_AND_LARGER_SQUARE,
@@ -69,13 +69,13 @@ static int prefer_window_icons_over_workspace_labels = 0;    /* whether to use w
 static int swap_occupied_workspace_label_format_strings = 0; /* 0 gives "icon: label", 1 gives "label: icon" */
 
 /* This determines what happens with pinned workspaces on a monitor when that monitor is removed.
- *   0 - the workspaces becomes unpinned and is moved to another monitor or
+ *   0 - the workspaces become unpinned and are moved to another monitor or
  *   1 - the workspace clients are moved to the selected workspace on the first monitor, but
  *       the workspace itself is hidden
  *
  * Non-pinned workspaces are always redistributed among the remaining monitors.
  */
-static const int workspaces_per_mon = 0;
+static int workspaces_per_mon = 0;
 
 /* See util.h for options */
 static uint64_t functionality = 0
@@ -205,7 +205,7 @@ static const char *const autorestart[] = {
  *
  * refer to the rule struct definition for the list of available fields.
  */
-static const Rule clientrules[] = {
+static Rule clientrules[] = {
 	/* xprop(1):
 	 *	wm_class(string) = instance, class
 	 *	wm_name(string) = title
@@ -292,7 +292,7 @@ static const Rule clientrules[] = {
  *    Note that vertical and horizontal side padding are controlled by the
  *    vertpad and sidepad variables towards the top of this configuration file.
  */
-static const BarDef bars[] = {
+static BarDef bars[] = {
 	/* monitor idx  vert   x     y      w     h     name            ext class  ext inst  ext name */
 	{  0,      0,   0,    "0%    0%     100% -1h ", "Primary top" },
 	{  0,      1,   0,    "0%    100%   100% -1h ", "Primary bottom" },
@@ -308,7 +308,7 @@ static const BarDef bars[] = {
  *    monitor:
  *      -1  show on all monitors
  *       0  show on monitor 0
- *      'A' show on active monitor (i.e. focused / selected) (or just -1 for active?)
+ *      'A' show on active monitor (i.e. follow focused monitor)
  *    bar - bar index, 0 is default, 1 is extrabar
  *    scheme - defines the default scheme for the bar module
  *    lpad - adds artificial spacing on the left hand side of the module
@@ -375,7 +375,7 @@ static const BarRule barrules[] = {
  *       occ   - the occupied icon shows if the workspace has clients
  *
  */
-static const WorkspaceRule wsrules[] = {
+static WorkspaceRule wsrules[] = {
 	/*                                                                     ------------------------------- schemes ------------------------------- ------ icons ------
 	   name,  monitor,  pinned,  layout,  mfact,  nmaster,  nstack,  gaps, default,          visible,          selected,         occupied,         def,   vac,  occ,  */
 	{  "1",    -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "1",   "",   "[1]", },
@@ -389,10 +389,10 @@ static const WorkspaceRule wsrules[] = {
 	{  "9",     0,       1,      10,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "9",   "",   "[9]", },
 };
 
-static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int nstack      = 0;    /* number of clients in primary stack area */
-static const int enablegaps  = 1;    /* whether gaps are enabled by default or not */
+static float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
+static int nmaster     = 1;    /* number of clients in master area */
+static int nstack      = 0;    /* number of clients in primary stack area */
+static int enablegaps  = 1;    /* whether gaps are enabled by default or not */
 
 /* layout(s) */
 static const Layout layouts[] = {
@@ -450,7 +450,7 @@ static const Layout layouts[] = {
 	{ KeyPress,   MOD, XK_z, ACTION, {.i = LASTTILED } },
 
 /* This relates to the StackerIcons functionality and should mirror the STACKKEYS list above. */
-static const StackerIcon stackericons[] = {
+static StackerIcon stackericons[] = {
 	{ "[j]", {.i = INC(+1) } },
 	{ "[k]", {.i = INC(-1) } },
 	{ "[s]", {.i = PREVSEL } },
