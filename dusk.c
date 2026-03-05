@@ -48,7 +48,6 @@
 #include "util.h"
 
 #include <assert.h>
-#include <libgen.h>
 #include <sys/stat.h>
 #define SPAWN_CWD_DELIM " []{}()<>\"':"
 
@@ -636,7 +635,7 @@ applyrules(Client *c)
 	const char *class, *instance;
 	Atom game_id = None, da = None, *win_types = NULL;
 	char *role = NULL;
-	int i, di;
+	int i, format;
 	unsigned long dl, nitems;
 	unsigned char *p = NULL;
 	unsigned int transient;
@@ -644,8 +643,9 @@ applyrules(Client *c)
 	XClassHint ch = { NULL, NULL };
 
 	if (XGetWindowProperty(dpy, c->win, netatom[NetWMWindowType], 0L, sizeof(Atom), False, XA_ATOM,
-			&da, &di, &nitems, &dl, &p) == Success && p) {
-		win_types = (Atom *) p;
+			&da, &format, &nitems, &dl, &p) == Success && p) {
+		if (nitems > 0 && format == 32)
+			win_types = (Atom *)p;
 	}
 
 	/* rule matching */
@@ -2075,16 +2075,18 @@ focusstack(const Arg *arg)
 Atom
 getatomprop(Client *c, Atom prop, Atom req)
 {
-	int di;
-	unsigned long dl, dm;
+	int format;
+	unsigned long nitems, after;
 	unsigned char *p = NULL;
 	Atom da, atom = None;
 
 	if (XGetWindowProperty(dpy, c->win, prop, 0L, sizeof atom, False, req,
-		&da, &di, &dl, &dm, &p) == Success && p) {
-		atom = *(Atom *)p;
-		if (da == xatom[XembedInfo] && dl == 2)
-			atom = ((Atom *)p)[1];
+		&da, &format, &nitems, &after, &p) == Success && p) {
+		if (nitems > 0 && format == 32) {
+			atom = *(long *)p;
+			if (da == xatom[XembedInfo] && nitems == 2)
+				atom = ((long *)p)[1];
+		}
 		XFree(p);
 	}
 	return atom;
@@ -2126,15 +2128,16 @@ getstate(Window w)
 	int format;
 	long result = -1;
 	unsigned char *p = NULL;
-	unsigned long n, extra;
+	unsigned long nitems, after;
 	Atom real;
 
 	if (XGetWindowProperty(dpy, w, wmatom[WMState], 0L, 2L, False, wmatom[WMState],
-		&real, &format, &n, &extra, (unsigned char **)&p) != Success)
-		return -1;
-	if (n != 0)
-		result = *p;
-	XFree(p);
+			&real, &format, &nitems, &after, &p) == Success && p) {
+		if (nitems > 0 && format == 32)
+			result = *(long *)p;
+		XFree(p);
+	}
+
 	return result;
 }
 
@@ -3316,12 +3319,10 @@ sendevent(Window w, Atom proto, int mask, long d0, long d1, long d2, long d3, lo
 void
 setfocus(Client *c)
 {
-	if (!NEVERFOCUS(c)) {
+	if (!NEVERFOCUS(c))
 		XSetInputFocus(dpy, c->win, RevertToPointerRoot, CurrentTime);
-		XChangeProperty(dpy, root, netatom[NetActiveWindow],
-			XA_WINDOW, 32, PropModeReplace,
-			(unsigned char *) &(c->win), 1);
-	}
+	XChangeProperty(dpy, root, netatom[NetActiveWindow], XA_WINDOW, 32,
+		PropModeReplace, (unsigned char *) &(c->win), 1);
 	selws->sel = c;
 	if (selws != c->ws)
 		c->ws->sel = c;
@@ -3678,7 +3679,7 @@ spawncmd(const Arg *arg, int buttonclick, int orphan)
 
 			cwd = strtok(selws->sel->name, SPAWN_CWD_DELIM);
 
-			if (strncmp(cwd, "~/", 2) == 0) {
+			if (cwd && strncmp(cwd, "~/", 2) == 0) {
 				/* Replace ~/ with HOME environment variable */
 				pathbuf = subst_home_directory(cwd);
 				cwd = pathbuf;
@@ -3688,12 +3689,25 @@ spawncmd(const Arg *arg, int buttonclick, int orphan)
 			 * but that does not matter because we are going to
 			 * exec() below anyway; nothing else will use it */
 			while (cwd) {
-				if (strchr(cwd, '/') && !stat(cwd, &statbuf)) {
-					if (!S_ISDIR(statbuf.st_mode))
-						cwd = dirname(cwd);
+				if (strchr(cwd, '/') && stat(cwd, &statbuf) == 0) {
 
-					if (strlen(cwd) > 1 && !chdir(cwd))
+					char *dir = NULL;
+
+					if (!S_ISDIR(statbuf.st_mode)) {
+						dir = path_dirname(cwd);
+					} else {
+						dir = strdup(cwd);
+					}
+
+					if (!dir)
+						break; /* OOM */
+
+					if (strlen(dir) > 1 && chdir(dir) == 0) {
+						free(dir);
 						break;
+					}
+
+					free(dir);
 				}
 
 				cwd = strtok(NULL, SPAWN_CWD_DELIM);
