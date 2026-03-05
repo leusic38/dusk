@@ -505,10 +505,10 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY,                       XK_Tab,          viewwsdir,              {.i = +2 } }, // view the next workspace right of current workspace that has clients (on the current monitor)
 	{ KeyPress,   MODKEY|Ctrl|Alt,              XK_Tab,          togglenomodbuttons,     {0} }, // disables / enables keybindings that are not accompanied by any modifier buttons for a client
 	/***********           q used by scratchpad st 	        ***************/	
-	{	KeyPress,	MODKEY,													XK_w,			spawn,		SHCMD("$BROWSER") },
-	{	KeyPress, MODKEY|ShiftMask,								XK_w,			spawn,		SHCMD("$BROWSER_2 -P") },
+	{	KeyPress,	MODKEY,													XK_w,			spawn,		SHCMD("$BROWSER -P") },
+	{	KeyPress, MODKEY|ShiftMask,								XK_w,			spawn,		SHCMD("$BROWSER_2") },
 	{	KeyPress, MODKEY|ControlMask,         		XK_w,			spawn,		SHCMD("$BROWSER_3") },
-	{	KeyPress, MODKEY,													XK_e,			spawn,		SHCMD("$EDI") },
+	{	KeyPress, MODKEY,													XK_e,			spawn,		SHCMD("$TERMINAL -e $EDI") },
 	{	KeyPress, MODKEY|ShiftMask,								XK_e,			spawn,		SHCMD("code") },
 	{	KeyPress, MODKEY|ControlMask,							XK_e,			spawn,		SHCMD("phpstorm") },
 	/*{KeyPress, MODKEY|ControlMask|ShiftMask,	XK_e,			spawn,		SHCMD("postman") },*/

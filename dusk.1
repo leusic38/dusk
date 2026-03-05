@@ -85,26 +85,41 @@ Assigns a window to the designated scratchpad.
 .B Mod\-Ctrl\-Shift\-[q,r,c]
 Removes a window from the designated scratchpad.
 .TP
+.B Mod\-w
+Open default browser.
+.TP
+.B Mod\-Shift\-w
+Open secondary browser with -P flag.
+.TP
+.B Mod\-Ctrl\-w
+Open tertiary browser.
+.TP
+.B Mod\-e
+Open default editor.
+.TP
+.B Mod\-Shift\-e
+Open VS Code.
+.TP
+.B Mod\-Ctrl\-e
+Open PhpStorm.
+.TP
+.B Mod\-Shift\-r
+Open Thunar file manager.
+.TP
+.B Mod\-Alt\-r
+Open terminal file manager.
+.TP
 .B Mod\-[Left,Right,Up,Down]
 Focus on client in a given direction (workspace borders wraps around).
 .TP
-.B Mod\-Shift\-minus
+.B Mod\-Ctrl\-[Left,Right,Up,Down]
+Swap places with the client window in the given direction.
+.TP
+.B Mod\-,
 Focus previous screen, if any.
 .TP
-.B Mod\-Shift\-equal
+.B Mod\-.
 Focus next screen, if any.
-.TP
-.B Mod\-Shift\-,
-Focus previous screen, if any.
-.TP
-.B Mod\-Shift\-.
-Focus next screen, if any.
-.TP
-.B Mod\-Shift\-Tab
-Move to the previous workspace (on the current monitor) that has windows on it.
-.TP
-.B Mod\-Tab
-Move to the next workspace (on the current monitor) that has windows on it.
 .TP
 .B Mod\-Alt\-,
 Send focused window to previous screen, if any.
@@ -112,11 +127,38 @@ Send focused window to previous screen, if any.
 .B Mod\-Alt\-.
 Send focused window to next screen, if any.
 .TP
-.B Mod\-Shift\-Alt\-,
-Send all window on current workspace to previous screen, if any.
+.B Mod\-Alt\-Shift\-,
+Send all windows to next screen, if any.
 .TP
-.B Mod\-Shift\-Alt\-.
-Send all window on current workspace focused window to next screen, if any.
+.B Mod\-Alt\-Shift\-.
+Send all windows to previous screen, if any.
+.TP
+.B Mod\-Ctrl\-,
+View workspace on the immediate left.
+.TP
+.B Mod\-Ctrl\-.
+View workspace on the immediate right.
+.TP
+.B Mod\-Shift\-,
+View previous workspace with clients.
+.TP
+.B Mod\-Shift\-.
+View next workspace with clients.
+.TP
+.B Mod\-Ctrl\-Alt\-,
+Move client to workspace on the immediate left.
+.TP
+.B Mod\-Ctrl\-Alt\-.
+Move client to workspace on the immediate right.
+.TP
+.B Mod\-Shift\-Tab
+Move to the previous workspace (on the current monitor) that has windows on it.
+.TP
+.B Mod\-Tab
+Move to the next workspace (on the current monitor) that has windows on it.
+.TP
+.B Mod\-Ctrl\-Alt\-Tab
+Toggle no modifier buttons mode for the current client.
 .TP
 .B Mod\-j
 Focus next window in the stack.
@@ -137,16 +179,16 @@ Push the currently selected window down the stack.
 Push the currently selected window up the stack.
 .TP
 .B Mod\-i
-Increase number of windows in master area.
-.TP
-.B Mod\-u
 Decrease number of windows in master area.
 .TP
-.B Mod\-Ctrl\-i
-Increase number of windows in primary stack area.
+.B Mod\-o
+Increase number of windows in master area.
 .TP
-.B Mod\-Ctrl\-u
+.B Mod\-Ctrl\-i
 Decrease number of windows in primary stack area.
+.TP
+.B Mod\-Ctrl\-o
+Increase number of windows in primary stack area.
 .TP
 .B Mod\-l
 Increase master area size.
@@ -163,15 +205,39 @@ Decrease client size respective to other windows within the same area.
 .B Mod\-Shift\-o
 Reset client size respective to other windows within the same area to default.
 .TP
-.B Mod\-m
+.B Mod\-Ctrl\-Shift\-o
+View the selected workspace (only relevant when viewing multiple workspaces).
+.TP
+.B Mod\-space
 Zooms/cycles focused window to/from master area (tiled layouts only).
 .TP
-.B Mod\-[plus,minus]
+.B Mod\-Alt\-space
+Toggles between current and previous layout.
+.TP
+.B Mod\-[equal,minus]
+Increase / decrease the master area size.
+.TP
+.B Mod\-Shift\-[equal,minus]
 Increase / decrease the client opacity (for compositors that support
 _NET_WM_OPACITY).
 .TP
-.B Mod\-q
+.B Mod\-Ctrl\-[equal,minus]
+Increase / decrease client size respective to other windows within the same area.
+.TP
+.B Mod\-BackSpace
 Close focused window.
+.TP
+.B Mod\-Shift\-BackSpace
+Quit dusk.
+.TP
+.B Mod\-Ctrl\-Shift\-BackSpace
+Restart dusk.
+.TP
+.B Mod\-Alt\-BackSpace
+Shutdown computer (with confirmation).
+.TP
+.B Mod\-Ctrl\-BackSpace
+Reboot computer (with confirmation).
 .TP
 .B Mod\-f
 Toggles fullscreen for the selected window.
@@ -196,6 +262,15 @@ the keyboard. Such features can be enabled or disabled on a per client basis.
 Move focused window to the nth workspace.
 .TP
 .B Mod\-Ctrl\-[1..n]
+Send focused window to the nth workspace (without following).
+.TP
+.B Mod\-Ctrl\-Shift\-[1..n]
+Move all windows from current workspace to the nth workspace.
+.TP
+.B Mod\-Ctrl\-Alt\-[1..n]
+Move all windows from the nth workspace to current workspace.
+.TP
+.B Mod\-Ctrl\-Alt\-Shift\-[1..n]
 Swap all clients on the current workspace with all clients on the nth workspace.
 .TP
 .B Mod\-Alt\-[1..n]
@@ -210,8 +285,6 @@ View all workspaces on the current monitor that has clients.
 .B Mod\-Ctrl\-[0]
 View all workspaces on the current monitor.
 .TP
-.B Mod\-o
-View the selected client's workspace (only relevant when viewing multiple workspaces).
 .TP
 .B Mod\-backslash
 Toggle pinning of the current workspace.
@@ -229,17 +302,185 @@ Cycle through the available tiling arrangements for the primary stack area.
 .B Mod\-Ctrl\-[bracketleft,bracketright]
 Cycle through the available tiling arrangements for the secondary stack area.
 .TP
-.B Mod\-Ctrl\-m
+.B Mod\-Ctrl\-b
 The master and stack areas swap places (mirror layout).
 .TP
-.B Mod\-space
-Toggles between current and previous layout.
+.B Mod\-Ctrl\-Shift\-b
+Flip between horizontal and vertical layout.
 .TP
-.B Mod\-Shift\-q
-Restart dusk.
+.B Mod\-t
+Set tile layout (default).
 .TP
-.B Mod\-Ctrl\-Shift\-q
-Quit dusk.
+.B Mod\-Shift\-t
+Set monocle layout.
+.TP
+.B Mod\-Ctrl\-t
+Set columns layout.
+.TP
+.B Mod\-Alt\-t
+Set columns (col) layout.
+.TP
+.B Mod\-Alt\-Shift\-t
+Set deck layout.
+.TP
+.B Mod\-Ctrl\-Shift\-t
+Set centered master layout.
+.TP
+.B Mod\-Ctrl\-Alt\-t
+Set tatami mats layout.
+.TP
+.B Mod\-y
+Set gapless grid layout.
+.TP
+.B Mod\-Shift\-y
+Set bstack layout.
+.TP
+.B Mod\-Ctrl\-y
+Set rows layout.
+.TP
+.B Mod\-Alt\-y
+Set bstack horizontal layout.
+.TP
+.B Mod\-Ctrl\-Alt\-y
+Set bstack grid layout.
+.TP
+.B Mod\-Ctrl\-Shift\-y
+Set centered master horizontal layout.
+.TP
+.B Mod\-Alt\-Shift\-y
+Set fibonacci dwindle layout.
+.TP
+.B Mod\-u
+Set fibonacci spiral layout.
+.TP
+.B Mod\-Shift\-u
+Set floating master layout.
+.TP
+.B Mod\-Ctrl\-u
+Set floating layout.
+.TP
+.B Mod\-z
+Show/hide the focused window.
+.TP
+.B Mod\-x
+Change keyboard layout to frqw.
+.TP
+.B Mod\-v
+Group floating clients together.
+.TP
+.B Mod\-Shift\-v
+Ungroup floating clients.
+.TP
+.B Mod\-b
+Toggle the display of the bar on the current monitor.
+.TP
+.B Mod\-n
+Open Slack.
+.TP
+.B Mod\-Shift\-n
+Open Discord.
+.TP
+.B Mod\-Alt\-n
+Kill Slack.
+.TP
+.B Mod\-Shift\-Alt\-n
+Kill Discord.
+.TP
+.B Mod\-m
+Open Deezer Enhanced.
+.TP
+.B Mod\-Ctrl\-m
+Open VLC.
+.TP
+.B Mod\-p
+Update all packages.
+.TP
+.B Mod\-Ctrl\-p
+Update official packages.
+.TP
+.B Mod\-Shift\-p
+Update AUR packages.
+.TP
+.B Mod\-s
+Screen configuration.
+.TP
+.B Mod\-Ctrl\-s
+Screen configuration (position left).
+.TP
+.B Mod\-Shift\-s
+Screen configuration (position top).
+.TP
+.B Mod\-Alt\-s
+Screen configuration (position right).
+.TP
+.B Mod\-Ctrl\-Shift\-s
+Screen configuration (vertical left).
+.TP
+.B Mod\-Ctrl\-Alt\-s
+Screen configuration (mirror mode).
+.TP
+.B Mod\-/
+Connect to moonshotlabs_theia WiFi.
+.TP
+.B Mod\-Alt\-/
+Disconnect from moonshotlabs_theia WiFi.
+.TP
+.B Mod\-a
+Mark all clients on the selected workspace.
+.TP
+.B Mod\-Ctrl\-a
+Mark all floating clients on the selected workspace.
+.TP
+.B Mod\-Alt\-a
+Mark all hidden clients on the selected workspace.
+.TP
+.B Mod\-Shift\-a
+Unmark all clients.
+.TP
+.B Mod\-Ctrl\-Alt\-a
+Toggle mark on the selected client.
+.TP
+.B Print
+Take full screen screenshot.
+.TP
+.B Shift\-Print
+Run print bar script.
+.TP
+.B Mod\-Home
+Lock screen, turn off display and pause Deezer.
+.TP
+.B Mod\-Shift\-Home
+Change lock time settings.
+.TP
+.B Mod\-Ctrl\-Shift\-Home
+Set DPMS settings (1200 2400 2400).
+.TP
+.B Pause
+Lock screen, turn off display and pause Deezer.
+.TP
+.B Mod\-Pause
+Change lock time settings.
+.TP
+.B Mod\-Ctrl\-Pause
+Set DPMS settings (1200 2400 2400).
+.TP
+.B XF86AudioMute
+Toggle audio mute.
+.TP
+.B XF86AudioRaiseVolume
+Increase volume by 5.
+.TP
+.B XF86AudioLowerVolume
+Decrease volume by 5.
+.TP
+.B XF86AudioPrev
+Previous track (Deezer).
+.TP
+.B XF86AudioNext
+Next track (Deezer).
+.TP
+.B XF86AudioPlay
+Play/Pause (Deezer).
 .SS Mouse commands
 .TP
 .B Mod\-Button1
