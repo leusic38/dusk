@@ -472,6 +472,7 @@ static void clientsmonresize(Client *clients, Monitor *from, Monitor *to);
 static void clientrelposmon(Client *c, Monitor *o, Monitor *n, int *cx, int *cy, int *cw, int *ch);
 static void clienttomon(const Arg *arg);
 static void clientstomon(const Arg *arg);
+static void movewstomon(const Arg *arg);
 static void configure(Client *c);
 static Workspace *configurenotify(XConfigureEvent *ev);
 static void configurerequest(XEvent *e);
@@ -1172,7 +1173,7 @@ clientmessage(XEvent *e)
 {
 	XClientMessageEvent *cme = &e->xclient;
 	Workspace *ws;
-	Client *c;
+	Client *c, *s;
 	unsigned int maximize_vert, maximize_horz;
 	int setfakefullscreen = 0;
 
@@ -1507,6 +1508,50 @@ clientstomon(const Arg *arg)
 		arrange(NULL);
 		focus(NULL);
 	}
+}
+
+/* Moves the currently selected workspace to an adjacent monitor.
+ * The workspace follows with all its clients. The focus and selmon follow too.
+ * If the workspace is pinned it gets unpinned since it is being explicitly moved. */
+void
+movewstomon(const Arg *arg)
+{
+	Workspace *ws = selws;
+	Monitor *m, *omon;
+	Workspace *ows;
+	uint64_t prevwsmask;
+
+	if (!mons->next || !ws)
+		return;
+
+	m = dirtomon(arg->i);
+	if (!m || ws->mon == m)
+		return;
+
+	omon = ws->mon;
+	prevwsmask = getwsmask(m);
+
+	/* Unpin - the workspace is being explicitly relocated */
+	ws->pinned = 0;
+
+	/* Move workspace to target monitor */
+	assignworkspacetomonitor(ws, m);
+
+	/* Show the workspace on target monitor */
+	showws(ws);
+	clientsfsrestore(ws->clients);
+
+	/* Ensure old monitor has a visible workspace */
+	ows = selectmonws(omon);
+	omon->selws = ows;
+	ows->visible = 1;
+
+	/* Hide other workspaces on target monitor */
+	hidewsotherthan(ws);
+
+	selmon = m;
+	storewsmask();
+	drawws(ws, m, prevwsmask, 0, 1, 1);
 }
 
 void
