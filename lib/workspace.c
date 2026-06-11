@@ -198,7 +198,10 @@ abandonworkspaces(Monitor *mon)
 		}
 
 		hidews(ws);
-		hidewsclients(ws->stack);
+		/* Leave clients in NormalState (skip hidewsclients) so the workspace keeps
+		 * its clients intact. assignworkspacetomonitor + clientsmonresize adjusts
+		 * positions for the new monitor. On monitor reconnect, distributeworkspaces
+		 * restores the workspace (with its clients) to its rule monitor. */
 		assignworkspacetomonitor(ws, mons);
 		ws->pinned = 0;
 	}
