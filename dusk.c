@@ -505,6 +505,7 @@ static void keyrelease(XEvent *e);
 static void killclient(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
+static void mapnotify(XEvent *e);
 static void maprequest(XEvent *e);
 static void motionnotify(XEvent *e);
 static unsigned long long now(void);
@@ -607,6 +608,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 	#endif
 	[KeyPress] = keypress,
 	[KeyRelease] = keypress,
+	[MapNotify] = mapnotify,
 	[MappingNotify] = mappingnotify,
 	[MapRequest] = maprequest,
 	[MotionNotify] = motionnotify,
@@ -2693,6 +2695,27 @@ mappingnotify(XEvent *e)
 	XRefreshKeyboardMapping(ev);
 	if (ev->request == MappingKeyboard)
 		grabkeys();
+}
+
+void
+mapnotify(XEvent *e)
+{
+	XMapEvent *ev = &e->xmap;
+
+	/* Override-redirect windows bypass the window manager entirely, so they
+	 * never generate a MapRequest -- the raise in maprequest() below is
+	 * unreachable for them. And in X11 mapping a window does not change its
+	 * stacking order, so a window that is created once and mapped again for
+	 * every use, as dunst does for notifications, comes back wherever it was
+	 * left in the stack: underneath everything raised since. Raise it here,
+	 * on the event that actually gets delivered (the root window selects
+	 * SubstructureNotifyMask, see the XSelectInput call in setup). */
+	if (!ev->override_redirect)
+		return;
+	if (wintoclient(ev->window))
+		return;
+
+	XRaiseWindow(dpy, ev->window);
 }
 
 void
