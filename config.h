@@ -15,7 +15,7 @@ static const unsigned int smartgaps_fact = 0;   /* smartgaps factor when there i
 
 static unsigned int attachdefault        = AttachAside; // AttachMaster, AttachAbove, AttachSide, AttachBelow, AttachBottom
 
-static int initshowbar                   = 1;   /* 0 means no bar */
+static int initshowbar                   = 0;   /* 0 means no bar */
 
 static int bar_height                    = 0;   /* 0 means derive from font, >= 1 explicit height */
 static int vertpad                       = 5;   /* vertical (outer) padding of bar */
@@ -174,17 +174,32 @@ static char *colors[SchemeLast][4] = {
 	[SchemeWsOcc]        = { "#D9CFC5", "#492B2D", "#000000" },
 };
 
+/* Affiche la barre pendant 10 secondes puis la recache. Partage par le raccourci
+ * MOD+Shift+b et par l'autostart. showbar marque la barre comme affichee
+ * temporairement (etat 2) et hidebar ne la referme que dans cet etat : si la barre
+ * est epinglee entre-temps avec MOD+b, le minuteur la laisse en place.
+ * Le pidfile evite qu'un ancien minuteur ne referme la barre trop tot lors d'un
+ * second appui. La boucle de reprise couvre le demarrage, ou autostart_exec()
+ * s'execute avant que dusk ne se soit enregistre sur D-Bus. */
+#define BARPEEK_CMD \
+	"f=${XDG_RUNTIME_DIR:-/tmp}/dusk-barpeek.pid; " \
+	"[ -f \"$f\" ] && kill \"$(cat \"$f\")\" 2>/dev/null; " \
+	"n=0; while ! duskc -q run_command showbar 2>/dev/null && [ $n -lt 50 ]; do n=$((n+1)); sleep 0.2; done; " \
+	"{ sleep 10; duskc -q run_command hidebar; rm -f \"$f\"; } & echo $! > \"$f\""
+
 /* List of programs to start automatically during startup only. Note that these will not be
  * executed again when doing a restart. */
 static const char *const autostart[] = {
-	"sh","-c","statusbar_launch","st","-e","ranger",
+	"sh","-c","statusbar_launch", NULL,
+	"sh","-c",BARPEEK_CMD, NULL,
 	NULL /* terminate */
 };
 
 /* List of programs to start automatically during a restart only. These should usually be short
  * scripts that perform specific operations, e.g. changing a wallpaper. */
 static const char *const autorestart[] = {
-  "sh","-c","statusbar_launch",
+	"sh","-c","statusbar_launch", NULL,
+	"sh","-c",BARPEEK_CMD, NULL,
 	NULL /* terminate */
 };
 /* there are two options when it comes to per-client rules:
@@ -594,6 +609,7 @@ static Key keys[] = {
   { KeyPress,   MODKEY,                       XK_v,            group,                  {0} }, // groups floating clients together
 	{ KeyPress,   MODKEY|Shift,                 XK_v,            ungroup,                {0} }, // ungroups floating clients
 	{ KeyPress,   MODKEY,                       XK_b,            togglebar,              {0} }, // toggles the display of the bar(s) on the current monitor
+	{ KeyPress,   MODKEY|Shift,                 XK_b,            spawn,                  SHCMD(BARPEEK_CMD) }, // affiche la barre pendant 10 secondes puis la recache
 	{ KeyPress,	  MODKEY|Ctrl,                  XK_b,            mirrorlayout,           {0} }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Ctrl|Shift,            XK_b,            layoutconvert,          {0} }, // flip between horizontal and vertical layout
 	{ KeyPress,		MODKEY,                       XK_n,      		spawn,    	SHCMD("slack") },
