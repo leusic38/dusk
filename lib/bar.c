@@ -640,6 +640,56 @@ hidebar(const Arg *arg)
 	}
 }
 
+/* Variantes tous moniteurs de showbar / hidebar. Meme convention d'etat : la
+ * barre affichee temporairement est marquee 2, et seule une barre dans cet etat
+ * est refermee par hidebarall. Une barre epinglee entre-temps reste en place. */
+void
+showbarall(const Arg *arg)
+{
+	Monitor *m;
+
+	for (m = mons; m; m = m->next)
+		if (!m->showbar) {
+			togglebarmon(m);
+			m->showbar = 2;
+		}
+}
+
+void
+hidebarall(const Arg *arg)
+{
+	Monitor *m;
+
+	for (m = mons; m; m = m->next)
+		if (m->showbar == 2) {
+			m->showbar = 1;
+			togglebarmon(m);
+		}
+}
+
+/* Bascule tous les moniteurs a la fois. Si au moins une barre est visible, tout
+ * est cache ; sinon tout est affiche et epingle (etat 1), ce qui neutralise un
+ * minuteur d'affichage temporaire encore en cours. */
+void
+togglebarall(const Arg *arg)
+{
+	Monitor *m;
+	int shown = 0;
+
+	for (m = mons; m; m = m->next)
+		if (m->showbar)
+			shown = 1;
+
+	for (m = mons; m; m = m->next) {
+		if (!shown)
+			togglebarmon(m);
+		else if (m->showbar) {
+			m->showbar = 1;
+			togglebarmon(m);
+		}
+	}
+}
+
 void
 showhidebar(Bar *bar)
 {
@@ -685,19 +735,27 @@ teardownbars(Monitor *m)
 	m->bar = NULL;
 }
 
+/* Coeur de togglebar, applicable a un moniteur quelconque. Transitions de
+ * showbar : 0 -> 1 (visible), 1 -> 0 (cachee), 2 -> 1 (temporaire -> epinglee). */
+void
+togglebarmon(Monitor *m)
+{
+	Bar *bar;
+	m->showbar = (m->showbar == 2 ? 1 : !m->showbar);
+	updatebarpos(m);
+	for (bar = m->bar; bar; bar = bar->next)
+		showhidebar(bar);
+	if (!m->showbar && systray && (!systray->bar || systray->bar->mon == m))
+		XMoveWindow(dpy, systray->win, -32000, -32000);
+	setworkspaceareasformon(m);
+	arrangemon(m);
+	drawbars();
+}
+
 void
 togglebar(const Arg *arg)
 {
-	Bar *bar;
-	selmon->showbar = (selmon->showbar == 2 ? 1 : !selmon->showbar);
-	updatebarpos(selmon);
-	for (bar = selmon->bar; bar; bar = bar->next)
-		showhidebar(bar);
-	if (!selmon->showbar && systray)
-		XMoveWindow(dpy, systray->win, -32000, -32000);
-	setworkspaceareasformon(selmon);
-	arrangemon(selmon);
-	drawbars();
+	togglebarmon(selmon);
 }
 
 void

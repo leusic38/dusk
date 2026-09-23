@@ -25,7 +25,8 @@ config.h:
 dusk: ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
 
-duskc:
+duskc: duskc.c util.c util.h config.h config.mk \
+	lib/dbus.c lib/dbus.h lib/dbus_client.c lib/dbus_client.h
 	${CC} ${CFLAGS} -o $@ duskc.c ${LDFLAGS}
 
 clean:

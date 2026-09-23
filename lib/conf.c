@@ -1730,6 +1730,7 @@ parse_arg_function(const char *string)
 	map("focuswin", focuswin);
 	map("group", group);
 	map("hidebar", hidebar);
+	map("hidebarall", hidebarall);
 	map("incrgaps", incrgaps);
 	map("incrigaps", incrigaps);
 	map("incrogaps", incrogaps);
@@ -1786,6 +1787,7 @@ parse_arg_function(const char *string)
 	map("setscratch", setscratch);
 	map("settitle", settitle);
 	map("showbar", showbar);
+	map("showbarall", showbarall);
 	map("showhideclient", showhideclient);
 	map("spawn", spawn);
 	map("stackfocus", stackfocus);
@@ -1800,6 +1802,7 @@ parse_arg_function(const char *string)
 	map("swallowmouse", swallowmouse);
 	map("toggle", toggle);
 	map("togglebar", togglebar);
+	map("togglebarall", togglebarall);
 	map("togglebarpadding", togglebarpadding);
 	map("togglecompact", togglecompact);
 	map("toggleclientflag", toggleclientflag);
