@@ -1203,6 +1203,47 @@ setworkspaceareas(void)
 		setworkspaceareasformon(mon);
 }
 
+/* Les workspaces masqués ne sont pas couverts par setworkspaceareasformon et gardent
+ * la géométrie de l'ancien écran. On leur donne toute la zone de leur moniteur, comme
+ * s'ils étaient le seul workspace affiché. */
+void
+sethiddenworkspaceareas(void)
+{
+	Workspace *ws;
+	Monitor *m;
+
+	for (ws = workspaces; ws; ws = ws->next) {
+		m = ws->mon;
+		if (ws->visible || ws == stickyws || !m || m == dummymon)
+			continue;
+		ws->wx = m->wx;
+		ws->wy = m->wy;
+		ws->ww = m->ww;
+		ws->wh = m->wh;
+	}
+}
+
+/* Réarrange les workspaces masqués dans leur nouvelle zone, puis remet leurs clients
+ * hors de l'écran : le layout les affiche en les redimensionnant, et configurenotify
+ * replace les flottants à leur position visible. Évite d'avoir à
+ * visiter chaque workspace après un changement d'écran. */
+void
+arrangehiddenworkspaces(void)
+{
+	Workspace *ws;
+	Client *c;
+
+	for (ws = workspaces; ws; ws = ws->next) {
+		if (ws->visible || ws == stickyws || !ws->clients || !ws->mon || ws->mon == dummymon)
+			continue;
+		ws->visible = 1;
+		arrangews(ws);
+		ws->visible = 0;
+		for (c = ws->stack; c; c = c->snext)
+			hide(c);
+	}
+}
+
 void
 setworkspaceareasformon(Monitor *m)
 {

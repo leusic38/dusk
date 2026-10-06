@@ -513,6 +513,8 @@ static void propertynotify(XEvent *e);
 static void restart(const Arg *arg);
 static void quit(const Arg *arg);
 static void raiseclient(Client *c);
+static void raiseoverrides(void);
+static void untrackoverride(Window win);
 static void readclientstackingorder(void);
 static Monitor *recttomon(int x, int y, int w, int h);
 static Workspace *recttows(int x, int y, int w, int h);
@@ -625,6 +627,8 @@ static Drw *drw;
 static Monitor *mons, *selmon, *dummymon;
 static Workspace *workspaces, *selws;
 static Window root, wmcheckwin;
+static Window overrides[32];
+static int noverrides = 0;
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
@@ -1406,6 +1410,7 @@ clientfsrestore(Client *c)
 	if (ISTRUEFULLSCREEN(c)) {
 		resizeclient(c, c->ws->mon->mx, c->ws->mon->my, c->ws->mon->mw, c->ws->mon->mh);
 		XRaiseWindow(dpy, c->win);
+		raiseoverrides();
 	} else if (ISFLOATING(c)) {
 		resizeclient(c, c->sfx, c->sfy, c->sfw, c->sfh);
 	}
@@ -1621,6 +1626,7 @@ configurenotify(XConfigureEvent *ev)
 	drw_resize(drw, sw, sh);
 	updatebars();
 	setworkspaceareas();
+	sethiddenworkspaceareas();
 	setviewport();
 
 	for (m = mons; m; m = m->next) {
@@ -1643,6 +1649,7 @@ configurenotify(XConfigureEvent *ev)
 		}
 		removepreview(ws);
 	}
+	arrangehiddenworkspaces();
 	arrange(NULL);
 	focus(NULL);
 
@@ -1795,6 +1802,8 @@ destroynotify(XDestroyWindowEvent *ev)
 
 	last_serial = ev->serial;
 	last_window = ev->window;
+
+	untrackoverride(ev->window);
 
 	if ((c = wintoclient(ev->window))) {
 		if (enabled(Debug) || DEBUGGING(c))
@@ -2712,8 +2721,15 @@ mapnotify(XEvent *e)
 	 * SubstructureNotifyMask, see the XSelectInput call in setup). */
 	if (!ev->override_redirect)
 		return;
-	if (wintoclient(ev->window))
+	if (wintoclient(ev->window) || wintobar(ev->window))
 		return;
+
+	/* Remember the window: dunst keeps it mapped while notifications are
+	 * shown, so any later raise of a client would bury it again. See
+	 * raiseoverrides. */
+	untrackoverride(ev->window);
+	if (noverrides < LENGTH(overrides))
+		overrides[noverrides++] = ev->window;
 
 	XRaiseWindow(dpy, ev->window);
 }
@@ -3030,15 +3046,39 @@ raiseclient(Client *c)
 		wc.sibling = s->win;
 	}
 
-	if (raised)
-		return;
-
-	if (top) {
-		XConfigureWindow(dpy, c->win, CWSibling|CWStackMode, &wc);
-		return;
+	if (!raised) {
+		if (top)
+			XConfigureWindow(dpy, c->win, CWSibling|CWStackMode, &wc);
+		else
+			XRaiseWindow(dpy, c->win);
 	}
 
-	XRaiseWindow(dpy, c->win);
+	raiseoverrides();
+}
+
+/* Keeps mapped override-redirect windows (notifications, popup menus) above the
+ * clients that have just been raised, preserving their relative order. */
+void
+raiseoverrides(void)
+{
+	int i;
+
+	for (i = 0; i < noverrides; i++)
+		XRaiseWindow(dpy, overrides[i]);
+}
+
+void
+untrackoverride(Window win)
+{
+	int i;
+
+	for (i = 0; i < noverrides; i++) {
+		if (overrides[i] != win)
+			continue;
+		memmove(&overrides[i], &overrides[i + 1], (noverrides - i - 1) * sizeof(Window));
+		noverrides--;
+		return;
+	}
 }
 
 /* This reads the stacking order on the X server side and updates the client
@@ -3449,6 +3489,7 @@ setfullscreen(Client *c, int fullscreen, int restorefakefullscreen)
 		c->bw = 0;
 		resizeclient(c, m->mx, m->my, m->mw, m->mh);
 		XRaiseWindow(dpy, c->win);
+		raiseoverrides();
 		LOCK(c);
 	} else if (restorestate && ISLOCKED(c)) {
 		UNLOCK(c);
@@ -4047,6 +4088,8 @@ unmapnotify(XUnmapEvent *ev)
 
 	last_serial = ev->serial;
 	last_window = ev->window;
+
+	untrackoverride(ev->window);
 
 	if ((c = wintoclient(ev->window))) {
 		ws = c->ws;

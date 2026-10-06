@@ -40,6 +40,7 @@ maximize_client(Client *c, int maximize_vert, int maximize_horz)
 
 	SETFLOATING(c);
 	XRaiseWindow(dpy, c->win);
+	raiseoverrides();
 
 	if (maximize_vert && maximize_horz)
 		setfloatpos(c, "0% 0% 100% 100%", 1, 0);

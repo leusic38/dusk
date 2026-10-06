@@ -91,6 +91,8 @@ static void reviewworkspaces(int hide_others);
 static void setwfact(const Arg *arg);
 static void setworkspaceareas(void);
 static void setworkspaceareasformon(Monitor *mon);
+static void sethiddenworkspaceareas(void);
+static void arrangehiddenworkspaces(void);
 static Workspace * nextmonws(Monitor *mon, Workspace *ws);
 static Workspace * nextoccmonws(Monitor *mon, Workspace *ws);
 static Workspace * nextvismonws(Monitor *mon, Workspace *ws);
