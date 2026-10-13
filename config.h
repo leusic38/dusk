@@ -585,6 +585,7 @@ static Key keys[] = {
 	{ KeyPress,	  MODKEY|Alt,                   XK_s,            spawn,           SHCMD("screenConfig --pos right") }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Ctrl|Shift,            XK_s,            spawn,           SHCMD("screenConfig --pos vertLeft") }, // flip the master and stack areas
 	{ KeyPress,	  MODKEY|Ctrl|Alt,              XK_s,            spawn,           SHCMD("screenConfig --pos mirror") }, // flip the master and stack areas
+	{ KeyPress,	  MODKEY|Alt|Shift,             XK_s,            spawn,           SHCMD("screenConfig --pos external") }, // external screens only, keep current layout
 	{ KeyPress,	  MODKEY|Ctrl|Alt|Shift,        XK_s,            spawn,           SHCMD("screen.sh") }, // flip the master and stack areas
 	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
 	{ KeyPress,   MODKEY,                       XK_f,            togglefullscreen,       {0} }, // toggles fullscreen for the currently selected client
